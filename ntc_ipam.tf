@@ -36,11 +36,11 @@ locals {
       allocation_resource_tags          = {}
     },
     {
-      pool_path   = "/toplevel/frankfurt/dev"
-      pool_name   = "Dev Pool"
-      pool_region = "eu-central-1"
-      description = "staging pool"
-      cidrs = cidrsubnets("100.68.0.0/14", 2, 2, 2, 2)
+      pool_path                         = "/toplevel/frankfurt/dev"
+      pool_name                         = "Dev Pool"
+      pool_region                       = "eu-central-1"
+      description                       = "staging pool"
+      cidrs                             = cidrsubnets("100.68.0.0/14", 2, 2, 2, 2)
       ram_share_principals              = []
       allocation_default_netmask_length = 22
       allocation_max_netmask_length     = 22
