@@ -1,0 +1,76 @@
+# ---------------------------------------------------------------------------------------------------------------------
+# ¦ LOCALS
+# ---------------------------------------------------------------------------------------------------------------------
+locals {
+  ipam_description = "Organizational IPAM"
+  ipam_nested_pools = [
+    {
+      pool_path   = "/toplevel"
+      pool_name   = "Global (CGNAT) Pool"
+      description = "top-level pool"
+      cidrs       = ["100.64.0.0/10"]
+    },
+    {
+      pool_path   = "/toplevel/frankfurt"
+      pool_name   = "Europe (Frankfurt) Pool"
+      pool_region = "eu-central-1"
+      description = "regional pool"
+      cidrs = [
+        "100.64.0.0/14",
+        "100.68.0.0/14",
+        "100.72.0.0/14"
+      ]
+    },
+    {
+      pool_path   = "/toplevel/frankfurt/prod"
+      pool_name   = "Prod Pool"
+      pool_region = "eu-central-1"
+      description = "staging pool"
+      # subnet cidrs can also be calculated with cidrsubnets()
+      cidrs = cidrsubnets("100.64.0.0/14", 2, 2, 2, 2)
+      # share IPAM with Organizations, OUs or Account IDs
+      # ram_share_principals              = ["945766593056", "090258021222"]
+      allocation_default_netmask_length = 22
+      allocation_max_netmask_length     = 22
+      allocation_min_netmask_length     = 22
+      allocation_resource_tags          = {}
+    },
+    {
+      pool_path   = "/toplevel/frankfurt/dev"
+      pool_name   = "Dev Pool"
+      pool_region = "eu-central-1"
+      description = "staging pool"
+      cidrs = cidrsubnets("100.68.0.0/14", 2, 2, 2, 2)
+      ram_share_principals              = []
+      allocation_default_netmask_length = 22
+      allocation_max_netmask_length     = 22
+      allocation_min_netmask_length     = 22
+      allocation_resource_tags          = {}
+    },
+    {
+      pool_path   = "/toplevel/ireland"
+      pool_name   = "Europe (Ireland) Pool"
+      pool_region = "eu-west-1"
+      description = "regional pool"
+      cidrs = [
+        "100.124.0.0/14",
+        "100.120.0.0/14",
+        "100.116.0.0/14"
+      ]
+    }
+  ]
+}
+
+# ---------------------------------------------------------------------------------------------------------------------
+# ¦ NTC IPAM
+# ---------------------------------------------------------------------------------------------------------------------
+module "ipam" {
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-ipam?ref=beta"
+
+  description  = local.ipam_description
+  nested_pools = local.ipam_nested_pools
+
+  providers = {
+    aws = aws.euc1
+  }
+}
