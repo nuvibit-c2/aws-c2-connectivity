@@ -23,15 +23,26 @@ locals {
   vpc_ipv4_ipam_netmask_length = module.ipam.nested_pools_allocation_configs["/toplevel/frankfurt"].allocation_default_netmask_length
 
   vpc_subnets = [
+    # {
+    #   subnet_prefix_name = "firewall"
+    #   subnet_type        = "firewall"
+    #   netmask_length     = 28
+    #   firewall_subnet_config = {
+    #     route_to_internet_gateway = false
+    #     route_to_transit_gateway_destinations = []
+    #   }
+    # },
     {
       subnet_prefix_name = "private"
       subnet_type        = "private"
       netmask_length     = 24
       private_subnet_config = {
-        # route_to_public_nat_gateway = true
+        route_to_public_nat_gateway = false
+        # route_to_network_firewall_destinations = ["0.0.0.0/0", "prefix_list_id"]
+        # route_to_transit_gateway_destinations = ["10.0.0.0/8", "prefix_list_id"]
       }
-      # share subnet with Organizations, OUs or Account IDs
-      # ram_share_principals = ["945766593056"]
+      # share subnet with Organizations, OUs or Accounts
+      # ram_share_principals = ["o-m29e8d9awz", "ou-6gf5-6ltp3mjf", "090258021222"]
     },
     {
       subnet_prefix_name = "public"
@@ -39,6 +50,9 @@ locals {
       netmask_length     = 26
       public_subnet_config = {
         # create_public_nat_gateway_in = "all_azs"
+        # map_public_ip_on_launch = true
+        # route_to_network_firewall_destinations = ["0.0.0.0/0", "prefix_list_id"]
+        # route_to_transit_gateway_destinations = ["10.0.0.0/8", "prefix_list_id"]
       }
       ram_share_principals = []
     },
@@ -81,7 +95,7 @@ locals {
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
-# ¦ NTC IPAM
+# ¦ NTC VPC
 # ---------------------------------------------------------------------------------------------------------------------
 module "prod_stage_vpc" {
   source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc?ref=beta"
