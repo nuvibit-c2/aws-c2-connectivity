@@ -22,6 +22,10 @@ module "ntc_parameters_reader" {
   source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-parameters//modules/reader?ref=beta"
 
   bucket_name = local.ntc_parameters_bucket_name
+
+  providers = {
+    aws = aws.euc1
+  }
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -33,4 +37,8 @@ module "ntc_parameters_writer" {
   bucket_name     = local.ntc_parameters_bucket_name
   parameter_node  = local.ntc_parameters_writer_node
   node_parameters = local.ntc_parameters_to_write
+
+  providers = {
+    aws = aws.euc1
+  }
 }
