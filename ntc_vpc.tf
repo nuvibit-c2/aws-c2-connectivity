@@ -70,7 +70,7 @@ locals {
   vpc_flow_log_destinations = [
     {
       destination_type = "s3"
-      destination_arn = try(local.ntc_parameters["log-archive"]["log_bucket_arns"]["vpc_flow_logs"], "")
+      destination_arn  = try(local.ntc_parameters["log-archive"]["log_bucket_arns"]["vpc_flow_logs"], "")
       # decide wether to capture ALL, only ACCEPT or only REJECT traffic
       traffic_type = "ALL"
       # interval can be 60 seconds (1min) or 600 seconds (10min)
