@@ -5,8 +5,12 @@ locals {
   # a prefix which will be added to all vpc resources
   vpc_prefix_name = "prod"
 
-  # subnets will be generated for each availability zone
-  vpc_availability_zones = slice(data.aws_availability_zones.available.names, 0, 3)
+  # subnets will be generated for each reserved AZ. Resources like NAT Gateway, VPC Endpoints and RAM sharing only for active AZs
+  # WARNING: changing the reserved count can lead to subnets beeing redeployed
+  vpc_availability_zones = {
+    reserved = 3
+    active   = 1
+  }
 
   # if IPAM should NOT be used then 'vpc_ipv4_cidr' will be used for VPC
   vpc_ipv4_cidr = "100.64.108.0/22"
@@ -35,13 +39,34 @@ locals {
     {
       subnet_prefix_name = "private"
       subnet_type        = "private"
+      # WARNING: changing the netmask_length can lead to subnets beeing redeployed
       netmask_length     = 24
       private_subnet_config = {
         route_to_public_nat_gateway = false
         # route_to_network_firewall_destinations = ["0.0.0.0/0", "prefix_list_id"]
         # route_to_transit_gateway_destinations = ["10.0.0.0/8", "prefix_list_id"]
       }
-      # share subnet with Organizations, OUs or Accounts
+      # interface endpoints should only be added to the private subnet
+      interface_endpoints = {
+        service_names = [
+          "ec2",
+          # "ec2messages",
+          # "events",
+          # "lambda",
+          # "logs",
+          # "rds",
+          # "rds-data"
+          # "sns",
+          # "sqs"
+        ]
+        private_dns_enabled   = true
+        # if no security group is created the default vpc security group will be attached
+        create_security_group = true
+        # if no cidr block is provided the vpc cidr range will be added
+        allowed_cidr_blocks   = []
+        inbound_ports         = ["443"]
+      }
+      # share subnet with Organizations, OUs or Accounts - requires RAM to be enabled for Organizations
       # ram_share_principals = ["o-m29e8d9awz", "ou-6gf5-6ltp3mjf", "090258021222"]
     },
     {
@@ -49,8 +74,8 @@ locals {
       subnet_type        = "public"
       netmask_length     = 26
       public_subnet_config = {
-        # create_public_nat_gateway_in = "all_azs"
-        # map_public_ip_on_launch = true
+        create_public_nat_gateway = false
+        map_public_ip_on_launch   = true
         # route_to_network_firewall_destinations = ["0.0.0.0/0", "prefix_list_id"]
         # route_to_transit_gateway_destinations = ["10.0.0.0/8", "prefix_list_id"]
       }
