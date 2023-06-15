@@ -40,7 +40,7 @@ locals {
       subnet_prefix_name = "private"
       subnet_type        = "private"
       # WARNING: changing the netmask_length can lead to subnets beeing redeployed
-      netmask_length     = 24
+      netmask_length = 24
       private_subnet_config = {
         route_to_public_nat_gateway = false
         # route_to_network_firewall_destinations = ["0.0.0.0/0", "prefix_list_id"]
@@ -59,12 +59,12 @@ locals {
           # "sns",
           # "sqs"
         ]
-        private_dns_enabled   = true
+        private_dns_enabled = true
         # if no security group is created the default vpc security group will be attached
         create_security_group = true
         # if no cidr block is provided the vpc cidr range will be added
-        allowed_cidr_blocks   = []
-        inbound_ports         = ["443"]
+        allowed_cidr_blocks = []
+        inbound_ports       = ["443"]
       }
       # share subnet with Organizations, OUs or Accounts - requires RAM to be enabled for Organizations
       # ram_share_principals = ["o-m29e8d9awz", "ou-6gf5-6ltp3mjf", "090258021222"]
