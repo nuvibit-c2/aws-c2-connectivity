@@ -48,7 +48,7 @@ locals {
       }
       # interface endpoints should only be added to the private subnet
       interface_endpoints = {
-        service_names = [
+        endpoint_names = [
           "ec2",
           # "ec2messages",
           # "events",
