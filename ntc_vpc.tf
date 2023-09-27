@@ -12,19 +12,26 @@ locals {
     active   = 1
   }
 
-  # if IPAM should NOT be used then 'vpc_ipv4_cidr' will be used for VPC
-  vpc_ipv4_cidr = "100.64.108.0/22"
+  # define primary cidr block for the VPC
+  vpc_ipv4_primary_cidr = "100.64.108.0/22"
+  # define additional cidr blocks for the VPC
+  vpc_ipv4_secondary_cidr_blocks = [
+    {
+      identifier = "hybrid"
+      cidr_block = "172.120.50.0/24"
+    }
+  ]
 
-  # if IPAM should be used then a dynamic IPAM CIDR will be used for VPC
+  # (optional) use IPAM to get a cidr block assigned to the VPC dynamically. 'vpc_ipv4_primary_cidr' will be ignored.
   vpc_use_ipam = false
-
-  # allocation can be managed by Terraform instead of dynamically by VPC
-  # IPAM will not import the VPC and no IP addresses will be scanned
+  # allocation can be managed by Terraform instead of natively by AWS
   vpc_ipam_reserve_cidr        = false
   vpc_ipam_reserve_description = "reservation for terraform managed vpc"
-  # get pool id from output of ipam module referenced by pool_path
-  vpc_ipv4_ipam_pool_id        = module.ipam.nested_pools_ids["/toplevel/frankfurt"]
-  vpc_ipv4_ipam_netmask_length = module.ipam.nested_pools_allocation_configs["/toplevel/frankfurt"].allocation_default_netmask_length
+  # get pool id from IPAM module referenced by pool_path
+  vpc_ipv4_ipam_primary_pool = {
+    pool_id = module.ipam.nested_pools_ids["/toplevel/frankfurt"]
+    netmask_length = module.ipam.nested_pools_allocation_configs["/toplevel/frankfurt"].allocation_default_netmask_length
+  }
 
   vpc_subnets = [
     # {
@@ -37,8 +44,10 @@ locals {
     #   }
     # },
     {
-      subnet_prefix_name = "private"
-      subnet_type        = "private"
+      # (optional) for VPCs with secondary cidr blocks the 'vpc_cidr_identifier' is required. Primary cidr block is always 'primary'.
+      vpc_cidr_identifier = "primary"
+      subnet_prefix_name  = "private"
+      subnet_type         = "private"
       # WARNING: changing the netmask_length can lead to subnets beeing redeployed
       netmask_length = 24
       private_subnet_config = {
@@ -125,16 +134,21 @@ locals {
 module "prod_stage_vpc" {
   source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc?ref=beta"
 
-  prefix_name                  = local.vpc_prefix_name
-  availability_zones           = local.vpc_availability_zones
-  vpc_ipv4_cidr                = local.vpc_use_ipam == false ? local.vpc_ipv4_cidr : null
-  vpc_use_ipam_cidr            = local.vpc_use_ipam
-  vpc_ipam_reserve_cidr        = local.vpc_ipam_reserve_cidr
-  vpc_ipam_reserve_description = local.vpc_ipam_reserve_description
-  vpc_ipv4_ipam_pool_id        = local.vpc_ipv4_ipam_pool_id
-  vpc_ipv4_ipam_netmask_length = local.vpc_ipv4_ipam_netmask_length
-  vpc_subnets                  = local.vpc_subnets
-  vpc_flow_log_destinations    = local.vpc_flow_log_destinations
+  prefix_name                    = local.vpc_prefix_name
+  availability_zones             = local.vpc_availability_zones
+  vpc_subnets                    = local.vpc_subnets
+  vpc_flow_log_destinations      = local.vpc_flow_log_destinations
+
+  # without IPAM
+  vpc_ipv4_primary_cidr          = local.vpc_ipv4_primary_cidr
+  vpc_ipv4_secondary_cidr_blocks = local.vpc_ipv4_secondary_cidr_blocks
+
+  # with IPAM
+  vpc_use_ipam_cidr              = local.vpc_use_ipam
+  vpc_ipv4_ipam_pool_id          = local.vpc_ipv4_ipam_pool_id
+  vpc_ipv4_ipam_netmask_length   = local.vpc_ipv4_ipam_netmask_length
+  vpc_ipam_reserve_cidr          = local.vpc_ipam_reserve_cidr
+  vpc_ipam_reserve_description   = local.vpc_ipam_reserve_description
 
   providers = {
     aws = aws.euc1
