@@ -23,14 +23,12 @@ locals {
   ]
 
   # (optional) use IPAM to get a cidr block assigned to the VPC dynamically. 'vpc_ipv4_primary_cidr' will be ignored.
-  vpc_use_ipam = false
-  # allocation can be managed by Terraform instead of natively by AWS
-  vpc_ipam_reserve_cidr        = false
-  vpc_ipam_reserve_description = "reservation for terraform managed vpc"
-  # get pool id from IPAM module referenced by pool_path
-  vpc_ipv4_ipam_primary_pool = {
-    pool_id = module.ipam.nested_pools_ids["/toplevel/frankfurt"]
-    netmask_length = module.ipam.nested_pools_allocation_configs["/toplevel/frankfurt"].allocation_default_netmask_length
+  vpc_ipam_settings = {
+    cidr_allocation_by_ipam          = false
+    cidr_reservation_by_terraform    = false
+    ipv4_primary_pool_id             = module.ipam.nested_pools_ids["/toplevel/frankfurt"]
+    ipv4_primary_pool_netmask_length = module.ipam.nested_pools_allocation_configs["/toplevel/frankfurt"].allocation_default_netmask_length
+    ipv4_secondary_pools = []
   }
 
   vpc_subnets = [
