@@ -22,13 +22,16 @@ locals {
     }
   ]
 
-  # (optional) use IPAM to get a cidr block assigned to the VPC dynamically. 'vpc_ipv4_primary_cidr' will be ignored.
+  # (optional) use IPAM to get cidr blocks dynamically
   vpc_ipam_settings = {
-    cidr_allocation_by_ipam          = false
-    cidr_reservation_by_terraform    = false
+    # cidrs will be dynamically requested from IPAM - this overwrites 'vpc_ipv4_primary_cidr'
+    cidrs_requested_from_ipam = false
+    # Terraform can allocate (reserve) cidrs (static or dynamic) in IPAM and assign to VPC
+    cidrs_allocated_by_terraform     = false
+    reservation_description          = "this cidr was allocated by terraform"
     ipv4_primary_pool_id             = module.ipam.nested_pools_ids["/toplevel/frankfurt"]
     ipv4_primary_pool_netmask_length = module.ipam.nested_pools_allocation_configs["/toplevel/frankfurt"].allocation_default_netmask_length
-    ipv4_secondary_pools = []
+    ipv4_secondary_pools             = []
   }
 
   vpc_subnets = [
@@ -42,14 +45,20 @@ locals {
     #   }
     # },
     {
-      # (optional) for VPCs with secondary cidr blocks the 'vpc_cidr_identifier' is required. Primary cidr block is always 'primary'.
+      # (optional) for VPCs with secondary cidr blocks the 'vpc_cidr_identifier' is required. Primary cidr block is always 'primary'
       vpc_cidr_identifier = "primary"
-      subnet_prefix_name  = "private"
-      subnet_type         = "private"
+      # unique prefix name for subnet
+      subnet_prefix_name = "private"
+      # subnets can be of type 'private', 'public' or 'transit'
+      subnet_type = "private"
       # WARNING: changing the netmask_length can lead to subnets beeing redeployed
       netmask_length = 24
+      # instead of dynamically calculating subnet cidrs based on netmask length a list of static cidrs can be provided
+      static_cidrs = []
+      # configure routing for subnet
       private_subnet_config = {
-        route_to_public_nat_gateway = false
+        default_route_to_public_nat_gateway = false
+        # default_route_to_transit_gateway = false
         # route_to_network_firewall_destinations = ["0.0.0.0/0", "prefix_list_id"]
         # route_to_transit_gateway_destinations = ["10.0.0.0/8", "prefix_list_id"]
       }
@@ -66,14 +75,15 @@ locals {
           # "sns",
           # "sqs"
         ]
+        # private dns must be disabled for centralized endpoints
         private_dns_enabled = true
-        # if no security group is created the default vpc security group will be attached
+        # if no endpoint security group is created the default vpc security group will be attached
         create_security_group = true
         # if no cidr block is provided the vpc cidr range will be added
         allowed_cidr_blocks = []
         inbound_ports       = ["443"]
       }
-      # share subnet with Organizations, OUs or Accounts - requires RAM to be enabled for Organizations
+      # (optional) share subnet with Organizations, OUs or Accounts - requires RAM to be enabled for Organizations
       # ram_share_principals = ["o-m29e8d9awz", "ou-6gf5-6ltp3mjf", "090258021222"]
     },
     {
@@ -132,21 +142,15 @@ locals {
 module "prod_stage_vpc" {
   source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc?ref=beta"
 
-  prefix_name                    = local.vpc_prefix_name
-  availability_zones             = local.vpc_availability_zones
-  vpc_subnets                    = local.vpc_subnets
-  vpc_flow_log_destinations      = local.vpc_flow_log_destinations
-
+  prefix_name               = local.vpc_prefix_name
+  availability_zones        = local.vpc_availability_zones
+  vpc_subnets               = local.vpc_subnets
+  vpc_flow_log_destinations = local.vpc_flow_log_destinations
   # without IPAM
   vpc_ipv4_primary_cidr          = local.vpc_ipv4_primary_cidr
   vpc_ipv4_secondary_cidr_blocks = local.vpc_ipv4_secondary_cidr_blocks
-
   # with IPAM
-  vpc_use_ipam_cidr              = local.vpc_use_ipam
-  vpc_ipv4_ipam_pool_id          = local.vpc_ipv4_ipam_pool_id
-  vpc_ipv4_ipam_netmask_length   = local.vpc_ipv4_ipam_netmask_length
-  vpc_ipam_reserve_cidr          = local.vpc_ipam_reserve_cidr
-  vpc_ipam_reserve_description   = local.vpc_ipam_reserve_description
+  vpc_ipam_settings = local.vpc_ipam_settings
 
   providers = {
     aws = aws.euc1
