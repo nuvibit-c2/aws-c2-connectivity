@@ -10,6 +10,7 @@ locals {
   vpc_availability_zones = {
     reserved = 3
     active   = 1
+    # filter_zone_names = []
   }
 
   # define primary cidr block for the VPC
@@ -17,8 +18,8 @@ locals {
   # define additional cidr blocks for the VPC
   vpc_ipv4_secondary_cidr_blocks = [
     {
-      identifier = "hybrid"
-      cidr_block = "172.120.50.0/24"
+      cidr_identifier = "hybrid"
+      cidr_block      = "172.120.50.0/24"
     }
   ]
 
@@ -36,7 +37,7 @@ locals {
 
   vpc_subnets = [
     # {
-    #   subnet_prefix_name = "firewall"
+    #   subnet_identifier = "co-firewall"
     #   subnet_type        = "firewall"
     #   netmask_length     = 28
     #   firewall_subnet_config = {
@@ -47,8 +48,8 @@ locals {
     {
       # (optional) for VPCs with secondary cidr blocks the 'vpc_cidr_identifier' is required. Primary cidr block is always 'primary'
       vpc_cidr_identifier = "primary"
-      # unique prefix name for subnet
-      subnet_prefix_name = "private"
+      # unique identifier for subnet - renaming will cause subnet to be recreated
+      subnet_identifier = "co-private"
       # subnets can be of type 'private', 'public' or 'transit'
       subnet_type = "private"
       # WARNING: changing the netmask_length can lead to subnets beeing redeployed
@@ -62,19 +63,22 @@ locals {
         # route_to_network_firewall_destinations = ["0.0.0.0/0", "prefix_list_id"]
         # route_to_transit_gateway_destinations = ["10.0.0.0/8", "prefix_list_id"]
       }
-      # interface endpoints should only be added to the private subnet
-      interface_endpoints = {
-        endpoint_names = [
-          "ec2",
-          # "ec2messages",
-          # "events",
-          # "lambda",
-          # "logs",
-          # "rds",
-          # "rds-data"
-          # "sns",
-          # "sqs"
-        ]
+      # interface endpoints should be added to the private subnet
+      interface_endpoints = [
+        {
+          common_name = "logs"
+          policy_json = null
+        },
+        # {
+        #   common_name = "ec2"
+        #   policy_json = null
+        # },
+        # {
+        #   common_name = "lambda"
+        #   policy_json = null
+        # }
+      ]
+      interface_endpoints_config = {
         # private dns must be disabled for centralized endpoints
         private_dns_enabled = true
         # if no endpoint security group is created the default vpc security group will be attached
@@ -87,9 +91,10 @@ locals {
       # ram_share_principals = ["o-m29e8d9awz", "ou-6gf5-6ltp3mjf", "090258021222"]
     },
     {
-      subnet_prefix_name = "public"
-      subnet_type        = "public"
-      netmask_length     = 26
+      vpc_cidr_identifier = "primary"
+      subnet_identifier   = "co-public"
+      subnet_type         = "public"
+      netmask_length      = 26
       public_subnet_config = {
         create_public_nat_gateway = false
         map_public_ip_on_launch   = true
@@ -99,11 +104,11 @@ locals {
       ram_share_principals = []
     },
     {
-      subnet_prefix_name    = "transit"
+      vpc_cidr_identifier   = "primary"
+      subnet_identifier     = "co-transit"
       subnet_type           = "transit"
       netmask_length        = 28
       transit_subnet_config = {}
-      ram_share_principals  = []
     }
   ]
 
