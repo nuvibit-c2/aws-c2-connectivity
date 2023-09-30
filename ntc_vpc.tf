@@ -63,30 +63,35 @@ locals {
         # route_to_network_firewall_destinations = ["0.0.0.0/0", "prefix_list_id"]
         # route_to_transit_gateway_destinations = ["10.0.0.0/8", "prefix_list_id"]
       }
-      # interface endpoints should be added to the private subnet
+      # gateway endpoints can be used for 's3' and 'dynamodb' and can only be accessed from inside the VPC
+      # to access 's3' endpoint from on-premises an interface endpoint is required. Combine both endpoint types for cost optimization
+      gateway_endpoints = [
+        {
+          common_name = "s3"
+          policy_json = null
+          # by default gateway endpoint will be associated to current subnet
+          associate_with_all_subnets = true
+        },
+        # {
+        #   common_name = "dynamodb"
+        # }
+      ]
+      # interface endpoints can be centralized and can also be accessed from on-premises
+      # by default a security group will be created with https/443 ingress rule for the local VPC CIDR
       interface_endpoints = [
         {
           common_name = "logs"
           policy_json = null
+          # private dns must be disabled for centralized endpoints
+          private_dns_enabled = true
         },
         # {
         #   common_name = "ec2"
-        #   policy_json = null
         # },
         # {
         #   common_name = "lambda"
-        #   policy_json = null
         # }
       ]
-      interface_endpoints_config = {
-        # private dns must be disabled for centralized endpoints
-        private_dns_enabled = true
-        # if no endpoint security group is created the default vpc security group will be attached
-        create_security_group = true
-        # if no cidr block is provided the vpc cidr range will be added
-        allowed_cidr_blocks = []
-        inbound_ports       = ["443"]
-      }
       # (optional) share subnet with Organizations, OUs or Accounts - requires RAM to be enabled for Organizations
       # ram_share_principals = ["o-m29e8d9awz", "ou-6gf5-6ltp3mjf", "090258021222"]
     },
