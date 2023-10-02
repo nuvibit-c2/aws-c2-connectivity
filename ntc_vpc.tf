@@ -13,6 +13,29 @@ locals {
     # filter_zone_names = []
   }
 
+  # define customer managed prefix lists e.g. for all on-premises ip ranges
+  customer_managed_prefix_lists = [
+    {
+      name = "onprem-ipv4-ranges"
+      entries = [
+        {
+          cidr        = "192.168.10.0/24"
+          description = "Server Zone A"
+        },
+        {
+          cidr        = "192.168.20.0/24"
+          description = "Server Zone B"
+        },
+        {
+          cidr        = "192.168.30.0/24"
+          description = "Server Zone C"
+        }
+      ]
+      # (optional) share subnet with Organizations, OUs or Accounts - requires RAM to be enabled for Organizations
+      # ram_share_principals = ["o-m29e8d9awz", "ou-6gf5-6ltp3mjf", "090258021222"]
+    }
+  ]
+
   # define primary cidr block for the VPC
   vpc_ipv4_primary_cidr = "100.64.108.0/22"
   # define additional cidr blocks for the VPC
@@ -152,15 +175,14 @@ locals {
 module "prod_stage_vpc" {
   source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc?ref=beta"
 
-  prefix_name               = local.vpc_prefix_name
-  availability_zones        = local.vpc_availability_zones
-  vpc_subnets               = local.vpc_subnets
-  vpc_flow_log_destinations = local.vpc_flow_log_destinations
-  # without IPAM
+  prefix_name                    = local.vpc_prefix_name
+  availability_zones             = local.vpc_availability_zones
+  customer_managed_prefix_lists  = local.customer_managed_prefix_lists
   vpc_ipv4_primary_cidr          = local.vpc_ipv4_primary_cidr
   vpc_ipv4_secondary_cidr_blocks = local.vpc_ipv4_secondary_cidr_blocks
-  # with IPAM
-  vpc_ipam_settings = local.vpc_ipam_settings
+  vpc_ipam_settings              = local.vpc_ipam_settings
+  vpc_subnets                    = local.vpc_subnets
+  vpc_flow_log_destinations      = local.vpc_flow_log_destinations
 
   providers = {
     aws = aws.euc1
