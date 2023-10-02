@@ -132,11 +132,19 @@ locals {
       ram_share_principals = []
     },
     {
-      vpc_cidr_identifier   = "primary"
-      subnet_identifier     = "co-transit"
-      subnet_type           = "transit"
-      netmask_length        = 28
-      transit_subnet_config = {}
+      vpc_cidr_identifier = "primary"
+      subnet_identifier   = "co-transit"
+      subnet_type         = "transit"
+      netmask_length      = 28
+      transit_subnet_config = {
+        transit_gateway_create_attachment               = true
+        transit_gateway_default_route_table_association = false
+        transit_gateway_default_route_table_propagation = false
+        transit_gateway_id                              = aws_ec2_transit_gateway.core.id
+        transit_gateway_association_with_route_table_id = aws_ec2_transit_gateway_route_table.spoke.id
+        transit_gateway_propagation_to_route_table_id   = aws_ec2_transit_gateway_route_table.hub.id
+        transit_gateway_appliance_mode_support          = false
+      }
     }
   ]
 

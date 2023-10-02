@@ -1,8 +1,16 @@
 # ---------------------------------------------------------------------------------------------------------------------
-# ¦ WILL BE REPLACED WITH A MODUlE
+# ¦ PLACEHOLDER: NTC-CORE-NETWORK
 # ---------------------------------------------------------------------------------------------------------------------
 resource "aws_ec2_transit_gateway" "core" {
-  description = "core network"
+  description                     = "core network"
+  amazon_side_asn                 = 64512
+  auto_accept_shared_attachments  = "disable"
+  default_route_table_association = "enable"
+  default_route_table_propagation = "enable"
+  dns_support                     = "enable"
+  multicast_support               = "disable"
+  transit_gateway_cidr_blocks     = null
+  vpn_ecmp_support                = "enable"
 }
 
 resource "aws_ec2_transit_gateway_route_table" "hub" {
