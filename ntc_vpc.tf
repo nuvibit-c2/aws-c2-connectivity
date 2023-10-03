@@ -72,7 +72,7 @@ locals {
       # (optional) for VPCs with secondary cidr blocks the 'vpc_cidr_identifier' is required. Primary cidr block is always 'primary'
       vpc_cidr_identifier = "primary"
       # unique identifier for subnet - renaming will cause subnet to be recreated
-      subnet_identifier = "co-private"
+      subnet_identifier = "cloudonly-private"
       # subnets can be of type 'private', 'public' or 'transit'
       subnet_type = "private"
       # WARNING: changing the netmask_length can lead to subnets beeing redeployed
@@ -82,7 +82,7 @@ locals {
       # configure routing for subnet
       private_subnet_config = {
         default_route_to_public_nat_gateway = false
-        # default_route_to_transit_gateway = false
+        default_route_to_transit_gateway    = true
         # route_to_network_firewall_destinations = ["0.0.0.0/0", "prefix_list_id"]
         # route_to_transit_gateway_destinations = ["10.0.0.0/8", "prefix_list_id"]
       }
@@ -120,7 +120,7 @@ locals {
     },
     {
       vpc_cidr_identifier = "primary"
-      subnet_identifier   = "co-public"
+      subnet_identifier   = "cloudonly-public"
       subnet_type         = "public"
       netmask_length      = 26
       public_subnet_config = {
@@ -133,7 +133,7 @@ locals {
     },
     {
       vpc_cidr_identifier = "primary"
-      subnet_identifier   = "co-transit"
+      subnet_identifier   = "cloudonly-transit"
       subnet_type         = "transit"
       netmask_length      = 28
       transit_subnet_config = {
@@ -144,6 +144,17 @@ locals {
         transit_gateway_association_with_route_table_id = aws_ec2_transit_gateway_route_table.spoke.id
         transit_gateway_propagation_to_route_table_id   = aws_ec2_transit_gateway_route_table.hub.id
         transit_gateway_appliance_mode_support          = false
+      }
+    },
+    # (optional) subnets from vpc secondary cidrs
+    {
+      vpc_cidr_identifier = "hybrid"
+      subnet_identifier   = "hybrid-private"
+      subnet_type         = "private"
+      netmask_length      = 26
+      private_subnet_config = {
+        default_route_to_public_nat_gateway = false
+        default_route_to_transit_gateway    = true
       }
     }
   ]

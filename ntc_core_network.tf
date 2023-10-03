@@ -11,12 +11,24 @@ resource "aws_ec2_transit_gateway" "core" {
   multicast_support               = "disable"
   transit_gateway_cidr_blocks     = null
   vpn_ecmp_support                = "enable"
+
+  tags = {
+    "Name" = "tgw-core"
+  }
 }
 
 resource "aws_ec2_transit_gateway_route_table" "hub" {
   transit_gateway_id = aws_ec2_transit_gateway.core.id
+
+  tags = {
+    "Name" = "tgw-route-table-hub"
+  }
 }
 
 resource "aws_ec2_transit_gateway_route_table" "spoke" {
   transit_gateway_id = aws_ec2_transit_gateway.core.id
+
+  tags = {
+    "Name" = "tgw-route-table-spoke"
+  }
 }
