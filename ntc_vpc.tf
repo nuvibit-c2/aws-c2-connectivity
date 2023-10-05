@@ -192,7 +192,7 @@ locals {
 # ¦ NTC VPC
 # ---------------------------------------------------------------------------------------------------------------------
 module "prod_stage_vpc" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc?ref=beta"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc?ref=hotfixes"
 
   prefix_name                    = local.vpc_prefix_name
   availability_zones             = local.vpc_availability_zones
