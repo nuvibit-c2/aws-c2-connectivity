@@ -33,7 +33,7 @@
 | <a name="module_ipam"></a> [ipam](#module\_ipam) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-ipam | beta |
 | <a name="module_ntc_parameters_reader"></a> [ntc\_parameters\_reader](#module\_ntc\_parameters\_reader) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-parameters//modules/reader | 1.0.0 |
 | <a name="module_ntc_parameters_writer"></a> [ntc\_parameters\_writer](#module\_ntc\_parameters\_writer) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-parameters//modules/writer | 1.0.0 |
-| <a name="module_prod_stage_vpc"></a> [prod\_stage\_vpc](#module\_prod\_stage\_vpc) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc | hotfixes |
+| <a name="module_prod_stage_vpc"></a> [prod\_stage\_vpc](#module\_prod\_stage\_vpc) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc | 1.0.1 |
 
 ## Resources
 
