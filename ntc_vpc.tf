@@ -97,7 +97,7 @@ locals {
       public_subnet_config = {
         default_route_to_internet_gateway = true
         map_public_ip_on_launch           = true
-        create_public_nat_gateway         = false
+        create_public_nat_gateway         = true
       }
       # (optional) share subnet with Organizations, OUs or Accounts - requires RAM to be enabled for Organizations
       ram_share_principals = [
