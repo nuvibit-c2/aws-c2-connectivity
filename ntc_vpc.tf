@@ -37,12 +37,12 @@ locals {
   ]
 
   # define primary cidr block for the VPC
-  vpc_ipv4_primary_cidr = "100.64.108.0/22"
+  vpc_ipv4_primary_cidr = "172.16.50.0/24"
   # define additional cidr blocks for the VPC
   vpc_ipv4_secondary_cidr_blocks = [
     {
-      cidr_identifier = "hybrid"
-      cidr_block      = "172.120.50.0/24"
+      cidr_identifier = "cloudonly"
+      cidr_block      = "100.64.108.0/22"
     }
   ]
 
@@ -59,32 +59,68 @@ locals {
   }
 
   vpc_subnets = [
-    # {
-    #   subnet_identifier = "co-firewall"
-    #   subnet_type        = "firewall"
-    #   netmask_length     = 28
-    #   firewall_subnet_config = {
-    #     route_to_internet_gateway = false
-    #     route_to_transit_gateway_destinations = []
-    #   }
-    # },
     {
       # (optional) for VPCs with secondary cidr blocks the 'vpc_cidr_identifier' is required. Primary cidr block is always 'primary'
       vpc_cidr_identifier = "primary"
       # unique identifier for subnet - renaming will cause subnet to be recreated
-      subnet_identifier = "cloudonly-private"
-      # subnets can be of type 'private', 'public' or 'transit'
+      subnet_identifier = "hybrid-private"
+      # subnets can be of type 'private', 'public', 'firewall' or 'transit'
       subnet_type = "private"
+      # setting netmask_length will dynamically calculate or allocate (with ipam) corresponding cidr ranges
+      # when calculating cidrs the subnets will be sorted from largest to smallest to optimize cidr space
+      # WARNING: changing the netmask_length can lead to subnets beeing redeployed
+      netmask_length = 26
+      # instead of dynamically calculating subnet cidrs based on netmask length a list of static cidrs can be provided
+      static_cidrs = []
+      # specific configuration for subnet type
+      private_subnet_config = {
+        default_route_to_public_nat_gateway = false
+        default_route_to_transit_gateway    = true
+      }
+      # (optional) share subnet with Organizations, OUs or Accounts - requires RAM to be enabled for Organizations
+      # ram_share_principals = ["o-m29e8d9awz", "ou-6gf5-6ltp3mjf", "090258021222"]
+    },
+    {
+      # (optional) for VPCs with secondary cidr blocks the 'vpc_cidr_identifier' is required. Primary cidr block is always 'primary'
+      vpc_cidr_identifier = "cloudonly"
+      # unique identifier for subnet - renaming will cause subnet to be recreated
+      subnet_identifier = "cloudonly-public"
+      # subnets can be of type 'private', 'public', 'firewall' or 'transit'
+      subnet_type = "public"
+      # setting netmask_length will dynamically calculate or allocate (with ipam) corresponding cidr ranges
+      # when calculating cidrs the subnets will be sorted from largest to smallest to optimize cidr space
+      # WARNING: changing the netmask_length can lead to subnets beeing redeployed
+      netmask_length = 27
+      # instead of dynamically calculating subnet cidrs based on netmask length a list of static cidrs can be provided
+      static_cidrs = []
+      # specific configuration for subnet type
+      public_subnet_config = {
+        default_route_to_internet_gateway = true
+        map_public_ip_on_launch           = true
+        create_public_nat_gateway         = false
+      }
+      # (optional) share subnet with Organizations, OUs or Accounts - requires RAM to be enabled for Organizations
+      ram_share_principals = [
+        local.ntc_parameters["management"]["organization"]["ou_ids"]["/root/workloads/prod"]
+      ]
+    },
+    {
+      # (optional) for VPCs with secondary cidr blocks the 'vpc_cidr_identifier' is required. Primary cidr block is always 'primary'
+      vpc_cidr_identifier = "cloudonly"
+      # unique identifier for subnet - renaming will cause subnet to be recreated
+      subnet_identifier = "cloudonly-private"
+      # subnets can be of type 'private', 'public', 'firewall' or 'transit'
+      subnet_type = "private"
+      # setting netmask_length will dynamically calculate or allocate (with ipam) corresponding cidr ranges
+      # when calculating cidrs the subnets will be sorted from largest to smallest to optimize cidr space
       # WARNING: changing the netmask_length can lead to subnets beeing redeployed
       netmask_length = 24
       # instead of dynamically calculating subnet cidrs based on netmask length a list of static cidrs can be provided
       static_cidrs = []
-      # configure routing for subnet
+      # specific configuration for subnet type
       private_subnet_config = {
         default_route_to_public_nat_gateway = false
         default_route_to_transit_gateway    = true
-        # route_to_network_firewall_destinations = ["0.0.0.0/0", "prefix_list_id"]
-        # route_to_transit_gateway_destinations = ["10.0.0.0/8", "prefix_list_id"]
       }
       # gateway endpoints can be used for 's3' and 'dynamodb' and can only be accessed from inside the VPC
       # to access 's3' endpoint from on-premises an interface endpoint is required. Combine both endpoint types for cost optimization
@@ -116,26 +152,46 @@ locals {
         # }
       ]
       # (optional) share subnet with Organizations, OUs or Accounts - requires RAM to be enabled for Organizations
+      ram_share_principals = [
+        local.ntc_parameters["management"]["organization"]["ou_ids"]["/root/workloads/prod"]
+      ]
+    },
+    {
+      # (optional) for VPCs with secondary cidr blocks the 'vpc_cidr_identifier' is required. Primary cidr block is always 'primary'
+      vpc_cidr_identifier = "cloudonly"
+      # unique identifier for subnet - renaming will cause subnet to be recreated
+      subnet_identifier = "cloudonly-firewall"
+      # subnets can be of type 'private', 'public', 'firewall' or 'transit'
+      subnet_type = "firewall"
+      # setting netmask_length will dynamically calculate or allocate (with ipam) corresponding cidr ranges
+      # when calculating cidrs the subnets will be sorted from largest to smallest to optimize cidr space
+      # WARNING: changing the netmask_length can lead to subnets beeing redeployed
+      netmask_length = 28
+      # instead of dynamically calculating subnet cidrs based on netmask length a list of static cidrs can be provided
+      static_cidrs = []
+      # specific configuration for subnet type
+      firewall_subnet_config = {
+        default_route_to_public_nat_gateway = true
+        default_route_to_internet_gateway   = false
+        default_route_to_transit_gateway    = false
+      }
+      # (optional) share subnet with Organizations, OUs or Accounts - requires RAM to be enabled for Organizations
       # ram_share_principals = ["o-m29e8d9awz", "ou-6gf5-6ltp3mjf", "090258021222"]
     },
     {
-      vpc_cidr_identifier = "primary"
-      subnet_identifier   = "cloudonly-public"
-      subnet_type         = "public"
-      netmask_length      = 26
-      public_subnet_config = {
-        create_public_nat_gateway = false
-        map_public_ip_on_launch   = true
-        # route_to_network_firewall_destinations = ["0.0.0.0/0", "prefix_list_id"]
-        # route_to_transit_gateway_destinations = ["10.0.0.0/8", "prefix_list_id"]
-      }
-      ram_share_principals = []
-    },
-    {
-      vpc_cidr_identifier = "primary"
-      subnet_identifier   = "cloudonly-transit"
-      subnet_type         = "transit"
-      netmask_length      = 28
+      # (optional) for VPCs with secondary cidr blocks the 'vpc_cidr_identifier' is required. Primary cidr block is always 'primary'
+      vpc_cidr_identifier = "cloudonly"
+      # unique identifier for subnet - renaming will cause subnet to be recreated
+      subnet_identifier = "cloudonly-transit"
+      # subnets can be of type 'private', 'public', 'firewall' or 'transit'
+      subnet_type = "transit"
+      # setting netmask_length will dynamically calculate or allocate (with ipam) corresponding cidr ranges
+      # when calculating cidrs the subnets will be sorted from largest to smallest to optimize cidr space
+      # WARNING: changing the netmask_length can lead to subnets beeing redeployed
+      netmask_length = 28
+      # instead of dynamically calculating subnet cidrs based on netmask length a list of static cidrs can be provided
+      static_cidrs = []
+      # specific configuration for subnet type
       transit_subnet_config = {
         transit_gateway_create_attachment               = true
         transit_gateway_default_route_table_association = false
@@ -145,17 +201,8 @@ locals {
         transit_gateway_propagation_to_route_table_id   = aws_ec2_transit_gateway_route_table.hub.id
         transit_gateway_appliance_mode_support          = false
       }
-    },
-    # (optional) subnets from vpc secondary cidrs
-    {
-      vpc_cidr_identifier = "hybrid"
-      subnet_identifier   = "hybrid-private"
-      subnet_type         = "private"
-      netmask_length      = 26
-      private_subnet_config = {
-        default_route_to_public_nat_gateway = false
-        default_route_to_transit_gateway    = true
-      }
+      # (optional) share subnet with Organizations, OUs or Accounts - requires RAM to be enabled for Organizations
+      # ram_share_principals = ["o-m29e8d9awz", "ou-6gf5-6ltp3mjf", "090258021222"]
     }
   ]
 
