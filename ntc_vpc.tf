@@ -239,8 +239,7 @@ locals {
 # ¦ NTC VPC
 # ---------------------------------------------------------------------------------------------------------------------
 module "prod_stage_vpc" {
-  # source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc?ref=1.0.1"
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc?ref=feat-firewall-subnet"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc?ref=1.1.0"
 
   prefix_name                    = local.vpc_prefix_name
   availability_zones             = local.vpc_availability_zones
