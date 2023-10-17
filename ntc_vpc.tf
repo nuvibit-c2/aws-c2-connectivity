@@ -238,7 +238,7 @@ locals {
 # ---------------------------------------------------------------------------------------------------------------------
 # ¦ NTC VPC
 # ---------------------------------------------------------------------------------------------------------------------
-module "prod_stage_vpc" {
+module "ntc_vpc_prod_stage" {
   source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc?ref=1.1.0"
 
   prefix_name                    = local.vpc_prefix_name

@@ -4,7 +4,7 @@ locals {
 
   # parameters that are managed by core connectivity account
   ntc_parameters_to_write = {
-    customer_managed_prefix_lists : module.prod_stage_vpc.customer_managed_prefix_lists
+    customer_managed_prefix_lists : module.ntc_vpc_prod_stage.customer_managed_prefix_lists
   }
 
   # by default existing node parameters will be merged with new parameters to avoid deleting parameters
