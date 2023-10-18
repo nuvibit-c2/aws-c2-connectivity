@@ -33,7 +33,9 @@
 | <a name="module_ipam"></a> [ipam](#module\_ipam) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-ipam | beta |
 | <a name="module_ntc_parameters_reader"></a> [ntc\_parameters\_reader](#module\_ntc\_parameters\_reader) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-parameters//modules/reader | 1.1.0 |
 | <a name="module_ntc_parameters_writer"></a> [ntc\_parameters\_writer](#module\_ntc\_parameters\_writer) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-parameters//modules/writer | 1.1.0 |
-| <a name="module_prod_stage_vpc"></a> [prod\_stage\_vpc](#module\_prod\_stage\_vpc) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc | 1.1.0 |
+| <a name="module_ntc_route53_central_endpoints"></a> [ntc\_route53\_central\_endpoints](#module\_ntc\_route53\_central\_endpoints) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53 | beta |
+| <a name="module_ntc_route53_mydomain_internal"></a> [ntc\_route53\_mydomain\_internal](#module\_ntc\_route53\_mydomain\_internal) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53 | beta |
+| <a name="module_ntc_vpc_prod_stage"></a> [ntc\_vpc\_prod\_stage](#module\_ntc\_vpc\_prod\_stage) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc | feat-routing |
 
 ## Resources
 
