@@ -50,8 +50,8 @@ locals {
         ttl  = 300
         alias = {
           enable_alias           = true
-          target_dns_name        = module.ntc_vpc_prod_stage.interface_endpoints.logs.dns_names[0]
-          target_hosted_zone_id  = module.ntc_vpc_prod_stage.interface_endpoints.logs.hosted_zone_id
+          target_dns_name        = module.ntc_vpc_central_endpoints.interface_endpoints.logs.dns_names[0]
+          target_hosted_zone_id  = module.ntc_vpc_central_endpoints.interface_endpoints.logs.hosted_zone_id
           evaluate_target_health = true
         }
       }

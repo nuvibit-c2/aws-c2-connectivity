@@ -7,7 +7,7 @@ locals {
   # https://docs.aws.amazon.com/whitepapers/latest/building-scalable-secure-multi-vpc-network-infrastructure/centralized-access-to-vpc-private-endpoints.html
 
   route53_central_endpoints = {
-    for endpoint in module.ntc_vpc_prod_stage.interface_endpoints : endpoint.common_name => {
+    for endpoint in module.ntc_vpc_central_endpoints.interface_endpoints : endpoint.common_name => {
       # name of the route53 hosted zone
       zone_name        = endpoint.private_dns_name
       zone_description = "Managed by Terraform"
