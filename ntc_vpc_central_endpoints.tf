@@ -29,7 +29,8 @@ locals {
           }
         ]
         # (optional) share subnet with Organizations, OUs or Accounts - requires RAM to be enabled for Organizations
-        # ram_share_principals = ["o-m29e8d9awz", "ou-6gf5-6ltp3mjf", "090258021222"]
+        # ram_share_principals = ["o-m29e8d9awz", "ou-6gf5-6ltp3mjf", "945766593056"]
+        # ram_share_allow_external_principals = false
       }
     ]
 
@@ -80,7 +81,8 @@ locals {
           }
         ]
         # (optional) share subnet with Organizations, OUs or Accounts - requires RAM to be enabled for Organizations
-        # ram_share_principals = ["o-m29e8d9awz", "ou-6gf5-6ltp3mjf", "090258021222"]
+        # ram_share_principals = ["o-m29e8d9awz", "ou-6gf5-6ltp3mjf", "945766593056"]
+        # ram_share_allow_external_principals = false
       },
       {
         # (optional) for VPCs with secondary cidr blocks the 'vpc_cidr_identifier' is required. Primary cidr block is always 'primary'
@@ -106,7 +108,8 @@ locals {
           transit_gateway_appliance_mode_support          = false
         }
         # (optional) share subnet with Organizations, OUs or Accounts - requires RAM to be enabled for Organizations
-        # ram_share_principals = ["o-m29e8d9awz", "ou-6gf5-6ltp3mjf", "090258021222"]
+        # ram_share_principals = ["o-m29e8d9awz", "ou-6gf5-6ltp3mjf", "945766593056"]
+        # ram_share_allow_external_principals = false
       }
     ]
 
