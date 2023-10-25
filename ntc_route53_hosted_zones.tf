@@ -66,7 +66,7 @@ locals {
 # ¦ NTC ROUTE53
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_route53_mydomain_internal" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53?ref=beta"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53?ref=1.0.0"
 
   zone_name                      = local.route53_mydomain_internal.zone_name
   zone_description               = local.route53_mydomain_internal.zone_description

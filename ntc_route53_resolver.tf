@@ -16,7 +16,7 @@ locals {
         {
           subnet_id = id
           # (optional but recommended) set a static ip for the resolver endpoint
-          static_ip = null
+          static_ip = cidrhost(module.ntc_vpc_central_endpoints.subnet_cidr_blocks["hybrid-private"][index], 4)
         }
       ]
     }
@@ -31,7 +31,7 @@ locals {
         {
           subnet_id = id
           # (optional but recommended) set a static ip for the resolver endpoint
-          static_ip = null
+          static_ip = cidrhost(module.ntc_vpc_central_endpoints.subnet_cidr_blocks["hybrid-private"][index], 5)
         }
       ]
     }
@@ -115,7 +115,7 @@ locals {
 # ¦ NTC ROUTE53
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_route53_resolver" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53//modules/resolver?ref=beta"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53//modules/resolver?ref=1.0.0"
 
   resolver_endpoint_inbound        = local.route53_resolver.resolver_endpoint_inbound
   resolver_endpoint_outbound       = local.route53_resolver.resolver_endpoint_outbound
