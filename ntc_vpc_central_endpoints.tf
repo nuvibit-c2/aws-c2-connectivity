@@ -42,6 +42,14 @@ locals {
     # (optional) use IPAM to get cidr blocks dynamically
     vpc_ipam_settings = {}
 
+    # for centralized vpc endpoints update security group (by default only current vpc is allowed to access endpoints)
+    interface_endpoints_security_group_ingress = {
+      create_security_group     = true
+      allowed_cidr_blocks       = ["172.16.0.0/16"]
+      allowed_prefix_list_names = []
+      inbound_ports             = ["443"]
+    }
+
     vpc_subnets = [
       {
         # (optional) for VPCs with secondary cidr blocks the 'vpc_cidr_identifier' is required. Primary cidr block is always 'primary'
@@ -150,14 +158,15 @@ module "ntc_vpc_central_endpoints" {
   # source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc?ref=1.1.0"
   source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc?ref=feat-routing"
 
-  prefix_name                    = local.vpc_central_endpoints.prefix_name
-  availability_zones             = local.vpc_central_endpoints.availability_zones
-  customer_managed_prefix_lists  = local.vpc_central_endpoints.customer_managed_prefix_lists
-  vpc_ipv4_primary_cidr          = local.vpc_central_endpoints.vpc_ipv4_primary_cidr
-  vpc_ipv4_secondary_cidr_blocks = local.vpc_central_endpoints.vpc_ipv4_secondary_cidr_blocks
-  vpc_ipam_settings              = local.vpc_central_endpoints.vpc_ipam_settings
-  vpc_subnets                    = local.vpc_central_endpoints.vpc_subnets
-  vpc_flow_log_destinations      = local.vpc_central_endpoints.vpc_flow_log_destinations
+  prefix_name                                = local.vpc_central_endpoints.prefix_name
+  availability_zones                         = local.vpc_central_endpoints.availability_zones
+  customer_managed_prefix_lists              = local.vpc_central_endpoints.customer_managed_prefix_lists
+  vpc_ipv4_primary_cidr                      = local.vpc_central_endpoints.vpc_ipv4_primary_cidr
+  vpc_ipv4_secondary_cidr_blocks             = local.vpc_central_endpoints.vpc_ipv4_secondary_cidr_blocks
+  vpc_ipam_settings                          = local.vpc_central_endpoints.vpc_ipam_settings
+  vpc_subnets                                = local.vpc_central_endpoints.vpc_subnets
+  vpc_flow_log_destinations                  = local.vpc_central_endpoints.vpc_flow_log_destinations
+  interface_endpoints_security_group_ingress = local.vpc_central_endpoints.interface_endpoints_security_group_ingress
 
   providers = {
     aws = aws.euc1
