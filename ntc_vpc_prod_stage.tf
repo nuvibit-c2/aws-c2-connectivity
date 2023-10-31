@@ -282,14 +282,14 @@ locals {
       }
       # where should the traffic be routed to? only 1 target
       target = {
-        egress_only_gateway_id      = "" # VPC Egress Only Internet Gateway
-        internet_gateway_id         = "" # VPC internet gateway or a virtual private gateway
-        transit_gateway_id          = ""
-        virtual_private_gateway_id  = "" # VPC internet gateway or a virtual private gateway
-        vpc_peering_connection_id   = ""
-        nat_gateway_ids             = [""] # should be ordered by availability zone
-        network_interface_ids       = [""] # should be ordered by availability zone
-        vpc_endpoint_ids            = [""] # should be ordered by availability zone
+        egress_only_gateway_id     = "" # VPC Egress Only Internet Gateway
+        internet_gateway_id        = "" # VPC internet gateway or a virtual private gateway
+        transit_gateway_id         = ""
+        virtual_private_gateway_id = "" # VPC internet gateway or a virtual private gateway
+        vpc_peering_connection_id  = ""
+        nat_gateway_ids            = [""] # should be ordered by availability zone
+        network_interface_ids      = [""] # should be ordered by availability zone
+        vpc_endpoint_ids           = [""] # should be ordered by availability zone
       }
     }
   ]
