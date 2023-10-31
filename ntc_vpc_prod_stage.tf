@@ -263,3 +263,34 @@ module "ntc_vpc_prod_stage" {
     aws = aws.euc1
   }
 }
+
+
+locals {
+  /*
+  TODO:
+  dependency between subnet, external resources (firewall) and routes.
+  dedicated submodule?
+  */
+  custom_routes = [
+    {
+      route_table_ids = [""]
+      # what is the destination of the traffic that should be routed?
+      destination = {
+        cidr_blocks      = [""]
+        ipv6_cidr_blocks = [""]
+        prefix_list_ids  = [""]
+      }
+      # where should the traffic be routed to? only 1 target
+      target = {
+        egress_only_gateway_id      = "" # VPC Egress Only Internet Gateway
+        internet_gateway_id         = "" # VPC internet gateway or a virtual private gateway
+        transit_gateway_id          = ""
+        virtual_private_gateway_id  = "" # VPC internet gateway or a virtual private gateway
+        vpc_peering_connection_id   = ""
+        nat_gateway_ids             = [""] # should be ordered by availability zone
+        network_interface_ids       = [""] # should be ordered by availability zone
+        vpc_endpoint_ids            = [""] # should be ordered by availability zone
+      }
+    }
+  ]
+}
