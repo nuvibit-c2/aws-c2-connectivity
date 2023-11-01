@@ -241,6 +241,31 @@ locals {
       # }
     ]
   }
+
+  # TODO: add description
+  vpc_prod_stage_custom_routes = [
+    {
+      route_table_ids = module.ntc_vpc_prod_stage.route_table_ids["cloudonly-private"]
+      # what is the destination of the traffic that should be routed? min/max 1 target
+      destination = {
+        cidr_blocks      = ["10.100.10.0/24", "10.100.20.0/24"]
+        ipv6_cidr_blocks = []
+        prefix_list_ids  = []
+      }
+      # where should the traffic be routed to? min/max 1 target
+      target = {
+        ipv6_egress_only_gateway_id = ""
+        internet_gateway_id         = ""
+        transit_gateway_id          = ""
+        virtual_private_gateway_id  = ""
+        vpc_peering_connection_id   = ""
+        # 
+        nat_gateway_ids             = [] 
+        network_interface_ids       = ["eni-068b5ccd7f7b7cfd3", "eni-0ca9af96faf51d443", "eni-0e55b3e0b04ee1824"]
+        vpc_endpoint_ids            = []
+      }
+    }
+  ]
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -264,33 +289,16 @@ module "ntc_vpc_prod_stage" {
   }
 }
 
+# ---------------------------------------------------------------------------------------------------------------------
+# ¦ NTC VPC - CUSTOM ROUTES
+# ---------------------------------------------------------------------------------------------------------------------
+module "ntc_vpc_prod_stage_custom_routes" {
+  # source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc//modules/custom-routes?ref=1.1.0"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc//modules/custom-routes?ref=feat-routing"
 
-locals {
-  /*
-  TODO:
-  dependency between subnet, external resources (firewall) and routes.
-  dedicated submodule?
-  */
-  custom_routes = [
-    {
-      route_table_ids = [""]
-      # what is the destination of the traffic that should be routed?
-      destination = {
-        cidr_blocks      = [""]
-        ipv6_cidr_blocks = [""]
-        prefix_list_ids  = [""]
-      }
-      # where should the traffic be routed to? only 1 target
-      target = {
-        egress_only_gateway_id     = "" # VPC Egress Only Internet Gateway
-        internet_gateway_id        = "" # VPC internet gateway or a virtual private gateway
-        transit_gateway_id         = ""
-        virtual_private_gateway_id = "" # VPC internet gateway or a virtual private gateway
-        vpc_peering_connection_id  = ""
-        nat_gateway_ids            = [""] # should be ordered by availability zone
-        network_interface_ids      = [""] # should be ordered by availability zone
-        vpc_endpoint_ids           = [""] # should be ordered by availability zone
-      }
-    }
-  ]
+  custom_routes = local.vpc_prod_stage_custom_routes
+
+  providers = {
+    aws = aws.euc1
+  }
 }
