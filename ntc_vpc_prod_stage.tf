@@ -242,24 +242,30 @@ locals {
     ]
   }
 
-  # TODO: add description
+  # vpc module only supports some predefined default routes
+  # define custom routes for maximum flexibility (e.g. firewall deployment)
   vpc_prod_stage_custom_routes = [
     {
+      # list of route tables where custom routes should be added
+      # Should contain route tables for same subnet type across multiple availability zones
       route_table_ids = module.ntc_vpc_prod_stage.route_table_ids["cloudonly-private"]
-      # what is the destination of the traffic that should be routed? min/max 1 target
+      # what is the destination of the traffic that should be controlled by this route?
+      # a single destination must be defined
       destination = {
         cidr_blocks      = ["10.100.10.0/24", "10.100.20.0/24"]
         ipv6_cidr_blocks = []
         prefix_list_ids  = []
       }
-      # where should the traffic be routed to? min/max 1 target
+      # what is the target of the traffic that should be controlled by this route?
+      # a single target must be defined
       target = {
         ipv6_egress_only_gateway_id = ""
         internet_gateway_id         = ""
         transit_gateway_id          = ""
         virtual_private_gateway_id  = ""
         vpc_peering_connection_id   = ""
-        # 
+        # either a single target or the same amount of targets as route table ids must be defined
+        # targets will be distributed across route tables if same amount of targets as route table ids are defined
         nat_gateway_ids             = [] 
         network_interface_ids       = ["eni-068b5ccd7f7b7cfd3", "eni-0ca9af96faf51d443", "eni-0e55b3e0b04ee1824"]
         vpc_endpoint_ids            = []
