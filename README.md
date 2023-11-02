@@ -38,7 +38,6 @@
 | <a name="module_ntc_route53_resolver"></a> [ntc\_route53\_resolver](#module\_ntc\_route53\_resolver) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53//modules/resolver | 1.0.0 |
 | <a name="module_ntc_vpc_central_endpoints"></a> [ntc\_vpc\_central\_endpoints](#module\_ntc\_vpc\_central\_endpoints) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc | feat-routing |
 | <a name="module_ntc_vpc_prod_stage"></a> [ntc\_vpc\_prod\_stage](#module\_ntc\_vpc\_prod\_stage) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc | feat-routing |
-| <a name="module_ntc_vpc_prod_stage_custom_routes"></a> [ntc\_vpc\_prod\_stage\_custom\_routes](#module\_ntc\_vpc\_prod\_stage\_custom\_routes) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc//modules/custom-routes | feat-routing |
 
 ## Resources
 
