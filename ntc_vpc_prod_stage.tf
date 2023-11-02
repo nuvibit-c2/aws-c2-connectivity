@@ -275,7 +275,7 @@ locals {
         cidr_block = "10.100.10.0/24"
       }
       target = {
-        network_interface_ids = "eni-0ca9af96faf51d443"
+        network_interface_id = "eni-0ca9af96faf51d443"
       }
     },
     {
@@ -284,7 +284,7 @@ locals {
         cidr_block = "10.100.10.0/24"
       }
       target = {
-        network_interface_ids = "eni-0e55b3e0b04ee1824"
+        network_interface_id = "eni-0e55b3e0b04ee1824"
       }
     }
   ]
@@ -314,13 +314,13 @@ module "ntc_vpc_prod_stage" {
 # ---------------------------------------------------------------------------------------------------------------------
 # ¦ NTC VPC - CUSTOM ROUTES
 # ---------------------------------------------------------------------------------------------------------------------
-# module "ntc_vpc_prod_stage_custom_routes" {
-#   # source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc//modules/custom-routes?ref=1.1.0"
-#   source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc//modules/custom-routes?ref=feat-routing"
+module "ntc_vpc_prod_stage_custom_routes" {
+  # source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc//modules/custom-routes?ref=1.1.0"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc//modules/custom-routes?ref=feat-routing"
 
-#   custom_routes = local.vpc_prod_stage_custom_routes
+  custom_routes = local.vpc_prod_stage_custom_routes
 
-#   providers = {
-#     aws = aws.euc1
-#   }
-# }
+  providers = {
+    aws = aws.euc1
+  }
+}
