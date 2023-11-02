@@ -258,6 +258,8 @@ locals {
       # what is the target of the traffic that should be controlled by this route?
       # a single target type is required and cannot combine multiple target types
       target = {
+        carrier_gateway_id          = ""
+        core_network_arn            = ""
         ipv6_egress_only_gateway_id = ""
         internet_gateway_id         = ""
         transit_gateway_id          = ""
