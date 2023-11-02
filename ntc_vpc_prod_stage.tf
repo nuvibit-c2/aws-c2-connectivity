@@ -245,15 +245,14 @@ locals {
   # add custom routes for more flexibility and full control (e.g. firewall deployment)
   vpc_prod_stage_custom_routes = [
     {
-      # list of route tables where custom routes should be added
-      # e.g. route tables of same subnet type across multiple availability zones (e.g. 3 route tables for 3 firewall subnets)
-      route_table_ids = module.ntc_vpc_prod_stage.route_table_ids["cloudonly-private"]
+      # route table where custom route will be be added
+      route_table_id = module.ntc_vpc_prod_stage.route_table_ids["cloudonly-private"][0]
       # what is the destination of the traffic that should be controlled by this route?
       # a single destination type is required and cannot combine multiple destination types
       destination = {
-        cidr_blocks      = ["10.100.10.0/24", "10.100.20.0/24"]
-        ipv6_cidr_blocks = []
-        prefix_list_ids  = []
+        cidr_block      = "10.100.10.0/24"
+        ipv6_cidr_block = ""
+        prefix_list_id  = ""
       }
       # what is the target of the traffic that should be controlled by this route?
       # a single target type is required and cannot combine multiple target types
@@ -265,11 +264,27 @@ locals {
         transit_gateway_id          = ""
         virtual_private_gateway_id  = ""
         vpc_peering_connection_id   = ""
-        # either a single target or the same amount of targets as route table ids must be defined
-        # targets will be distributed across route tables if a list of targets is defined (e.g. 1st target in 1st route table, 2nd target in 2nd route table...)
-        nat_gateway_ids       = []
-        network_interface_ids = ["eni-068b5ccd7f7b7cfd3", "eni-0ca9af96faf51d443", "eni-0e55b3e0b04ee1824"]
-        vpc_endpoint_ids      = []
+        nat_gateway_id              = ""
+        network_interface_id        = "eni-068b5ccd7f7b7cfd3"
+        vpc_endpoint_id             = ""
+      }
+    },
+    {
+      route_table_id = module.ntc_vpc_prod_stage.route_table_ids["cloudonly-private"][1]
+      destination = {
+        cidr_block = "10.100.10.0/24"
+      }
+      target = {
+        network_interface_ids = "eni-0ca9af96faf51d443"
+      }
+    },
+    {
+      route_table_id = module.ntc_vpc_prod_stage.route_table_ids["cloudonly-private"][2]
+      destination = {
+        cidr_block = "10.100.10.0/24"
+      }
+      target = {
+        network_interface_ids = "eni-0e55b3e0b04ee1824"
       }
     }
   ]
@@ -299,13 +314,13 @@ module "ntc_vpc_prod_stage" {
 # ---------------------------------------------------------------------------------------------------------------------
 # ¦ NTC VPC - CUSTOM ROUTES
 # ---------------------------------------------------------------------------------------------------------------------
-module "ntc_vpc_prod_stage_custom_routes" {
-  # source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc//modules/custom-routes?ref=1.1.0"
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc//modules/custom-routes?ref=feat-routing"
+# module "ntc_vpc_prod_stage_custom_routes" {
+#   # source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc//modules/custom-routes?ref=1.1.0"
+#   source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc//modules/custom-routes?ref=feat-routing"
 
-  custom_routes = local.vpc_prod_stage_custom_routes
+#   custom_routes = local.vpc_prod_stage_custom_routes
 
-  providers = {
-    aws = aws.euc1
-  }
-}
+#   providers = {
+#     aws = aws.euc1
+#   }
+# }
