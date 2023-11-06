@@ -203,6 +203,8 @@ locals {
           transit_gateway_default_route_table_association = false
           transit_gateway_default_route_table_propagation = false
           transit_gateway_appliance_mode_support          = false
+          transit_gateway_ipv6_support                    = false
+          transit_gateway_dns_support                     = true
         }
         # (optional) share subnet with Organizations, OUs or Accounts - requires RAM to be enabled for Organizations
         # ram_share_principals = ["o-m29e8d9awz", "ou-6gf5-6ltp3mjf", "945766593056"]
