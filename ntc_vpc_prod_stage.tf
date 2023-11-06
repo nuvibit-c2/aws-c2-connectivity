@@ -202,9 +202,6 @@ locals {
           transit_gateway_create_attachment               = true
           transit_gateway_default_route_table_association = false
           transit_gateway_default_route_table_propagation = false
-          transit_gateway_id                              = aws_ec2_transit_gateway.core.id
-          transit_gateway_association_with_route_table_id = aws_ec2_transit_gateway_route_table.spoke.id
-          transit_gateway_propagation_to_route_table_ids  = [aws_ec2_transit_gateway_route_table.hub.id]
           transit_gateway_appliance_mode_support          = false
         }
         # (optional) share subnet with Organizations, OUs or Accounts - requires RAM to be enabled for Organizations
@@ -305,6 +302,7 @@ module "ntc_vpc_prod_stage" {
   vpc_ipam_settings              = local.vpc_prod_stage.vpc_ipam_settings
   vpc_subnets                    = local.vpc_prod_stage.vpc_subnets
   vpc_flow_log_destinations      = local.vpc_prod_stage.vpc_flow_log_destinations
+  transit_gateway_id             = aws_ec2_transit_gateway.core.id
 
   providers = {
     aws = aws.euc1
