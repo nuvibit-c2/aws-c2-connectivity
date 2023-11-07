@@ -3,7 +3,7 @@
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_vpc_central_endpoints" {
   # source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc?ref=1.1.0"
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc?ref=feat-routing"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc?ref=feat-custom-routes"
 
   # a prefix which will be added to all vpc resources
   prefix_name = "central-endpoints"
