@@ -110,7 +110,7 @@ module "ntc_vpc_central_endpoints" {
       # specific configuration for subnet type
       transit_subnet_config = {
         transit_gateway_create_attachment               = true
-        transit_gateway_id = aws_ec2_transit_gateway.core.id
+        transit_gateway_id                              = aws_ec2_transit_gateway.core.id
         transit_gateway_default_route_table_association = false
         transit_gateway_default_route_table_propagation = false
         transit_gateway_appliance_mode_support          = false
