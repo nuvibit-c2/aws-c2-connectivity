@@ -110,12 +110,19 @@ module "ntc_vpc_central_endpoints" {
       # specific configuration for subnet type
       transit_subnet_config = {
         transit_gateway_create_attachment               = true
-        transit_gateway_id                              = aws_ec2_transit_gateway.core.id
-        transit_gateway_default_route_table_association = false
-        transit_gateway_default_route_table_propagation = false
         transit_gateway_appliance_mode_support          = false
         transit_gateway_ipv6_support                    = false
         transit_gateway_dns_support                     = true
+        transit_gateway_default_route_table_association = false
+        transit_gateway_default_route_table_propagation = false
+        transit_gateway_id                              = aws_ec2_transit_gateway.core.id
+        # vpc attachement can only be associated with a single transit gateway route table
+        transit_gateway_association_with_route_table_id = aws_ec2_transit_gateway_route_table.hub.id
+        # vpc attachement can propagate to multiple transit gateway route table for dynamic routing
+        transit_gateway_propagation_to_route_table_ids = [
+          aws_ec2_transit_gateway_route_table.hub.id,
+          aws_ec2_transit_gateway_route_table.spoke.id
+        ]
       }
       # (optional) share subnet with Organizations, OUs or Accounts - requires RAM to be enabled for Organizations
       # ram_share_principals = ["o-m29e8d9awz", "ou-6gf5-6ltp3mjf", "945766593056"]
