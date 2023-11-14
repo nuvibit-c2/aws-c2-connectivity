@@ -6,6 +6,7 @@
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_route53_resolver" {
   source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53//modules/resolver?ref=1.0.0"
+  count  = 0 # disabled for demo purposes
 
   # inbound resolver endpoints are required for conditional dns forwarding from on-premise dns servers to aws
   resolver_endpoint_inbound = {
