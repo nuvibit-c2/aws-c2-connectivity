@@ -2,7 +2,8 @@
 # ¦ NTC VPC
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_vpc_central_endpoints" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc?ref=1.2.0"
+  # source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc?ref=1.2.0"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc?ref=fix-sg-prefix-list"
 
   # a prefix which will be added to all vpc resources
   prefix_name = "central-endpoints"
@@ -47,7 +48,7 @@ module "ntc_vpc_central_endpoints" {
   interface_endpoints_security_group_ingress = {
     create_security_group     = true
     allowed_cidr_blocks       = ["172.16.0.0/16"]
-    allowed_prefix_list_names = []
+    allowed_prefix_list_names = ["onprem-dns-servers"]
     inbound_ports             = ["443"]
   }
 
