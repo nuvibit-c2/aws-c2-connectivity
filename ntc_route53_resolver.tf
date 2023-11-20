@@ -48,20 +48,23 @@ module "ntc_route53_resolver" {
     ingress_rules = [
       {
         protocol = "tcp"
+        # add cidrs or prefix list of on-premises dns servers (if omitted default is 0.0.0.0/0)
         cidr_blocks = [
-          # add cidrs of on-premises dns servers (by default 0.0.0.0/0)
-          "192.168.8.8/32",
-          "192.168.9.9/32"
+          # "192.168.8.8/32",
+          # "192.168.9.9/32"
+        ]
+        prefix_list_ids = [
+          module.ntc_vpc_central_endpoints.customer_managed_prefix_lists["onprem-dns-servers"].id
         ]
         # (optional) allow outbound resolver to forward to inbound resolver
         self = true
       },
       {
         protocol = "udp"
-        cidr_blocks = [
-          # add cidrs of on-premises dns servers (by default 0.0.0.0/0)
-          "192.168.8.8/32",
-          "192.168.9.9/32"
+        # add cidrs or prefix list of on-premises dns servers (if omitted default is 0.0.0.0/0)
+        cidr_blocks = []
+        prefix_list_ids = [
+          module.ntc_vpc_central_endpoints.customer_managed_prefix_lists["onprem-dns-servers"].id
         ]
         # (optional) allow outbound resolver to forward to inbound resolver
         self = true
@@ -71,20 +74,20 @@ module "ntc_route53_resolver" {
     egress_rules = [
       {
         protocol = "tcp"
-        cidr_blocks = [
-          # add cidrs of on-premises dns servers (by default 0.0.0.0/0)
-          "192.168.8.8/32",
-          "192.168.9.9/32"
+        # add cidrs or prefix list of on-premises dns servers (if omitted default is 0.0.0.0/0)
+        cidr_blocks = []
+        prefix_list_ids = [
+          module.ntc_vpc_central_endpoints.customer_managed_prefix_lists["onprem-dns-servers"].id
         ]
         # (optional) allow outbound resolver to forward to inbound resolver
         self = true
       },
       {
         protocol = "udp"
-        cidr_blocks = [
-          # add cidrs of on-premises dns servers (by default 0.0.0.0/0)
-          "192.168.8.8/32",
-          "192.168.9.9/32"
+        # add cidrs or prefix list of on-premises dns servers (if omitted default is 0.0.0.0/0)
+        cidr_blocks = []
+        prefix_list_ids = [
+          module.ntc_vpc_central_endpoints.customer_managed_prefix_lists["onprem-dns-servers"].id
         ]
         # (optional) allow outbound resolver to forward to inbound resolver
         self = true
