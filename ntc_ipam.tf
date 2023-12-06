@@ -1,9 +1,11 @@
 # ---------------------------------------------------------------------------------------------------------------------
-# ¦ LOCALS
+# ¦ NTC IPAM
 # ---------------------------------------------------------------------------------------------------------------------
-locals {
-  ipam_description = "Organizational IPAM"
-  ipam_nested_pools = [
+module "ipam" {
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-ipam?ref=beta"
+
+  description = "Organizational IPAM"
+  nested_pools = [
     {
       pool_path   = "/toplevel"
       pool_name   = "Global (CGNAT) Pool"
@@ -59,16 +61,6 @@ locals {
       ]
     }
   ]
-}
-
-# ---------------------------------------------------------------------------------------------------------------------
-# ¦ NTC IPAM
-# ---------------------------------------------------------------------------------------------------------------------
-module "ipam" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-ipam?ref=beta"
-
-  description  = local.ipam_description
-  nested_pools = local.ipam_nested_pools
 
   providers = {
     aws = aws.euc1

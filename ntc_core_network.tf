@@ -9,7 +9,7 @@ resource "aws_ec2_transit_gateway" "core" {
   default_route_table_propagation = "enable"
   dns_support                     = "enable"
   multicast_support               = "disable"
-  transit_gateway_cidr_blocks     = null
+  transit_gateway_cidr_blocks     = []
   vpn_ecmp_support                = "enable"
 
   tags = {
@@ -32,3 +32,16 @@ resource "aws_ec2_transit_gateway_route_table" "spoke" {
     "Name" = "tgw-route-table-spoke"
   }
 }
+
+# ---------------------------------------------------------------------------------------------------------------------
+# ¦ NTC CORE NETWORK
+# ---------------------------------------------------------------------------------------------------------------------
+# module "ntc_core_network" {
+#   source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network?ref=beta"
+
+
+
+#   providers = {
+#     aws = aws.euc1
+#   }
+# }
