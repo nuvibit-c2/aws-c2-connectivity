@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------------------------------------------------------
 # ¦ PLACEHOLDER: NTC-CORE-NETWORK
 # ---------------------------------------------------------------------------------------------------------------------
-resource "aws_ec2_transit_gateway" "core" {
+resource "aws_ec2_transit_gateway" "ntc_core" {
   description                     = "core network"
   amazon_side_asn                 = 64512
   auto_accept_shared_attachments  = "disable"
@@ -17,16 +17,16 @@ resource "aws_ec2_transit_gateway" "core" {
   }
 }
 
-resource "aws_ec2_transit_gateway_route_table" "hub" {
-  transit_gateway_id = aws_ec2_transit_gateway.core.id
+resource "aws_ec2_transit_gateway_route_table" "ntc_hub" {
+  transit_gateway_id = aws_ec2_transit_gateway.ntc_core.id
 
   tags = {
     "Name" = "tgw-route-table-hub"
   }
 }
 
-resource "aws_ec2_transit_gateway_route_table" "spoke" {
-  transit_gateway_id = aws_ec2_transit_gateway.core.id
+resource "aws_ec2_transit_gateway_route_table" "ntc_spoke" {
+  transit_gateway_id = aws_ec2_transit_gateway.ntc_core.id
 
   tags = {
     "Name" = "tgw-route-table-spoke"
@@ -38,10 +38,22 @@ resource "aws_ec2_transit_gateway_route_table" "spoke" {
 # ---------------------------------------------------------------------------------------------------------------------
 # module "ntc_core_network" {
 #   source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network?ref=beta"
-
-
-
 #   providers = {
 #     aws = aws.euc1
 #   }
 # }
+
+moved {
+  from = aws_ec2_transit_gateway.core
+  to = aws_ec2_transit_gateway.ntc_core
+}
+
+moved {
+  from = aws_ec2_transit_gateway_route_table.hub
+  to = aws_ec2_transit_gateway_route_table.ntc_hub
+}
+
+moved {
+  from = aws_ec2_transit_gateway_route_table.spoke
+  to = aws_ec2_transit_gateway_route_table.ntc_spoke
+}
