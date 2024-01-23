@@ -45,15 +45,15 @@ resource "aws_ec2_transit_gateway_route_table" "ntc_spoke" {
 
 moved {
   from = aws_ec2_transit_gateway.core
-  to = aws_ec2_transit_gateway.ntc_core
+  to   = aws_ec2_transit_gateway.ntc_core
 }
 
 moved {
   from = aws_ec2_transit_gateway_route_table.hub
-  to = aws_ec2_transit_gateway_route_table.ntc_hub
+  to   = aws_ec2_transit_gateway_route_table.ntc_hub
 }
 
 moved {
   from = aws_ec2_transit_gateway_route_table.spoke
-  to = aws_ec2_transit_gateway_route_table.ntc_spoke
+  to   = aws_ec2_transit_gateway_route_table.ntc_spoke
 }
