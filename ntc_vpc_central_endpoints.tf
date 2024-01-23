@@ -114,7 +114,7 @@ module "ntc_vpc_central_endpoints" {
         transit_gateway_dns_support                     = true
         transit_gateway_default_route_table_association = false
         transit_gateway_default_route_table_propagation = false
-        transit_gateway_id                              = aws_ec2_transit_gateway.core.id
+        transit_gateway_id                              = aws_ec2_transit_gateway.ntc_core.id
         # vpc attachement can only be associated with a single transit gateway route table
         transit_gateway_association_with_route_table_id = aws_ec2_transit_gateway_route_table.hub.id
         # vpc attachement can propagate to multiple transit gateway route table for dynamic routing
