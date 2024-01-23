@@ -33,9 +33,10 @@ module "ntc_parameters_reader" {
 module "ntc_parameters_writer" {
   source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-parameters//modules/writer?ref=1.1.0"
 
-  bucket_name     = local.ntc_parameters_bucket_name
-  parameter_node  = local.ntc_parameters_writer_node
-  node_parameters = local.ntc_parameters_to_write
+  bucket_name        = local.ntc_parameters_bucket_name
+  parameter_node     = local.ntc_parameters_writer_node
+  node_parameters    = local.ntc_parameters_to_write
+  replace_parameters = local.ntc_parameters_replace
 
   providers = {
     aws = aws.euc1
