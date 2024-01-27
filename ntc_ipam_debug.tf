@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------------------------------------------------------
 # ¦ NTC IPAM
 # ---------------------------------------------------------------------------------------------------------------------
-module "ipam" {
+module "ipam_euc2" {
   source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-ipam?ref=beta"
 
   description    = "Organizational IPAM"
