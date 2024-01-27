@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------------------------------------------------------
 # ¦ NTC IPAM
 # ---------------------------------------------------------------------------------------------------------------------
-module "ipam" {
+module "ipam_debug" {
   source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-ipam?ref=beta"
 
   description    = "DEBUG IPAM"
