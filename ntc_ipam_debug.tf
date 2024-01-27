@@ -4,13 +4,13 @@
 module "ipam" {
   source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-ipam?ref=beta"
 
-  description    = "Organizational IPAM"
+  description    = "DEBUG IPAM"
   cascade_delete = false
 
   nested_pools = [
     {
       pool_path   = "/toplevel"
-      pool_name   = "Global (CGNAT) Pool"
+      pool_name   = "DEBUG Pool"
       description = "top-level pool"
       cidrs       = ["100.64.0.0/10"]
     },
