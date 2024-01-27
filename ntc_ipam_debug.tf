@@ -4,7 +4,7 @@
 module "ipam_euc2" {
   source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-ipam?ref=beta"
 
-  count = 0
+  count = 1
 
   description    = "Organizational IPAM"
   cascade_delete = false
