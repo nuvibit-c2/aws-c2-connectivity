@@ -6,9 +6,8 @@ module "ipam_euc2" {
 
   count = 0
 
-  description    = "Organizational IPAM"
-  cascade_delete = true
-
+  description = "Organizational IPAM"
+  
   nested_pools = [
     {
       pool_path   = "/toplevel"

@@ -4,8 +4,7 @@
 module "ipam" {
   source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-ipam?ref=beta"
 
-  description    = "Organizational IPAM"
-  cascade_delete = false
+  description = "Organizational IPAM"
 
   nested_pools = [
     {
