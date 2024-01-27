@@ -7,7 +7,7 @@ module "ipam_euc2" {
   count = 1
 
   description    = "Organizational IPAM"
-  cascade_delete = false
+  cascade_delete = true
 
   nested_pools = [
     {
