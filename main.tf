@@ -17,6 +17,14 @@ provider "aws" {
 }
 
 provider "aws" {
+  alias  = "euc2"
+  region = "eu-central-2"
+  # default_tags {
+  #   tags = local.default_tags
+  # }
+}
+
+provider "aws" {
   alias  = "use1"
   region = "us-east-1"
   # default_tags {
