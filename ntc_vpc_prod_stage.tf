@@ -106,7 +106,7 @@ module "ntc_vpc_prod_stage" {
       }
       # (optional) share subnet with Organizations, OUs or Accounts - requires RAM to be enabled for Organizations
       ram_share_principals = [
-        local.ntc_parameters["management"]["organization"]["ou_ids"]["/root/workloads/prod"]
+        local.ntc_parameters["mgmt-organizations"]["ou_ids"]["/root/workloads/prod"]
       ]
       ram_share_allow_external_principals = false
     },
@@ -159,7 +159,7 @@ module "ntc_vpc_prod_stage" {
       ]
       # (optional) share subnet with Organizations, OUs or Accounts - requires RAM to be enabled for Organizations
       ram_share_principals = [
-        local.ntc_parameters["management"]["organization"]["ou_ids"]["/root/workloads/prod"]
+        local.ntc_parameters["mgmt-organizations"]["ou_ids"]["/root/workloads/prod"]
       ]
       ram_share_allow_external_principals = false
     },
