@@ -30,12 +30,12 @@
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_ipam"></a> [ipam](#module\_ipam) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-ipam | beta |
+| <a name="module_ipam"></a> [ipam](#module\_ipam) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-ipam | 1.0.0 |
 | <a name="module_ntc_core_network"></a> [ntc\_core\_network](#module\_ntc\_core\_network) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network | beta |
 | <a name="module_ntc_parameters_reader"></a> [ntc\_parameters\_reader](#module\_ntc\_parameters\_reader) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-parameters//modules/reader | 1.1.1 |
-| <a name="module_ntc_parameters_writer"></a> [ntc\_parameters\_writer](#module\_ntc\_parameters\_writer) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-parameters//modules/writer | 1.1.0 |
+| <a name="module_ntc_parameters_writer"></a> [ntc\_parameters\_writer](#module\_ntc\_parameters\_writer) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-parameters//modules/writer | 1.1.1 |
 | <a name="module_ntc_route53_central_endpoints"></a> [ntc\_route53\_central\_endpoints](#module\_ntc\_route53\_central\_endpoints) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53 | 1.0.1 |
-| <a name="module_ntc_route53_mydomain_internal"></a> [ntc\_route53\_mydomain\_internal](#module\_ntc\_route53\_mydomain\_internal) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53 | 1.0.0 |
+| <a name="module_ntc_route53_mydomain_internal"></a> [ntc\_route53\_mydomain\_internal](#module\_ntc\_route53\_mydomain\_internal) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53 | 1.0.1 |
 | <a name="module_ntc_route53_resolver"></a> [ntc\_route53\_resolver](#module\_ntc\_route53\_resolver) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53//modules/resolver | 1.0.1 |
 | <a name="module_ntc_vpc_central_endpoints"></a> [ntc\_vpc\_central\_endpoints](#module\_ntc\_vpc\_central\_endpoints) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc | 1.2.1 |
 | <a name="module_ntc_vpc_prod_stage"></a> [ntc\_vpc\_prod\_stage](#module\_ntc\_vpc\_prod\_stage) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc | 1.2.1 |
@@ -48,7 +48,6 @@
 | [aws_ec2_transit_gateway.ntc_core](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ec2_transit_gateway) | resource |
 | [aws_ec2_transit_gateway_route_table.ntc_hub](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ec2_transit_gateway_route_table) | resource |
 | [aws_ec2_transit_gateway_route_table.ntc_spoke](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ec2_transit_gateway_route_table) | resource |
-| [aws_availability_zones.available](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/availability_zones) | data source |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
 | [aws_region.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
 
