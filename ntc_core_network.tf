@@ -43,20 +43,20 @@ module "ntc_core_network" {
     name                            = "tgw-core-frankfurt"
     description                     = "core network in frankfurt"
     amazon_side_asn                 = 64512
-    default_route_table_association = true
-    default_route_table_propagation = true
+    default_route_table_association = false
+    default_route_table_propagation = false
     dns_support                     = true
     multicast_support               = false
     vpn_ecmp_support                = true
     cidr_blocks                     = []
     route_table_names = [
-      "tgw-route-table-hub",
-      "tgw-route-table-spoke-prod",
-      "tgw-route-table-spoke-dev",
-      "tgw-route-table-spoke-int",
+      "tgw-core-rtb-hub",
+      "tgw-core-rtb-spoke-prod",
+      "tgw-core-rtb-spoke-dev",
+      "tgw-core-rtb-spoke-int",
     ]
     # (optional) share subnet with Organizations, OUs or Accounts - requires RAM to be enabled for Organizations
-    auto_accept_shared_attachments      = false
+    auto_accept_shared_attachments      = true
     ram_share_principals                = []
     ram_share_allow_external_principals = false
   }
