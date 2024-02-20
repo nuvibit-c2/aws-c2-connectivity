@@ -34,57 +34,44 @@ module "ntc_core_network" {
 # ---------------------------------------------------------------------------------------------------------------------
 # ¦ NTC CORE NETWORK - CUSTOM ROUTES
 # ---------------------------------------------------------------------------------------------------------------------
-# module "ntc_core_network_custom_routes" {
-#   source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network//modules/custom-routes?ref=beta"
+module "ntc_core_network_custom_routes" {
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network//modules/custom-routes?ref=beta"
 
-#   # add custom routes for more flexibility and full control (e.g. firewall deployment)
-#   custom_routes = [
-#     {
-#       # route table where custom route will be be added
-#       route_table_id = module.ntc_vpc_prod_stage.route_table_ids["cloudonly-private"][0]
-#       # what is the destination of the traffic that should be controlled by this route?
-#       # a single destination type is required and cannot combine multiple destination types
-#       destination = {
-#         cidr_block      = "10.100.10.0/24"
-#         ipv6_cidr_block = ""
-#         prefix_list_id  = ""
-#       }
-#       # what is the target of the traffic that should be controlled by this route?
-#       # a single target type is required and cannot combine multiple target types
-#       target = {
-#         carrier_gateway_id          = ""
-#         core_network_arn            = ""
-#         ipv6_egress_only_gateway_id = ""
-#         internet_gateway_id         = ""
-#         transit_gateway_id          = ""
-#         virtual_private_gateway_id  = ""
-#         vpc_peering_connection_id   = ""
-#         nat_gateway_id              = ""
-#         network_interface_id        = "eni-068b5ccd7f7b7cfd3"
-#         vpc_endpoint_id             = ""
-#       }
-#     },
-#     {
-#       route_table_id = module.ntc_vpc_prod_stage.route_table_ids["cloudonly-private"][1]
-#       destination = {
-#         cidr_block = "10.100.10.0/24"
-#       }
-#       target = {
-#         network_interface_id = "eni-0ca9af96faf51d443"
-#       }
-#     },
-#     {
-#       route_table_id = module.ntc_vpc_prod_stage.route_table_ids["cloudonly-private"][2]
-#       destination = {
-#         cidr_block = "10.100.10.0/24"
-#       }
-#       target = {
-#         network_interface_id = "eni-0e55b3e0b04ee1824"
-#       }
-#     }
-#   ]
+  # add custom routes for more flexibility and full control (e.g. firewall deployment)
+  transit_gateway_custom_routes = [
+    {
+      # route table where custom route will be be added
+      route_table_id = module.ntc_core_network.transit_gateway_route_table_ids["tgw-core-rtb-spoke-prod"]
+      attachment_id  = module.ntc_vpc_central_endpoints.transit_gateway_vpc_attachement_id
+      blackhole      = false
+      # what is the destination of the traffic that should be controlled by this route?
+      # a single destination type is required and cannot combine multiple destination types
+      destination = {
+        cidr_block     = "10.100.10.0/24"
+        prefix_list_id = ""
+      }
+    },
+    {
+      route_table_id = module.ntc_vpc_prod_stage.transit_gateway_route_table_ids["tgw-core-rtb-spoke-dev"]
+      attachment_id  = ""
+      blackhole      = true
+      destination = {
+        cidr_block     = "10.100.10.0/24"
+        prefix_list_id = ""
+      }
+    },
+    {
+      route_table_id = module.ntc_vpc_prod_stage.transit_gateway_route_table_ids["tgw-core-rtb-spoke-int"]
+      attachment_id  = module.ntc_vpc_central_endpoints.transit_gateway_vpc_attachement_id
+      blackhole      = false
+      destination = {
+        cidr_block     = "10.100.10.0/24"
+        prefix_list_id = ""
+      }
+    }
+  ]
 
-#   providers = {
-#     aws = aws.euc1
-#   }
-# }
+  providers = {
+    aws = aws.euc1
+  }
+}
