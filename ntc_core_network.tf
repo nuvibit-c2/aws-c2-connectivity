@@ -52,7 +52,7 @@ module "ntc_core_network_custom_routes" {
       }
     },
     {
-      route_table_id = module.ntc_core_network.transit_gateway_route_table_ids["tgw-core-rtb-spoke-dev"]
+      route_table_id = module.ntc_core_network.transit_gateway_route_table_ids["tgw-core-rtb-spoke-prod"]
       attachment_id  = ""
       blackhole      = true
       destination = {
