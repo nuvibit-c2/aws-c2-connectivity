@@ -40,6 +40,7 @@ module "ntc_core_network_custom_routes_euc2" {
   # add custom routes for more flexibility and full control (e.g. firewall deployment)
   transit_gateway_custom_routes = [
     {
+      route_identifier = "blackhole_dev_spoke_to_central_endpoints"
       route_table_id = module.ntc_core_network_euc2.transit_gateway_route_table_ids["tgw-core-rtb-spoke-dev"]
       attachment_id  = "" # TODO: forward to peering attachement for tgw_frankfurt
       blackhole      = true
