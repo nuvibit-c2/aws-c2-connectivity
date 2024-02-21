@@ -42,8 +42,10 @@ module "ntc_core_network_custom_routes" {
     {
       # route table where custom route will be be added
       route_table_id = module.ntc_core_network.transit_gateway_route_table_ids["tgw-core-rtb-spoke-prod"]
-      attachment_id  = module.ntc_vpc_central_endpoints.transit_gateway_vpc_attachement_id
-      blackhole      = false
+      # transit gateway attachment (Peering, VPC, Direct Connect, VPN) where traffic should be forwarded to
+      attachment_id = module.ntc_vpc_central_endpoints.transit_gateway_vpc_attachement_id
+      # set to true to drop specific traffic. cannot be combined with 'attachment_id'
+      blackhole = false
       # what is the destination of the traffic that should be controlled by this route?
       # a single destination type is required and cannot combine multiple destination types
       destination = {
@@ -52,7 +54,7 @@ module "ntc_core_network_custom_routes" {
       }
     },
     {
-      route_table_id = module.ntc_core_network.transit_gateway_route_table_ids["tgw-core-rtb-spoke-prod"]
+      route_table_id = module.ntc_core_network.transit_gateway_route_table_ids["tgw-core-rtb-spoke-dev"]
       attachment_id  = ""
       blackhole      = true
       destination = {
