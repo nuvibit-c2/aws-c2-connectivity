@@ -56,9 +56,9 @@ module "ntc_core_network_custom_routes" {
     },
     {
       route_identifier = "blackhole_dev_spoke_to_central_endpoints"
-      route_table_id = module.ntc_core_network.transit_gateway_route_table_ids["tgw-core-rtb-spoke-dev"]
-      attachment_id  = ""
-      blackhole      = true
+      route_table_id   = module.ntc_core_network.transit_gateway_route_table_ids["tgw-core-rtb-spoke-dev"]
+      attachment_id    = ""
+      blackhole        = true
       destination = {
         cidr_block     = "10.100.10.0/24"
         prefix_list_id = ""
@@ -66,9 +66,9 @@ module "ntc_core_network_custom_routes" {
     },
     {
       route_identifier = "route_int_spoke_to_central_endpoints"
-      route_table_id = module.ntc_core_network.transit_gateway_route_table_ids["tgw-core-rtb-spoke-int"]
-      attachment_id  = module.ntc_vpc_central_endpoints.transit_gateway_vpc_attachement_id
-      blackhole      = false
+      route_table_id   = module.ntc_core_network.transit_gateway_route_table_ids["tgw-core-rtb-spoke-int"]
+      attachment_id    = module.ntc_vpc_central_endpoints.transit_gateway_vpc_attachement_id
+      blackhole        = false
       destination = {
         cidr_block     = "10.100.10.0/24"
         prefix_list_id = ""
