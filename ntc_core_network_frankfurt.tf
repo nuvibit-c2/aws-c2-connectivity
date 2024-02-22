@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------------------------------------------------------
 # ¦ NTC CORE NETWORK
 # ---------------------------------------------------------------------------------------------------------------------
-module "ntc_core_network" {
+module "ntc_core_network_euc1" {
   source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network?ref=beta"
 
   transit_gateway = {
@@ -31,6 +31,29 @@ module "ntc_core_network" {
   }
 }
 
+moved {
+  from = module.ntc_core_network
+  to   = module.ntc_core_network_euc1
+}
+
+# ---------------------------------------------------------------------------------------------------------------------
+# ¦ NTC CORE NETWORK - PEERING
+# ---------------------------------------------------------------------------------------------------------------------
+module "ntc_core_network_euc1_peering" {
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network//modules/transit-gateway-peering?ref=beta"
+
+  # the transit gateway accepting a peering is called 'accepter'
+  # accepter transit gateway can accept peerings with multiple transit gateways in different regions and/or accounts
+  # transit gateway peers need to initialize the peering beforehand and are therefore called 'requester'
+  transit_gateway_accept_peerings = [
+    module.ntc_core_network_euc2_peering.transit_gateway_peering_info_for_accepter
+  ]
+
+  providers = {
+    aws = aws.euc1
+  }
+}
+
 # ---------------------------------------------------------------------------------------------------------------------
 # ¦ NTC CORE NETWORK - CUSTOM ROUTES
 # ---------------------------------------------------------------------------------------------------------------------
@@ -42,7 +65,7 @@ module "ntc_core_network_custom_routes" {
     {
       route_identifier = "route_prod_spoke_to_central_endpoints"
       # route table where custom route will be be added
-      route_table_id = module.ntc_core_network.transit_gateway_route_table_ids["tgw-core-rtb-spoke-prod"]
+      route_table_id = module.ntc_core_network_euc1.transit_gateway_route_table_ids["tgw-core-rtb-spoke-prod"]
       # transit gateway attachment (Peering, VPC, Direct Connect, VPN) where traffic should be forwarded to
       attachment_id = module.ntc_vpc_central_endpoints.transit_gateway_vpc_attachement_id
       # set to true to drop specific traffic. cannot be combined with 'attachment_id'
@@ -56,7 +79,7 @@ module "ntc_core_network_custom_routes" {
     },
     {
       route_identifier = "blackhole_dev_spoke_to_central_endpoints"
-      route_table_id   = module.ntc_core_network.transit_gateway_route_table_ids["tgw-core-rtb-spoke-dev"]
+      route_table_id   = module.ntc_core_network_euc1.transit_gateway_route_table_ids["tgw-core-rtb-spoke-dev"]
       attachment_id    = ""
       blackhole        = true
       destination = {
@@ -66,7 +89,7 @@ module "ntc_core_network_custom_routes" {
     },
     {
       route_identifier = "route_int_spoke_to_central_endpoints"
-      route_table_id   = module.ntc_core_network.transit_gateway_route_table_ids["tgw-core-rtb-spoke-int"]
+      route_table_id   = module.ntc_core_network_euc1.transit_gateway_route_table_ids["tgw-core-rtb-spoke-int"]
       attachment_id    = module.ntc_vpc_central_endpoints.transit_gateway_vpc_attachement_id
       blackhole        = false
       destination = {

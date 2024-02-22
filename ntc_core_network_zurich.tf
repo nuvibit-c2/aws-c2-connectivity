@@ -32,6 +32,27 @@ module "ntc_core_network_euc2" {
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
+# ¦ NTC CORE NETWORK - PEERING
+# ---------------------------------------------------------------------------------------------------------------------
+module "ntc_core_network_euc2_peering" {
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network//modules/transit-gateway-peering?ref=beta"
+
+  # the transit gateway initiating peering is called 'requester'
+  # requester transit gateway can initialize peerings with multiple transit gateways in different regions and/or accounts
+  # transit gateway peers need to accept the peering and are therefore called 'accepter'
+  transit_gateway_create_peerings = {
+    requester_transit_gateway_id = module.ntc_core_network_euc2.transit_gateway_id
+    accepter_transit_gateways = [
+      module.ntc_core_network_euc1.transit_gateway_peering_info_for_creator
+    ]
+  }
+
+  providers = {
+    aws = aws.euc2
+  }
+}
+
+# ---------------------------------------------------------------------------------------------------------------------
 # ¦ NTC CORE NETWORK - CUSTOM ROUTES
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_core_network_custom_routes_euc2" {
