@@ -41,8 +41,15 @@ module "ntc_core_network_euc2_peering" {
   # requester transit gateway can initialize peerings with multiple transit gateways in different regions and/or accounts
   # transit gateway peers need to accept the peering and are therefore called 'accepter'
   transit_gateway_create_peerings = {
-    requester_transit_gateway_id = module.ntc_core_network_euc2.transit_gateway_id
+    requester_transit_gateway_name = module.ntc_core_network_euc2.transit_gateway_name
+    requester_transit_gateway_id   = module.ntc_core_network_euc2.transit_gateway_id
     accepter_transit_gateways = [
+      # {
+      #   peer_transit_gateway_name = ""
+      #   peer_transit_gateway_id   = ""
+      #   peer_account_id           = ""
+      #   peer_region               = ""
+      # }
       module.ntc_core_network_euc1.transit_gateway_peering_info_for_creator
     ]
   }

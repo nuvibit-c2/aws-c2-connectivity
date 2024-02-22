@@ -46,6 +46,10 @@ module "ntc_core_network_euc1_peering" {
   # accepter transit gateway can accept peerings with multiple transit gateways in different regions and/or accounts
   # transit gateway peers need to initialize the peering beforehand and are therefore called 'requester'
   transit_gateway_accept_peerings = [
+    # {
+    #   requester_transit_gateway_name          = ""
+    #   requester_transit_gateway_attachment_id = ""
+    # }
     module.ntc_core_network_euc2_peering.transit_gateway_peering_info_for_accepter["tgw-core-frankfurt"]
   ]
 
