@@ -48,6 +48,7 @@ module "ntc_core_network_euc1_peering" {
   transit_gateway_accept_peerings = [
     # {
     #   requester_transit_gateway_name          = ""
+    #   requester_transit_gateway_id            = ""
     #   requester_transit_gateway_attachment_id = ""
     # }
     module.ntc_core_network_euc2_peering.transit_gateway_peering_info_for_accepter["tgw-core-frankfurt"]
