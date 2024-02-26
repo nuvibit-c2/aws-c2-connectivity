@@ -28,7 +28,7 @@ module "ntc_core_network_euc1" {
 
   # transit gateway flow logs can be delivered to s3, cloudwatch and kinesis-data-firehose.
   # it is possible to send flow logs from a single transit gateway to multiple targets in parallel e.g. s3 + cloudwatch
-  vpc_flow_log_destinations = [
+  transit_gateway_flow_log_destinations = [
     {
       destination_type = "s3"
       destination_arn  = try(local.ntc_parameters["log-archive"]["log_bucket_arns"]["transit_gateway_flow_logs"], "")
