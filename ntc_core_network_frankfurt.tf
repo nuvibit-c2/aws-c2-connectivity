@@ -34,8 +34,8 @@ module "ntc_core_network_euc1" {
       destination_arn  = try(local.ntc_parameters["log-archive"]["log_bucket_arns"]["transit_gateway_flow_logs"], "")
       # decide wether to capture ALL, only ACCEPT or only REJECT traffic
       traffic_type = "ALL"
-      # interval can be 60 seconds (1min) or 600 seconds (10min)
-      max_aggregation_interval = 600
+      # interval must be 60 seconds (1min)
+      max_aggregation_interval = 60
       # log format fields can be customized
       # https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs.html#flow-logs-default
       # log_format = "$${account-id} $${action} $${bytes} $${dstaddr} $${dstport} $${end} $${instance-id} $${interface-id} $${log-status} $${packets} $${pkt-dstaddr} $${pkt-srcaddr} $${protocol} $${srcaddr} $${srcport} $${start} $${subnet-id} $${tcp-flags} $${type} $${version} $${vpc-id}"
