@@ -9,7 +9,7 @@ locals {
   route53_central_endpoints = {
     for endpoint in module.ntc_vpc_central_endpoints.interface_endpoints : endpoint.common_name => {
       # name of the route53 hosted zone
-      zone_name        = endpoint.private_dns_name
+      zone_name        = trimsuffix(endpoint.private_dns_name, "*.")
       zone_description = "Managed by Terraform"
       # 
       zone_force_destroy = true
