@@ -85,3 +85,7 @@ module "ntc_route53_central_endpoints" {
     aws = aws.euc1
   }
 }
+
+output "vpc_endpoints" {
+  value = module.ntc_vpc_central_endpoints.interface_endpoints
+}
