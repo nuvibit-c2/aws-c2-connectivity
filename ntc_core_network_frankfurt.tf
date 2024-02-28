@@ -60,7 +60,7 @@ module "ntc_core_network_euc1" {
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
-# ¦ NTC CORE NETWORK - PEERING
+# ¦ NTC CORE NETWORK - PEERING (ZRH-FRA)
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_core_network_euc1_peering" {
   source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network//modules/transit-gateway-peering?ref=beta"
