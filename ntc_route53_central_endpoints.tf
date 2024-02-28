@@ -68,7 +68,8 @@ locals {
 # ¦ NTC ROUTE53
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_route53_central_endpoints" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53?ref=1.0.3"
+  # source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53?ref=1.0.3"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53?ref=fix-validation"
 
   for_each = local.route53_central_endpoints
 
