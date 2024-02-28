@@ -9,7 +9,7 @@ locals {
   route53_central_endpoints = {
     for endpoint in module.ntc_vpc_central_endpoints.interface_endpoints : endpoint.common_name => {
       # name of the route53 hosted zone
-      zone_name        = endpoint.private_dns_name
+      zone_name        = endpoint.private_hosted_zone_name
       zone_description = "Managed by Terraform"
       # 
       zone_force_destroy = true
@@ -68,7 +68,7 @@ locals {
 # ¦ NTC ROUTE53
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_route53_central_endpoints" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53?ref=1.0.1"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53?ref=1.0.3"
 
   for_each = local.route53_central_endpoints
 

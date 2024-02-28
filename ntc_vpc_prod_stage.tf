@@ -2,7 +2,7 @@
 # ¦ NTC VPC - PROD STAGE
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_vpc_prod_stage" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc?ref=1.2.1"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc?ref=1.2.2"
 
   # a prefix which will be added to all vpc resources
   prefix_name = "prod-stage"
@@ -259,11 +259,13 @@ module "ntc_vpc_prod_stage" {
 # ¦ NTC VPC - PROD STAGE - CUSTOM ROUTES
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_vpc_prod_stage_custom_routes" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc//modules/custom-routes?ref=1.2.1"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc//modules/custom-routes?ref=1.2.2"
 
   # add custom routes for more flexibility and full control (e.g. firewall deployment)
   custom_routes = [
     {
+      # unique name to identify the route
+      route_identifier = "route_private_traffic_to_firewall_az1"
       # route table where custom route will be be added
       route_table_id = module.ntc_vpc_prod_stage.route_table_ids["cloudonly-private"][0]
       # what is the destination of the traffic that should be controlled by this route?
@@ -289,7 +291,8 @@ module "ntc_vpc_prod_stage_custom_routes" {
       }
     },
     {
-      route_table_id = module.ntc_vpc_prod_stage.route_table_ids["cloudonly-private"][1]
+      route_identifier = "route_private_traffic_to_firewall_az2"
+      route_table_id   = module.ntc_vpc_prod_stage.route_table_ids["cloudonly-private"][1]
       destination = {
         cidr_block = "10.100.10.0/24"
       }
@@ -298,7 +301,8 @@ module "ntc_vpc_prod_stage_custom_routes" {
       }
     },
     {
-      route_table_id = module.ntc_vpc_prod_stage.route_table_ids["cloudonly-private"][2]
+      route_identifier = "route_private_traffic_to_firewall_az3"
+      route_table_id   = module.ntc_vpc_prod_stage.route_table_ids["cloudonly-private"][2]
       destination = {
         cidr_block = "10.100.10.0/24"
       }
