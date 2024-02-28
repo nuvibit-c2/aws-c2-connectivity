@@ -32,28 +32,28 @@ locals {
       # list of dns records which should be created in hosted zone. alias records are a special type of records
       # https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resource-record-sets-choosing-alias-non-alias.html
       dns_records = [
-        {
-          name = ""
-          type = "A"
-          ttl  = 300
-          alias = {
-            enable_alias           = true
-            target_dns_name        = endpoint.dns_names[0]
-            target_hosted_zone_id  = endpoint.hosted_zone_id
-            evaluate_target_health = true
-          }
-        },
-        {
-          name = "*"
-          type = "A"
-          ttl  = 300
-          alias = {
-            enable_alias           = true
-            target_dns_name        = endpoint.dns_names[0]
-            target_hosted_zone_id  = endpoint.hosted_zone_id
-            evaluate_target_health = true
-          }
-        }
+        # {
+        #   name = ""
+        #   type = "A"
+        #   ttl  = 300
+        #   alias = {
+        #     enable_alias           = true
+        #     target_dns_name        = endpoint.dns_names[0]
+        #     target_hosted_zone_id  = endpoint.hosted_zone_id
+        #     evaluate_target_health = true
+        #   }
+        # },
+        # {
+        #   name = "*"
+        #   type = "A"
+        #   ttl  = 300
+        #   alias = {
+        #     enable_alias           = true
+        #     target_dns_name        = endpoint.dns_names[0]
+        #     target_hosted_zone_id  = endpoint.hosted_zone_id
+        #     evaluate_target_health = true
+        #   }
+        # }
       ]
 
       # (optional) 

@@ -87,6 +87,12 @@ module "ntc_vpc_central_endpoints" {
           policy_json = null
           # private dns should be disabled for centralized endpoints
           private_dns_enabled = false
+        },
+        {
+          common_name = "ecr.dkr"
+          policy_json = null
+          # private dns should be disabled for centralized endpoints
+          private_dns_enabled = false
         }
       ]
       # (optional) share subnet with Organizations, OUs or Accounts - requires RAM to be enabled for Organizations
