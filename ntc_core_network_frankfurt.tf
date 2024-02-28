@@ -91,6 +91,7 @@ module "ntc_core_network_custom_routes" {
   # add custom routes for more flexibility and full control (e.g. firewall deployment)
   transit_gateway_custom_routes = [
     {
+      # unique name to identify the route
       route_identifier = "route_prod_spoke_to_central_endpoints"
       # route table where custom route will be be added
       route_table_id = module.ntc_core_network_euc1.transit_gateway_route_table_ids["tgw-core-rtb-spoke-prod"]
