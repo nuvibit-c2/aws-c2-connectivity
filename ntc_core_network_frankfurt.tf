@@ -26,6 +26,64 @@ module "ntc_core_network_euc1" {
     ram_share_allow_external_principals = false
   }
 
+  direct_connect = {
+    dx_gateways = [
+      {
+        name    = "dx-gateway"
+        bgp_asn = 64512
+      }
+    ]
+
+    dx_connections = [
+      {
+        name              = "dx-connection-10G-primary"
+        bandwidth_in_gpbs = 4 # this will create a LAG with 4x1Gbps
+        location          = "EqDC2"
+        provider_name     = "Equinix"
+        macsec_support    = false
+        # macsec_mode = "must_encrypt"
+        virtual_interfaces = [
+          {
+            name             = "dx-transit-vif-primary"
+            type             = "transit"
+            interface_owner  = null
+            dx_gateway_name  = "dx-gateway"
+            vlan             = 100
+            address_family   = "ipv4"
+            bgp_asn          = 65352
+            bgp_auth_key     = null
+            mtu              = 1500
+            sitelink_enabled = false
+            customer_peer_ip = "10.0.0.1/30"
+            amazon_peer_ip   = "10.0.0.2/30"
+          }
+        ]
+        skip_destroy = true
+      }
+    ]
+  }
+
+  virtual_private_network = {
+    customer_gateways = [
+      {
+        name            = "zrh_vpn1"
+        device_name     = "tpix26"
+        bgp_asn         = 64512
+        ip_address      = "192.0.2.1"
+        certificate_arn = null
+      }
+    ]
+
+    vpn_connections = [
+      {
+        name                  = "zrh_vpn1"
+        customer_gateway_name = "zrh_vpn1"
+        static_routes_only    = false
+        enable_acceleration   = false
+      }
+    ]
+  }
+
   # transit gateway flow logs can be delivered to s3, cloudwatch and kinesis-data-firehose.
   # it is possible to send flow logs from a single transit gateway to multiple targets in parallel e.g. s3 + cloudwatch
   transit_gateway_flow_log_destinations = [
