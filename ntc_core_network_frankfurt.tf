@@ -26,64 +26,6 @@ module "ntc_core_network_euc1" {
     ram_share_allow_external_principals = false
   }
 
-  direct_connect = {
-    dx_gateways = [
-      {
-        name    = "dx-gateway"
-        bgp_asn = 64512
-      }
-    ]
-
-    dx_connections = [
-      {
-        name              = "dx-connection-10G-primary"
-        bandwidth_in_gpbs = 4 # this will create a LAG with 4x1Gbps
-        location          = "EqDC2"
-        provider_name     = "Equinix"
-        macsec_support    = false
-        # macsec_mode = "must_encrypt"
-        virtual_interfaces = [
-          {
-            name             = "dx-transit-vif-primary"
-            type             = "transit"
-            interface_owner  = null
-            dx_gateway_name  = "dx-gateway"
-            vlan             = 100
-            address_family   = "ipv4"
-            bgp_asn          = 65352
-            bgp_auth_key     = null
-            mtu              = 1500
-            sitelink_enabled = false
-            customer_peer_ip = "10.0.0.1/30"
-            amazon_peer_ip   = "10.0.0.2/30"
-          }
-        ]
-        skip_destroy = true
-      }
-    ]
-  }
-
-  virtual_private_network = {
-    customer_gateways = [
-      {
-        name            = "zrh_vpn1"
-        device_name     = "tpix26"
-        bgp_asn         = 64512
-        ip_address      = "192.0.2.1"
-        certificate_arn = null
-      }
-    ]
-
-    vpn_connections = [
-      {
-        name                  = "zrh_vpn1"
-        customer_gateway_name = "zrh_vpn1"
-        static_routes_only    = false
-        enable_acceleration   = false
-      }
-    ]
-  }
-
   # transit gateway flow logs can be delivered to s3, cloudwatch and kinesis-data-firehose.
   # it is possible to send flow logs from a single transit gateway to multiple targets in parallel e.g. s3 + cloudwatch
   transit_gateway_flow_log_destinations = [
@@ -111,6 +53,145 @@ module "ntc_core_network_euc1" {
     #   destination_arn = "KINESIS_DATA_FIREHOSE_ARN"
     # }
   ]
+
+  # -------------------------------------------------------------------------------------------------------------------
+  # ¦ DIRECT CONNECT
+  # -------------------------------------------------------------------------------------------------------------------
+  direct_connect = {
+    # direct connect gateway is a globally available resource to connect to the VPCs or VPNs that are attached to a transit gateway
+    # you can connect up to 6 transit gateways in one or more regions with a single direct connect gateway
+    dx_gateways = [
+      {
+        name    = "dx-gateway"
+        bgp_asn = 64512
+      }
+    ]
+    # dedicated network connections between on-premises and aws direct connect locations
+    dx_dedicated_connections = [
+      {
+        name              = "dx-zurich-10G"
+        bandwidth_in_gpbs = 4 # this will create a LAG with 4x1Gbps
+        location          = "EqDC2"
+        provider_name     = "Equinix"
+        macsec_support    = false
+        # avoid deleting connection when destroyed, and instead just removed from the Terraform state
+        skip_destroy = true
+        # private virtual interfaces can be used to access a VPC using private IP addresses
+        # public virtual interfaces can access all aws public services using public IP addresses
+        # transit virtual interfaces should be used to access one or more transit gateways associated with direct connect gateways (recommended)
+        virtual_interfaces = [
+          {
+            name            = "dx-zurich-transit-vif"
+            type            = "transit"
+            interface_owner = null
+            # either reference the direct connect gateway defined in 'dx_gateways'
+            dx_gateway_name = "dx-gateway"
+            # or insert the id of an existing direct connect gateway
+            dx_gateway_id    = ""
+            vlan             = 100
+            address_family   = "ipv4"
+            bgp_asn          = 65352
+            bgp_auth_key     = null
+            mtu              = 1500
+            sitelink_enabled = false
+            # the destination IPv4 CIDR address to which AWS should send traffic (default is a /29 from 169.254.0.0/16)
+            customer_peer_ip = "10.0.0.1/30"
+            # the IPv4 CIDR address to use to send traffic to AWS (default is a /29 from 169.254.0.0/16)
+            amazon_peer_ip = "10.0.0.2/30"
+          }
+        ]
+      }
+    ]
+  }
+
+  # -------------------------------------------------------------------------------------------------------------------
+  # ¦ S2S VPN
+  # -------------------------------------------------------------------------------------------------------------------
+  virtual_private_network = {
+    # a customer gateway device is a physical or software appliance that you own or manage in your on-premises network
+    customer_gateways = [
+      {
+        name            = "zrh_vpn1"
+        device_name     = "tpix26"
+        bgp_asn         = 64512
+        ip_address      = "192.0.2.1"
+        certificate_arn = null
+      }
+    ]
+    # a VPN connection offers two VPN tunnels between a virtual private gateway or transit gateway on the AWS side, and a customer gateway on the on-premises side
+    # maximum bandwidth per VPN tunnel is 1.25 Gbps but you can add additional vpn connections to increase bandwith when ECMP is enabled on transit gateway
+    vpn_connections = [
+      {
+        name = "zrh_vpn1"
+        # either reference the customer gateway defined in 'customer_gateways'
+        customer_gateway_name = "zrh_vpn1"
+        # or insert the id of an existing customer gateway
+        customer_gateway_id = ""
+        static_routes_only  = false
+        enable_acceleration = false
+        # either reference the transit gateway defined in 'transit_gateway'
+        transit_gateway_name = "tgw-core-frankfurt"
+        # or insert the id of an existing transit gateway
+        transit_gateway_id = ""
+        address_family     = "ipv4"
+        # local_network_cidr    = "0.0.0.0/0"
+        # remote_network_cidr    = "0.0.0.0/0"
+        outside_ip_address_type = "PublicIpv4"
+        # attachment_id required when 'outside_ip_address_type' is 'PrivateIpv4'
+        # transport_transit_gateway_attachment_id = ""
+        tunnel1_options = {
+          inside_cidr                     = null
+          preshared_key                   = null
+          dpd_timeout_action              = "clear"
+          dpd_timeout_seconds             = 30
+          enable_tunnel_lifecycle_control = false
+          ike_versions                    = ["ikev1", "ikev2"]
+          phase1_dh_group_numbers         = [2, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
+          phase1_encryption_algorithms    = ["AES128", "AES256", "AES128-GCM-16", "AES256-GCM-16"]
+          phase1_integrity_algorithms     = ["SHA1", "SHA2-256", "SHA2-384", "SHA2-512"]
+          phase1_lifetime_seconds         = 28800
+          phase2_dh_group_numbers         = [2, 5, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
+          phase2_encryption_algorithms    = ["AES128", "AES256", "AES128-GCM-16", "AES256-GCM-16"]
+          phase2_integrity_algorithms     = ["SHA1", "SHA2-256", "SHA2-384", "SHA2-512"]
+          phase2_lifetime_seconds         = 28800
+          rekey_fuzz_percentage           = 100
+          rekey_margin_time_seconds       = 540
+          replay_window_size              = 1024
+          startup_action                  = "add"
+          cloudwatch_log_options = {
+            enabled           = false
+            log_group_arn     = ""
+            log_output_format = "json"
+          }
+        }
+        tunnel2_options = {
+          inside_cidr                     = null
+          preshared_key                   = null
+          dpd_timeout_action              = "clear"
+          dpd_timeout_seconds             = 30
+          enable_tunnel_lifecycle_control = false
+          ike_versions                    = ["ikev1", "ikev2"]
+          phase1_dh_group_numbers         = [2, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
+          phase1_encryption_algorithms    = ["AES128", "AES256", "AES128-GCM-16", "AES256-GCM-16"]
+          phase1_integrity_algorithms     = ["SHA1", "SHA2-256", "SHA2-384", "SHA2-512"]
+          phase1_lifetime_seconds         = 28800
+          phase2_dh_group_numbers         = [2, 5, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
+          phase2_encryption_algorithms    = ["AES128", "AES256", "AES128-GCM-16", "AES256-GCM-16"]
+          phase2_integrity_algorithms     = ["SHA1", "SHA2-256", "SHA2-384", "SHA2-512"]
+          phase2_lifetime_seconds         = 28800
+          rekey_fuzz_percentage           = 100
+          rekey_margin_time_seconds       = 540
+          replay_window_size              = 1024
+          startup_action                  = "add"
+          cloudwatch_log_options = {
+            enabled           = false
+            log_group_arn     = ""
+            log_output_format = "json"
+          }
+        }
+      }
+    ]
+  }
 
   providers = {
     aws = aws.euc1
