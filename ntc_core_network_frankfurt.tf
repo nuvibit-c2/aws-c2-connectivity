@@ -126,6 +126,8 @@ module "ntc_core_network_euc1" {
         name = "i7_zrh_vpn1"
         # reference customer gateway defined in 'customer_gateways'
         customer_gateway_name = "i7_zrh"
+        # reference transit gateway route table defined in 'transit_gateway'
+        transit_gateway_association_with_route_table_name = "tgw-core-rtb-hub"
         # by default dynamic routing with bgp is enabled
         # static routes need to be added to transit gateway route table
         static_routes_only      = false
