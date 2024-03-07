@@ -113,7 +113,7 @@ module "ntc_core_network_euc1" {
       {
         name            = "i7_zrh"
         device_name     = "i7zrhr1"
-        bgp_asn         = 64512
+        bgp_asn         = 65000
         ip_address      = "77.109.180.4"
         certificate_arn = null
       }
