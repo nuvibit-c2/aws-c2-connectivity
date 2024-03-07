@@ -39,9 +39,9 @@
 | <a name="module_ntc_core_network_euc2_peering"></a> [ntc\_core\_network\_euc2\_peering](#module\_ntc\_core\_network\_euc2\_peering) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network//modules/transit-gateway-peering | beta |
 | <a name="module_ntc_parameters_reader"></a> [ntc\_parameters\_reader](#module\_ntc\_parameters\_reader) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-parameters//modules/reader | 1.1.2 |
 | <a name="module_ntc_parameters_writer"></a> [ntc\_parameters\_writer](#module\_ntc\_parameters\_writer) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-parameters//modules/writer | 1.1.2 |
-| <a name="module_ntc_route53_central_endpoints"></a> [ntc\_route53\_central\_endpoints](#module\_ntc\_route53\_central\_endpoints) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53 | 1.0.3 |
-| <a name="module_ntc_route53_mydomain_internal"></a> [ntc\_route53\_mydomain\_internal](#module\_ntc\_route53\_mydomain\_internal) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53 | 1.0.3 |
-| <a name="module_ntc_route53_resolver"></a> [ntc\_route53\_resolver](#module\_ntc\_route53\_resolver) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53//modules/resolver | 1.0.3 |
+| <a name="module_ntc_route53_central_endpoints"></a> [ntc\_route53\_central\_endpoints](#module\_ntc\_route53\_central\_endpoints) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53 | 1.0.4 |
+| <a name="module_ntc_route53_mydomain_internal"></a> [ntc\_route53\_mydomain\_internal](#module\_ntc\_route53\_mydomain\_internal) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53 | 1.0.4 |
+| <a name="module_ntc_route53_resolver"></a> [ntc\_route53\_resolver](#module\_ntc\_route53\_resolver) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53//modules/resolver | 1.0.4 |
 | <a name="module_ntc_vpc_central_endpoints"></a> [ntc\_vpc\_central\_endpoints](#module\_ntc\_vpc\_central\_endpoints) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc | 1.2.2 |
 | <a name="module_ntc_vpc_prod_stage"></a> [ntc\_vpc\_prod\_stage](#module\_ntc\_vpc\_prod\_stage) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc | 1.2.2 |
 | <a name="module_ntc_vpc_prod_stage_custom_routes"></a> [ntc\_vpc\_prod\_stage\_custom\_routes](#module\_ntc\_vpc\_prod\_stage\_custom\_routes) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc//modules/custom-routes | 1.2.2 |
