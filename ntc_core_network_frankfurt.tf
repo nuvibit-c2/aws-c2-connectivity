@@ -111,8 +111,8 @@ module "ntc_core_network_euc1" {
     # a customer gateway device is a physical or software appliance that you own or manage in your on-premises network
     customer_gateways = [
       {
-        name            = "init7_vpn1"
-        device_name     = "init7"
+        name            = "i7_zrh"
+        device_name     = "i7zrhr1"
         bgp_asn         = 64512
         ip_address      = "77.109.180.4"
         certificate_arn = null
@@ -123,9 +123,9 @@ module "ntc_core_network_euc1" {
     # maximum bandwidth per VPN tunnel is 1.25 Gbps but you can add additional vpn connections to increase bandwith when ECMP is enabled on transit gateway
     vpn_connections = [
       {
-        name = "zrh_vpn1"
+        name = "i7_zrh_vpn1"
         # reference customer gateway defined in 'customer_gateways'
-        customer_gateway_name = "zrh_vpn1"
+        customer_gateway_name = "i7_zrh"
         # by default dynamic routing with bgp is enabled
         # static routes need to be added to transit gateway route table
         static_routes_only      = false
