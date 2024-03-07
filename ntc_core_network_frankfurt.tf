@@ -62,8 +62,8 @@ module "ntc_core_network_euc1" {
     # you can connect up to 6 transit gateways in one or more regions with a single direct connect gateway
     dx_gateways = [
       {
-        name    = "dx-gateway"
-        bgp_asn = 64512
+        name            = "dx-gateway"
+        amazon_side_asn = 64512
       }
     ]
     # dedicated network connections between on-premises and aws direct connect locations
@@ -90,7 +90,7 @@ module "ntc_core_network_euc1" {
             dx_gateway_id    = ""
             vlan             = 100
             address_family   = "ipv4"
-            bgp_asn          = 65352
+            customer_side_asn = 65352
             bgp_auth_key     = null
             mtu              = 1500
             sitelink_enabled = false
@@ -113,7 +113,7 @@ module "ntc_core_network_euc1" {
       {
         name            = "i7_zrh"
         device_name     = "i7zrhr1"
-        bgp_asn         = 65000
+        customer_side_asn = 65000
         ip_address      = "77.109.180.4"
         certificate_arn = null
       }
