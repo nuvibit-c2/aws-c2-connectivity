@@ -114,25 +114,22 @@ module "ntc_core_network_euc1" {
         name            = "zrh_vpn1"
         device_name     = "tpix26"
         bgp_asn         = 64512
-        ip_address      = "192.0.2.1"
+        ip_address      = "77.109.180.4"
         certificate_arn = null
       }
     ]
+    # VPN connections will be automatically attached to core network transit gateway defined in 'transit_gateway'
     # a VPN connection offers two VPN tunnels between a virtual private gateway or transit gateway on the AWS side, and a customer gateway on the on-premises side
     # maximum bandwidth per VPN tunnel is 1.25 Gbps but you can add additional vpn connections to increase bandwith when ECMP is enabled on transit gateway
     vpn_connections = [
       {
         name = "zrh_vpn1"
-        # either reference the customer gateway defined in 'customer_gateways'
+        # reference customer gateway defined in 'customer_gateways'
         customer_gateway_name = "zrh_vpn1"
-        # or insert the id of an existing customer gateway
-        customer_gateway_id = ""
-        static_routes_only  = false
-        enable_acceleration = false
-        # either reference the transit gateway defined in 'transit_gateway'
-        transit_gateway_name = "tgw-core-frankfurt"
-        # or insert the id of an existing transit gateway
-        transit_gateway_id      = ""
+        # by default dynamic routing with bgp is enabled
+        # static routes need to be added to transit gateway route table
+        static_routes_only      = false
+        enable_acceleration     = false
         address_family          = "ipv4"
         local_network_cidr      = "0.0.0.0/0"
         remote_network_cidr     = "0.0.0.0/0"
