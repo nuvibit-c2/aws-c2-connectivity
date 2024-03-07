@@ -138,7 +138,8 @@ module "ntc_core_network_euc1" {
         remote_network_cidr     = "0.0.0.0/0"
         outside_ip_address_type = "PublicIpv4"
         # attachment_id required when 'outside_ip_address_type' is 'PrivateIpv4'
-        # transport_transit_gateway_attachment_id = ""
+        transport_transit_gateway_attachment_id = ""
+        # (optional) ipsec tunnel1 configuration
         tunnel1_options = {
           inside_cidr                     = null
           preshared_key                   = null
@@ -153,7 +154,7 @@ module "ntc_core_network_euc1" {
           phase2_dh_group_numbers         = [2, 5, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
           phase2_encryption_algorithms    = ["AES128", "AES256", "AES128-GCM-16", "AES256-GCM-16"]
           phase2_integrity_algorithms     = ["SHA1", "SHA2-256", "SHA2-384", "SHA2-512"]
-          phase2_lifetime_seconds         = 28800
+          phase2_lifetime_seconds         = 3600
           rekey_fuzz_percentage           = 100
           rekey_margin_time_seconds       = 540
           replay_window_size              = 1024
@@ -164,6 +165,7 @@ module "ntc_core_network_euc1" {
             log_output_format = "json"
           }
         }
+        # (optional) ipsec tunnel2 configuration
         tunnel2_options = {
           inside_cidr                     = null
           preshared_key                   = null
@@ -178,7 +180,7 @@ module "ntc_core_network_euc1" {
           phase2_dh_group_numbers         = [2, 5, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
           phase2_encryption_algorithms    = ["AES128", "AES256", "AES128-GCM-16", "AES256-GCM-16"]
           phase2_integrity_algorithms     = ["SHA1", "SHA2-256", "SHA2-384", "SHA2-512"]
-          phase2_lifetime_seconds         = 28800
+          phase2_lifetime_seconds         = 3600
           rekey_fuzz_percentage           = 100
           rekey_margin_time_seconds       = 540
           replay_window_size              = 1024
