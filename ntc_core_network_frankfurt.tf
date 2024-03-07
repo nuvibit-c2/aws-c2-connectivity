@@ -132,10 +132,10 @@ module "ntc_core_network_euc1" {
         # either reference the transit gateway defined in 'transit_gateway'
         transit_gateway_name = "tgw-core-frankfurt"
         # or insert the id of an existing transit gateway
-        transit_gateway_id = ""
-        address_family     = "ipv4"
-        # local_network_cidr    = "0.0.0.0/0"
-        # remote_network_cidr    = "0.0.0.0/0"
+        transit_gateway_id      = ""
+        address_family          = "ipv4"
+        local_network_cidr      = "0.0.0.0/0"
+        remote_network_cidr     = "0.0.0.0/0"
         outside_ip_address_type = "PublicIpv4"
         # attachment_id required when 'outside_ip_address_type' is 'PrivateIpv4'
         # transport_transit_gateway_attachment_id = ""
