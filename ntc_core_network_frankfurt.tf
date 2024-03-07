@@ -111,8 +111,8 @@ module "ntc_core_network_euc1" {
     # a customer gateway device is a physical or software appliance that you own or manage in your on-premises network
     customer_gateways = [
       {
-        name            = "zrh_vpn1"
-        device_name     = "tpix26"
+        name            = "init7_vpn1"
+        device_name     = "init7"
         bgp_asn         = 64512
         ip_address      = "77.109.180.4"
         certificate_arn = null
