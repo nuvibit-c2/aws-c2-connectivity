@@ -59,11 +59,25 @@ module "ntc_core_network_euc1" {
   # -------------------------------------------------------------------------------------------------------------------
   direct_connect = {
     # direct connect gateway is a globally available resource to connect to the VPCs or VPNs that are attached to a transit gateway
-    # you can connect up to 6 transit gateways in one or more regions with a single direct connect gateway
     dx_gateways = [
       {
         name            = "dx-gateway"
         amazon_side_asn = 64512
+        # you can connect up to 6 transit gateways in one or more regions with a single direct connect gateway
+        transit_gateway_associations = [
+          {
+            transit_gateway_name = "tgw-core-frankfurt"
+            transit_gateway_id   = "this" # 'this' is the transit gateway defined in the current core network
+            # only the allowed prefixes entered will be advertised to on-premises and cannot be overlapping
+            allowed_prefixes = ["10.100.10.0/24", "10.100.20.0/24", "10.100.30.0/24"]
+          },
+          {
+            transit_gateway_name = "tgw-core-zurich"
+            transit_gateway_id   = module.ntc_core_network_euc2.transit_gateway_id
+            # only the allowed prefixes entered will be advertised to on-premises and cannot be overlapping
+            allowed_prefixes = ["10.200.10.0/24", "10.200.20.0/24"]
+          }
+        ]
       }
     ]
     # dedicated network connections between on-premises and aws direct connect locations
@@ -87,13 +101,13 @@ module "ntc_core_network_euc1" {
             # either reference the direct connect gateway defined in 'dx_gateways'
             dx_gateway_name = "dx-gateway"
             # or insert the id of an existing direct connect gateway
-            dx_gateway_id    = ""
-            vlan             = 100
-            address_family   = "ipv4"
+            dx_gateway_id     = ""
+            vlan              = 100
+            address_family    = "ipv4"
             customer_side_asn = 65352
-            bgp_auth_key     = null
-            mtu              = 1500
-            sitelink_enabled = false
+            bgp_auth_key      = null
+            mtu               = 1500
+            sitelink_enabled  = false
             # the destination IPv4 CIDR address to which AWS should send traffic (default is a /29 from 169.254.0.0/16)
             customer_peer_ip = "10.0.0.1/30"
             # the IPv4 CIDR address to use to send traffic to AWS (default is a /29 from 169.254.0.0/16)
@@ -111,11 +125,11 @@ module "ntc_core_network_euc1" {
     # a customer gateway device is a physical or software appliance that you own or manage in your on-premises network
     customer_gateways = [
       {
-        name            = "i7_zrh"
-        device_name     = "i7zrhr1"
+        name              = "i7_zrh"
+        device_name       = "i7zrhr1"
         customer_side_asn = 65000
-        ip_address      = "77.109.180.4"
-        certificate_arn = null
+        ip_address        = "77.109.180.4"
+        certificate_arn   = null
       }
     ]
     # VPN connections will be automatically attached to core network transit gateway defined in 'transit_gateway'
