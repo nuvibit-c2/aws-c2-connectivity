@@ -59,25 +59,24 @@ module "ntc_core_network_euc1" {
   # -------------------------------------------------------------------------------------------------------------------
   direct_connect = {
     # direct connect gateway is a globally available resource to connect to the VPCs or VPNs that are attached to a transit gateway
+    # you can connect up to 6 transit gateways in one or more regions with a single direct connect gateway
     dx_gateways = [
       {
         name            = "dx-gateway"
         amazon_side_asn = 64512
-        # you can connect up to 6 transit gateways in one or more regions with a single direct connect gateway
-        transit_gateway_associations = [
-          {
-            transit_gateway_name = "tgw-core-frankfurt"
-            transit_gateway_id   = "this" # 'this' is the transit gateway defined in the current core network
-            # only the allowed prefixes entered will be advertised to on-premises and cannot be overlapping
-            allowed_prefixes = ["10.100.10.0/24", "10.100.20.0/24", "10.100.30.0/24"]
-          },
-          {
-            transit_gateway_name = "tgw-core-zurich"
-            transit_gateway_id   = module.ntc_core_network_euc2.transit_gateway_id
-            # only the allowed prefixes entered will be advertised to on-premises and cannot be overlapping
-            allowed_prefixes = ["10.200.10.0/24", "10.200.20.0/24"]
-          }
-        ]
+      }
+    ]
+    # associate direct connect gateway with transit gateway defined in 'transit_gateway'
+    transit_gateway_associations = [
+      {
+        # either reference the direct connect gateway defined in 'dx_gateways'
+        dx_gateway_name = "dx-gateway"
+        # or reference the id of an existing direct connect gateway
+        dx_gateway_id     = ""
+        # reference transit gateway route table defined in 'transit_gateway'
+        transit_gateway_association_with_route_table_name = "tgw-core-rtb-hub"
+        # only the allowed prefixes entered will be advertised to on-premises and cannot be overlapping across transit gateways
+        allowed_prefixes = ["10.100.10.0/24", "10.100.20.0/24", "10.100.30.0/24"]
       }
     ]
     # dedicated network connections between on-premises and aws direct connect locations
@@ -100,7 +99,7 @@ module "ntc_core_network_euc1" {
             interface_owner = null
             # either reference the direct connect gateway defined in 'dx_gateways'
             dx_gateway_name = "dx-gateway"
-            # or insert the id of an existing direct connect gateway
+            # or reference the id of an existing direct connect gateway
             dx_gateway_id     = ""
             vlan              = 100
             address_family    = "ipv4"
