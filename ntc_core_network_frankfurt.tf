@@ -7,7 +7,7 @@ module "ntc_core_network_euc1" {
   transit_gateway = {
     name                            = "tgw-core-frankfurt"
     description                     = "core network in frankfurt"
-    amazon_side_asn                 = 64512
+    amazon_side_asn                 = 64513
     default_route_table_association = false
     default_route_table_propagation = false
     dns_support                     = true
