@@ -72,7 +72,7 @@ module "ntc_core_network_euc1" {
         # either reference the direct connect gateway defined in 'dx_gateways'
         dx_gateway_name = "dx-gateway"
         # or reference the id of an existing direct connect gateway
-        dx_gateway_id     = ""
+        dx_gateway_id = ""
         # reference transit gateway route table defined in 'transit_gateway'
         transit_gateway_association_with_route_table_name = "tgw-core-rtb-hub"
         # only the allowed prefixes entered will be advertised to on-premises and cannot be overlapping across transit gateways
