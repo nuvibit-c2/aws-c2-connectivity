@@ -7,7 +7,7 @@ module "ntc_core_network_euc1" {
   transit_gateway = {
     name                            = "tgw-core-frankfurt"
     description                     = "core network in frankfurt"
-    amazon_side_asn                 = 64513
+    amazon_side_asn                 = 64512
     default_route_table_association = false
     default_route_table_propagation = false
     dns_support                     = true
@@ -63,7 +63,7 @@ module "ntc_core_network_euc1" {
     dx_gateways = [
       {
         name            = "dx-gateway"
-        amazon_side_asn = 64512
+        amazon_side_asn = 64513
       }
     ]
     # associate direct connect gateway with transit gateway defined in 'transit_gateway'
