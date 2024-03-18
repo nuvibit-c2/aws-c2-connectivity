@@ -82,12 +82,13 @@ module "ntc_core_network_euc1" {
     # dedicated network connections between on-premises and aws direct connect locations
     dx_dedicated_connections = [
       {
-        name              = "dx-zurich-10G"
-        bandwidth_in_gpbs = 4 # this will create a LAG with 4x1Gbps
+        name = "dxcon-zurich"
+        # link aggregation groups with 1-4 Gpbs, 10-40 Gpbs or 100-400 Gpbs
+        bandwidth_in_gpbs = 4
         location          = "EqDC2"
         provider_name     = "Equinix"
         macsec_support    = false
-        # avoid deleting connection when destroyed, and instead just removed from the Terraform state
+        # avoid deleting connection when destroyed and instead remove from the Terraform state
         skip_destroy = true
         # private virtual interfaces can be used to access a VPC using private IP addresses
         # public virtual interfaces can access all aws public services using public IP addresses
