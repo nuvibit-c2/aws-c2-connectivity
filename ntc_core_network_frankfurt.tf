@@ -82,10 +82,10 @@ module "ntc_core_network_euc1" {
     # dedicated network connections between on-premises and aws direct connect locations
     dx_dedicated_connections = [
       {
-        name = "dxcon-zurich"
+        name = "dxcon-frankfurt"
         # link aggregation groups with 1-4 Gpbs, 10-40 Gpbs or 100-400 Gpbs
         bandwidth_in_gpbs = 4
-        location          = "EqDC2"
+        location          = "EqFA5"
         provider_name     = "Equinix"
         macsec_support    = false
         # avoid deleting connection when destroyed and instead remove from the Terraform state
@@ -95,7 +95,7 @@ module "ntc_core_network_euc1" {
         # transit virtual interfaces should be used to access one or more transit gateways associated with direct connect gateways (recommended)
         virtual_interfaces = [
           {
-            name = "dx-zurich-transit-vif"
+            name = "dx-frankfurt-transit-vif"
             type = "transit"
             # either reference the direct connect gateway defined in 'dx_gateways'
             dx_gateway_name = "dx-gateway"
