@@ -95,9 +95,8 @@ module "ntc_core_network_euc1" {
         # transit virtual interfaces should be used to access one or more transit gateways associated with direct connect gateways (recommended)
         virtual_interfaces = [
           {
-            name            = "dx-zurich-transit-vif"
-            type            = "transit"
-            interface_owner = null
+            name             = "dx-zurich-transit-vif"
+            type             = "transit"
             # either reference the direct connect gateway defined in 'dx_gateways'
             dx_gateway_name = "dx-gateway"
             # or reference the id of an existing direct connect gateway
