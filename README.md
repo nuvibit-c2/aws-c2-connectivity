@@ -30,7 +30,7 @@
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_ipam"></a> [ipam](#module\_ipam) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-ipam | 1.0.1 |
+| <a name="module_ipam"></a> [ipam](#module\_ipam) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-ipam | 1.0.2 |
 | <a name="module_ntc_core_network_custom_routes"></a> [ntc\_core\_network\_custom\_routes](#module\_ntc\_core\_network\_custom\_routes) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network//modules/custom-routes | beta |
 | <a name="module_ntc_core_network_custom_routes_euc2"></a> [ntc\_core\_network\_custom\_routes\_euc2](#module\_ntc\_core\_network\_custom\_routes\_euc2) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network//modules/custom-routes | beta |
 | <a name="module_ntc_core_network_euc1"></a> [ntc\_core\_network\_euc1](#module\_ntc\_core\_network\_euc1) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network | beta |
