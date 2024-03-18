@@ -57,65 +57,65 @@ module "ntc_core_network_euc1" {
   # -------------------------------------------------------------------------------------------------------------------
   # ¦ DIRECT CONNECT
   # -------------------------------------------------------------------------------------------------------------------
-  # direct_connect = {
-  #   # direct connect gateway is a globally available resource to connect to the VPCs or VPNs that are attached to a transit gateway
-  #   # you can connect up to 6 transit gateways in one or more regions with a single direct connect gateway
-  #   dx_gateways = [
-  #     {
-  #       name            = "dx-gateway"
-  #       amazon_side_asn = 64513
-  #     }
-  #   ]
-  #   # associate direct connect gateway with transit gateway defined in 'transit_gateway'
-  #   transit_gateway_associations = [
-  #     {
-  #       # either reference the direct connect gateway defined in 'dx_gateways'
-  #       dx_gateway_name = "dx-gateway"
-  #       # or reference the id of an existing direct connect gateway
-  #       dx_gateway_id = ""
-  #       # reference transit gateway route table defined in 'transit_gateway'
-  #       transit_gateway_association_with_route_table_name = "tgw-core-rtb-hub"
-  #       # only the allowed prefixes entered will be advertised to on-premises and cannot be overlapping across transit gateways
-  #       allowed_prefixes = ["10.100.10.0/24", "10.100.20.0/24", "10.100.30.0/24"]
-  #     }
-  #   ]
-  #   # dedicated network connections between on-premises and aws direct connect locations
-  #   dx_dedicated_connections = [
-  #     {
-  #       name = "dxcon-frankfurt"
-  #       # link aggregation groups with 1-4 Gpbs, 10-40 Gpbs or 100-400 Gpbs
-  #       bandwidth_in_gpbs = 4
-  #       location          = "EqFA5"
-  #       provider_name     = "Equinix"
-  #       macsec_support    = false
-  #       # avoid deleting connection when destroyed and instead remove from the Terraform state
-  #       skip_destroy = true
-  #       # private virtual interfaces can be used to access a VPC using private IP addresses
-  #       # public virtual interfaces can access all aws public services using public IP addresses
-  #       # transit virtual interfaces should be used to access one or more transit gateways associated with direct connect gateways (recommended)
-  #       virtual_interfaces = [
-  #         {
-  #           name = "dx-frankfurt-transit-vif"
-  #           type = "transit"
-  #           # either reference the direct connect gateway defined in 'dx_gateways'
-  #           dx_gateway_name = "dx-gateway"
-  #           # or reference the id of an existing direct connect gateway
-  #           dx_gateway_id     = ""
-  #           vlan              = 100
-  #           address_family    = "ipv4"
-  #           customer_side_asn = 65352
-  #           bgp_auth_key      = null
-  #           mtu               = 1500
-  #           sitelink_enabled  = false
-  #           # the destination IPv4 CIDR address to which AWS should send traffic (default is a /29 from 169.254.0.0/16)
-  #           customer_peer_ip = "10.0.0.1/30"
-  #           # the IPv4 CIDR address to use to send traffic to AWS (default is a /29 from 169.254.0.0/16)
-  #           amazon_peer_ip = "10.0.0.2/30"
-  #         }
-  #       ]
-  #     }
-  #   ]
-  # }
+  direct_connect = {
+    # direct connect gateway is a globally available resource to connect to the VPCs or VPNs that are attached to a transit gateway
+    # you can connect up to 6 transit gateways in one or more regions with a single direct connect gateway
+    dx_gateways = [
+      {
+        name            = "dx-gateway"
+        amazon_side_asn = 64513
+      }
+    ]
+    # associate direct connect gateway with transit gateway defined in 'transit_gateway'
+    transit_gateway_associations = [
+      {
+        # either reference the direct connect gateway defined in 'dx_gateways'
+        dx_gateway_name = "dx-gateway"
+        # or reference the id of an existing direct connect gateway
+        dx_gateway_id = ""
+        # reference transit gateway route table defined in 'transit_gateway'
+        transit_gateway_association_with_route_table_name = "tgw-core-rtb-hub"
+        # only the allowed prefixes entered will be advertised to on-premises and cannot be overlapping across transit gateways
+        allowed_prefixes = ["10.100.10.0/24", "10.100.20.0/24", "10.100.30.0/24"]
+      }
+    ]
+    # dedicated network connections between on-premises and aws direct connect locations
+    dx_dedicated_connections = [
+      {
+        name = "dxcon-frankfurt"
+        # link aggregation groups with 1-4 Gpbs, 10-40 Gpbs or 100-400 Gpbs
+        bandwidth_in_gpbs = 1
+        location          = "EqFA5"
+        provider_name     = "Equinix"
+        macsec_support    = false
+        # avoid deleting connection when destroyed and instead remove from the Terraform state
+        skip_destroy = true
+        # private virtual interfaces can be used to access a VPC using private IP addresses
+        # public virtual interfaces can access all aws public services using public IP addresses
+        # transit virtual interfaces should be used to access one or more transit gateways associated with direct connect gateways (recommended)
+        virtual_interfaces = [
+          {
+            name = "dx-frankfurt-transit-vif"
+            type = "transit"
+            # either reference the direct connect gateway defined in 'dx_gateways'
+            dx_gateway_name = "dx-gateway"
+            # or reference the id of an existing direct connect gateway
+            dx_gateway_id     = ""
+            vlan              = 100
+            address_family    = "ipv4"
+            customer_side_asn = 65352
+            bgp_auth_key      = null
+            mtu               = 1500
+            sitelink_enabled  = false
+            # the destination IPv4 CIDR address to which AWS should send traffic (default is a /29 from 169.254.0.0/16)
+            customer_peer_ip = "10.0.0.1/30"
+            # the IPv4 CIDR address to use to send traffic to AWS (default is a /29 from 169.254.0.0/16)
+            amazon_peer_ip = "10.0.0.2/30"
+          }
+        ]
+      }
+    ]
+  }
 
   # -------------------------------------------------------------------------------------------------------------------
   # ¦ S2S VPN
