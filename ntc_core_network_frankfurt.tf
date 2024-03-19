@@ -1,7 +1,24 @@
+moved {
+  from = module.ntc_core_network_euc1
+  to   = module.ntc_core_network_frankfurt
+}
+moved {
+  from = module.ntc_core_network_euc1_peering
+  to   = module.ntc_core_network_frankfurt_peering
+}
+moved {
+  from = module.ntc_core_network_euc2
+  to   = module.ntc_core_network_zurich
+}
+moved {
+  from = module.ntc_core_network_euc2_peering
+  to   = module.ntc_core_network_zurich_peering
+}
+
 # ---------------------------------------------------------------------------------------------------------------------
 # ¦ NTC CORE NETWORK
 # ---------------------------------------------------------------------------------------------------------------------
-module "ntc_core_network_euc1" {
+module "ntc_core_network_frankfurt" {
   source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network?ref=beta"
 
   transit_gateway = {
@@ -69,7 +86,7 @@ module "ntc_core_network_euc1" {
     # associate direct connect gateway with transit gateway defined in 'transit_gateway'
     transit_gateway_associations = [
       {
-        # either reference the direct connect gateway defined in 'dx_gateways'
+        # either reference the direct connect gateway defined in 'direct_connect.dx_gateways'
         dx_gateway_name = "dx-gateway"
         # or reference the id of an existing direct connect gateway
         dx_gateway_id = ""
@@ -100,7 +117,7 @@ module "ntc_core_network_euc1" {
       #     {
       #       name = "dx-vif-transit-frankfurt"
       #       type = "transit"
-      #       # either reference the direct connect gateway defined in 'dx_gateways'
+      #       # either reference the direct connect gateway defined in 'direct_connect.dx_gateways'
       #       dx_gateway_name = "dx-gateway"
       #       # or reference the id of an existing direct connect gateway
       #       dx_gateway_id     = ""
@@ -218,7 +235,7 @@ module "ntc_core_network_euc1" {
 # ---------------------------------------------------------------------------------------------------------------------
 # ¦ NTC CORE NETWORK - PEERING (ZRH-FRA)
 # ---------------------------------------------------------------------------------------------------------------------
-module "ntc_core_network_euc1_peering" {
+module "ntc_core_network_frankfurt_peering" {
   source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network//modules/transit-gateway-peering?ref=beta"
 
   # the transit gateway accepting a peering is called 'accepter'
@@ -230,7 +247,7 @@ module "ntc_core_network_euc1_peering" {
     #   requester_transit_gateway_id            = ""
     #   requester_transit_gateway_attachment_id = ""
     # }
-    module.ntc_core_network_euc2_peering.transit_gateway_peering_info_for_accepter["tgw-core-frankfurt"]
+    module.ntc_core_network_zurich_peering.transit_gateway_peering_info_for_accepter["tgw-core-frankfurt"]
   ]
 
   providers = {
@@ -250,7 +267,7 @@ module "ntc_core_network_custom_routes" {
       # unique name to identify the route
       route_identifier = "route_prod_spoke_to_central_endpoints"
       # route table where custom route will be be added
-      route_table_id = module.ntc_core_network_euc1.transit_gateway_route_table_ids["tgw-core-rtb-spoke-prod"]
+      route_table_id = module.ntc_core_network_frankfurt.transit_gateway_route_table_ids["tgw-core-rtb-spoke-prod"]
       # transit gateway attachment (Peering, VPC, Direct Connect, VPN) where traffic should be forwarded to
       attachment_id = module.ntc_vpc_central_endpoints.transit_gateway_vpc_attachement_id
       # set to true to drop specific traffic. cannot be combined with 'attachment_id'
@@ -264,7 +281,7 @@ module "ntc_core_network_custom_routes" {
     },
     {
       route_identifier = "blackhole_dev_spoke_to_central_endpoints"
-      route_table_id   = module.ntc_core_network_euc1.transit_gateway_route_table_ids["tgw-core-rtb-spoke-dev"]
+      route_table_id   = module.ntc_core_network_frankfurt.transit_gateway_route_table_ids["tgw-core-rtb-spoke-dev"]
       attachment_id    = ""
       blackhole        = true
       destination = {
@@ -274,7 +291,7 @@ module "ntc_core_network_custom_routes" {
     },
     {
       route_identifier = "route_int_spoke_to_central_endpoints"
-      route_table_id   = module.ntc_core_network_euc1.transit_gateway_route_table_ids["tgw-core-rtb-spoke-int"]
+      route_table_id   = module.ntc_core_network_frankfurt.transit_gateway_route_table_ids["tgw-core-rtb-spoke-int"]
       attachment_id    = module.ntc_vpc_central_endpoints.transit_gateway_vpc_attachement_id
       blackhole        = false
       destination = {
