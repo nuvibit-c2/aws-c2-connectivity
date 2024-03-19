@@ -1,26 +1,12 @@
-moved {
-  from = module.ntc_core_network_euc1
-  to   = module.ntc_core_network_frankfurt
-}
-moved {
-  from = module.ntc_core_network_euc1_peering
-  to   = module.ntc_core_network_frankfurt_peering
-}
-moved {
-  from = module.ntc_core_network_euc2
-  to   = module.ntc_core_network_zurich
-}
-moved {
-  from = module.ntc_core_network_euc2_peering
-  to   = module.ntc_core_network_zurich_peering
-}
-
 # ---------------------------------------------------------------------------------------------------------------------
 # ¦ NTC CORE NETWORK
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_core_network_frankfurt" {
   source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network?ref=beta"
 
+  # -------------------------------------------------------------------------------------------------------------------
+  # ¦ TRANSIT GATEWAY
+  # -------------------------------------------------------------------------------------------------------------------
   transit_gateway = {
     name                            = "tgw-core-frankfurt"
     description                     = "core network in frankfurt"
@@ -258,7 +244,7 @@ module "ntc_core_network_frankfurt_peering" {
 # ---------------------------------------------------------------------------------------------------------------------
 # ¦ NTC CORE NETWORK - CUSTOM ROUTES
 # ---------------------------------------------------------------------------------------------------------------------
-module "ntc_core_network_custom_routes" {
+module "ntc_core_network_frankfurt_custom_routes" {
   source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network//modules/custom-routes?ref=beta"
 
   # add custom routes for more flexibility and full control (e.g. firewall deployment)

@@ -4,10 +4,13 @@
 module "ntc_core_network_zurich" {
   source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network?ref=beta"
 
+  # -------------------------------------------------------------------------------------------------------------------
+  # ¦ TRANSIT GATEWAY
+  # -------------------------------------------------------------------------------------------------------------------
   transit_gateway = {
     name                            = "tgw-core-zurich"
     description                     = "core network in zurich"
-    amazon_side_asn                 = 64513 # good practice to use unique asn in multi region
+    amazon_side_asn                 = 64513
     default_route_table_association = false
     default_route_table_propagation = false
     dns_support                     = true
@@ -151,16 +154,16 @@ module "ntc_core_network_zurich_peering" {
 # ---------------------------------------------------------------------------------------------------------------------
 # ¦ NTC CORE NETWORK - CUSTOM ROUTES
 # ---------------------------------------------------------------------------------------------------------------------
-module "ntc_core_network_custom_routes_euc2" {
+module "ntc_core_network_zurich_custom_routes" {
   source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network//modules/custom-routes?ref=beta"
 
   # add custom routes for more flexibility and full control (e.g. firewall deployment)
   transit_gateway_custom_routes = [
     {
-      route_identifier = "blackhole_dev_spoke_to_central_endpoints"
+      route_identifier = "dev_spoke_to_frankfurt"
       route_table_id   = module.ntc_core_network_zurich.transit_gateway_route_table_ids["tgw-core-rtb-spoke-dev"]
-      attachment_id    = "" # TODO: forward to peering attachement for tgw_frankfurt
-      blackhole        = true
+      attachment_id    = module.ntc_core_network_zurich_peering.transit_gateway_attachment_id_by_peer_transit_gateway_name["tgw-core-frankfurt"]
+      blackhole        = false
       destination = {
         cidr_block     = "10.100.0.0/16"
         prefix_list_id = ""
