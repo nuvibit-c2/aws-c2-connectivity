@@ -127,7 +127,7 @@ module "ntc_core_network_zurich" {
 # ¦ NTC CORE NETWORK - PEERING (FRA-ZRH)
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_core_network_zurich_peering" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network//modules/transit-gateway-peering?ref=beta"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network//modules/peering?ref=beta"
 
   # the transit gateway initiating peering is called 'requester'
   # requester transit gateway can initialize peerings with multiple transit gateways in different regions and/or accounts
@@ -160,7 +160,7 @@ module "ntc_core_network_zurich_custom_routes" {
   # add custom routes for more flexibility and full control (e.g. firewall deployment)
   transit_gateway_custom_routes = [
     {
-      route_identifier = "dev_spoke_to_frankfurt"
+      route_identifier = "dev_spoke_to_tgw_frankfurt"
       route_table_id   = module.ntc_core_network_zurich.transit_gateway_route_table_ids["tgw-core-rtb-spoke-dev"]
       attachment_id    = module.ntc_core_network_zurich_peering.transit_gateway_attachment_id_by_peer_transit_gateway_name["tgw-core-frankfurt"]
       blackhole        = false
