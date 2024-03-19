@@ -169,7 +169,6 @@ module "ntc_core_network_zurich_custom_routes" {
       blackhole        = false
       destination = {
         cidr_block     = "10.100.0.0/16"
-        prefix_list_id = ""
       }
     }
   ]
