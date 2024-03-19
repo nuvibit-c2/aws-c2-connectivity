@@ -224,6 +224,9 @@ module "ntc_core_network_frankfurt" {
 module "ntc_core_network_frankfurt_peering" {
   source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network//modules/peering?ref=beta"
 
+  # all transit gateway peerings will be associated with the same transit gateway route table
+  transit_gateway_peering_association_with_route_table_id = module.ntc_core_network_frankfurt.transit_gateway_route_table_ids["tgw-core-rtb-hub"]
+
   # the transit gateway accepting a peering is called 'accepter'
   # accepter transit gateway can accept peerings with multiple transit gateways in different regions and/or accounts
   # transit gateway peers need to initialize the peering beforehand and are therefore called 'requester'
@@ -285,16 +288,16 @@ module "ntc_core_network_frankfurt_custom_routes" {
         prefix_list_id = ""
       }
     },
-    {
-      route_identifier = "dev_spoke_to_tgw_zurich"
-      route_table_id   = module.ntc_core_network_frankfurt.transit_gateway_route_table_ids["tgw-core-rtb-spoke-dev"]
-      attachment_id    = module.ntc_core_network_frankfurt_peering.transit_gateway_attachment_id_by_peer_transit_gateway_name["tgw-core-zurich"]
-      blackhole        = false
-      destination = {
-        cidr_block     = "10.100.0.0/16"
-        prefix_list_id = ""
-      }
-    }
+    # {
+    #   route_identifier = "dev_spoke_to_tgw_zurich"
+    #   route_table_id   = module.ntc_core_network_frankfurt.transit_gateway_route_table_ids["tgw-core-rtb-spoke-dev"]
+    #   attachment_id    = module.ntc_core_network_frankfurt_peering.transit_gateway_attachment_id_by_peer_transit_gateway_name["tgw-core-zurich"]
+    #   blackhole        = false
+    #   destination = {
+    #     cidr_block     = "10.200.0.0/16"
+    #     prefix_list_id = ""
+    #   }
+    # }
   ]
 
   providers = {
