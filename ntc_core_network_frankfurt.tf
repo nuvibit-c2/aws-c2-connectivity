@@ -80,7 +80,7 @@ module "ntc_core_network_frankfurt" {
     dx_gateways = [
       {
         name            = "dx-gateway"
-        amazon_side_asn = 64513
+        amazon_side_asn = 64500
       }
     ]
     # associate direct connect gateway with transit gateway defined in 'transit_gateway'
