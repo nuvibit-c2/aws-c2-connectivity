@@ -165,7 +165,7 @@ module "ntc_core_network_zurich_custom_routes" {
     {
       route_identifier = "dev_spoke_to_tgw_frankfurt"
       route_table_id   = module.ntc_core_network_zurich.transit_gateway_route_table_ids["tgw-core-rtb-spoke-dev"]
-      attachment_id    = module.ntc_core_network_zurich_peering.transit_gateway_attachment_id_by_peer_transit_gateway_name["tgw-core-frankfurt"]
+      attachment_id    = module.ntc_core_network_zurich_peering.transit_gateway_peering_attachment_id_by_peer_name["tgw-core-frankfurt"]
       blackhole        = false
       destination = {
         cidr_block     = "10.100.0.0/16"
