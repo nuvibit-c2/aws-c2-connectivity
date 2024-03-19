@@ -218,31 +218,31 @@ module "ntc_core_network_frankfurt" {
   }
 }
 
-# # ---------------------------------------------------------------------------------------------------------------------
-# # ¦ NTC CORE NETWORK - PEERING (ZRH-FRA)
-# # ---------------------------------------------------------------------------------------------------------------------
-# module "ntc_core_network_frankfurt_peering" {
-#   source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network//modules/peering?ref=beta"
+# ---------------------------------------------------------------------------------------------------------------------
+# ¦ NTC CORE NETWORK - PEERING (ZRH-FRA)
+# ---------------------------------------------------------------------------------------------------------------------
+module "ntc_core_network_frankfurt_peering" {
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network//modules/peering?ref=beta"
 
-#   # all transit gateway peerings will be associated with the same transit gateway route table
-#   transit_gateway_peering_association_with_route_table_id = module.ntc_core_network_frankfurt.transit_gateway_route_table_ids["tgw-core-rtb-hub"]
+  # all transit gateway peerings will be associated with the same transit gateway route table
+  transit_gateway_peering_association_with_route_table_id = module.ntc_core_network_frankfurt.transit_gateway_route_table_ids["tgw-core-rtb-hub"]
 
-#   # the transit gateway accepting a peering is called 'accepter'
-#   # accepter transit gateway can accept peerings with multiple transit gateways in different regions and/or accounts
-#   # transit gateway peers need to initialize the peering beforehand and are therefore called 'requester'
-#   transit_gateway_accept_peerings = [
-#     # {
-#     #   requester_transit_gateway_name          = ""
-#     #   requester_transit_gateway_id            = ""
-#     #   requester_transit_gateway_attachment_id = ""
-#     # }
-#     module.ntc_core_network_zurich_peering.transit_gateway_peering_info_for_accepter["tgw-core-frankfurt"]
-#   ]
+  # the transit gateway accepting a peering is called 'accepter'
+  # accepter transit gateway can accept peerings with multiple transit gateways in different regions and/or accounts
+  # transit gateway peers need to initialize the peering beforehand and are therefore called 'requester'
+  transit_gateway_accept_peerings = [
+    # {
+    #   requester_transit_gateway_name          = ""
+    #   requester_transit_gateway_id            = ""
+    #   requester_transit_gateway_attachment_id = ""
+    # }
+    module.ntc_core_network_zurich_peering.transit_gateway_peering_info_for_accepter["tgw-core-frankfurt"]
+  ]
 
-#   providers = {
-#     aws = aws.euc1
-#   }
-# }
+  providers = {
+    aws = aws.euc1
+  }
+}
 
 # # ---------------------------------------------------------------------------------------------------------------------
 # # ¦ NTC CORE NETWORK - CUSTOM ROUTES
