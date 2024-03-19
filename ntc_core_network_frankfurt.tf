@@ -84,7 +84,10 @@ module "ntc_core_network_euc1" {
       {
         name = "dx-con-frankfurt"
         # bandwidth can be one of 1, 2, 3, 4, 10, 20, 30, 40, 100, 200, 300, 400 Gpbs
-        bandwidth_in_gpbs = 1
+        # upgrading bandwidth without downtime in ranges 1-4, 10-40 or 100-400
+        # upgrading bandwidth from 1 Gpbs to 10 Gpbs will recreate connections
+        # WARNING: recreating connections will cause downtime if no failover is availble (e.g. secondary direct connect or vpn)
+        bandwidth_in_gpbs = 3
         location          = "EqFA5"
         provider_name     = "Equinix"
         macsec_support    = false
