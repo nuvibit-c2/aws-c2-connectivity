@@ -218,86 +218,86 @@ module "ntc_core_network_frankfurt" {
   }
 }
 
-# ---------------------------------------------------------------------------------------------------------------------
-# ¦ NTC CORE NETWORK - PEERING (ZRH-FRA)
-# ---------------------------------------------------------------------------------------------------------------------
-module "ntc_core_network_frankfurt_peering" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network//modules/peering?ref=beta"
+# # ---------------------------------------------------------------------------------------------------------------------
+# # ¦ NTC CORE NETWORK - PEERING (ZRH-FRA)
+# # ---------------------------------------------------------------------------------------------------------------------
+# module "ntc_core_network_frankfurt_peering" {
+#   source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network//modules/peering?ref=beta"
 
-  # all transit gateway peerings will be associated with the same transit gateway route table
-  transit_gateway_peering_association_with_route_table_id = module.ntc_core_network_frankfurt.transit_gateway_route_table_ids["tgw-core-rtb-hub"]
+#   # all transit gateway peerings will be associated with the same transit gateway route table
+#   transit_gateway_peering_association_with_route_table_id = module.ntc_core_network_frankfurt.transit_gateway_route_table_ids["tgw-core-rtb-hub"]
 
-  # the transit gateway accepting a peering is called 'accepter'
-  # accepter transit gateway can accept peerings with multiple transit gateways in different regions and/or accounts
-  # transit gateway peers need to initialize the peering beforehand and are therefore called 'requester'
-  transit_gateway_accept_peerings = [
-    # {
-    #   requester_transit_gateway_name          = ""
-    #   requester_transit_gateway_id            = ""
-    #   requester_transit_gateway_attachment_id = ""
-    # }
-    module.ntc_core_network_zurich_peering.transit_gateway_peering_info_for_accepter["tgw-core-frankfurt"]
-  ]
+#   # the transit gateway accepting a peering is called 'accepter'
+#   # accepter transit gateway can accept peerings with multiple transit gateways in different regions and/or accounts
+#   # transit gateway peers need to initialize the peering beforehand and are therefore called 'requester'
+#   transit_gateway_accept_peerings = [
+#     # {
+#     #   requester_transit_gateway_name          = ""
+#     #   requester_transit_gateway_id            = ""
+#     #   requester_transit_gateway_attachment_id = ""
+#     # }
+#     module.ntc_core_network_zurich_peering.transit_gateway_peering_info_for_accepter["tgw-core-frankfurt"]
+#   ]
 
-  providers = {
-    aws = aws.euc1
-  }
-}
+#   providers = {
+#     aws = aws.euc1
+#   }
+# }
 
-# ---------------------------------------------------------------------------------------------------------------------
-# ¦ NTC CORE NETWORK - CUSTOM ROUTES
-# ---------------------------------------------------------------------------------------------------------------------
-module "ntc_core_network_frankfurt_custom_routes" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network//modules/custom-routes?ref=beta"
+# # ---------------------------------------------------------------------------------------------------------------------
+# # ¦ NTC CORE NETWORK - CUSTOM ROUTES
+# # ---------------------------------------------------------------------------------------------------------------------
+# module "ntc_core_network_frankfurt_custom_routes" {
+#   source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network//modules/custom-routes?ref=beta"
 
-  # add custom routes for more flexibility and full control (e.g. firewall deployment)
-  transit_gateway_custom_routes = [
-    {
-      # unique name to identify the route
-      route_identifier = "route_prod_spoke_to_central_endpoints"
-      # route table where custom route will be be added
-      route_table_id = module.ntc_core_network_frankfurt.transit_gateway_route_table_ids["tgw-core-rtb-spoke-prod"]
-      # transit gateway attachment (Peering, VPC, Direct Connect, VPN) where traffic should be forwarded to
-      attachment_id = module.ntc_vpc_central_endpoints.transit_gateway_vpc_attachement_id
-      # set to true to drop specific traffic. cannot be combined with 'attachment_id'
-      blackhole = false
-      # what is the destination of the traffic that should be controlled by this route?
-      # a single destination type is required and cannot combine multiple destination types
-      destination = {
-        cidr_block     = "10.100.10.0/24"
-        prefix_list_id = ""
-      }
-    },
-    {
-      route_identifier = "blackhole_dev_spoke_to_central_endpoints"
-      route_table_id   = module.ntc_core_network_frankfurt.transit_gateway_route_table_ids["tgw-core-rtb-spoke-dev"]
-      attachment_id    = ""
-      blackhole        = true
-      destination = {
-        cidr_block     = "10.100.10.0/24"
-      }
-    },
-    {
-      route_identifier = "route_int_spoke_to_central_endpoints"
-      route_table_id   = module.ntc_core_network_frankfurt.transit_gateway_route_table_ids["tgw-core-rtb-spoke-int"]
-      attachment_id    = module.ntc_vpc_central_endpoints.transit_gateway_vpc_attachement_id
-      blackhole        = false
-      destination = {
-        cidr_block     = "10.100.10.0/24"
-      }
-    },
-    {
-      route_identifier = "dev_spoke_to_tgw_zurich"
-      route_table_id   = module.ntc_core_network_frankfurt.transit_gateway_route_table_ids["tgw-core-rtb-spoke-dev"]
-      attachment_id    = module.ntc_core_network_frankfurt_peering.transit_gateway_peering_attachment_id_by_peer_name["tgw-core-zurich"]
-      blackhole        = false
-      destination = {
-        cidr_block     = "10.200.0.0/16"
-      }
-    }
-  ]
+#   # add custom routes for more flexibility and full control (e.g. firewall deployment)
+#   transit_gateway_custom_routes = [
+#     {
+#       # unique name to identify the route
+#       route_identifier = "route_prod_spoke_to_central_endpoints"
+#       # route table where custom route will be be added
+#       route_table_id = module.ntc_core_network_frankfurt.transit_gateway_route_table_ids["tgw-core-rtb-spoke-prod"]
+#       # transit gateway attachment (Peering, VPC, Direct Connect, VPN) where traffic should be forwarded to
+#       attachment_id = module.ntc_vpc_central_endpoints.transit_gateway_vpc_attachement_id
+#       # set to true to drop specific traffic. cannot be combined with 'attachment_id'
+#       blackhole = false
+#       # what is the destination of the traffic that should be controlled by this route?
+#       # a single destination type is required and cannot combine multiple destination types
+#       destination = {
+#         cidr_block     = "10.100.10.0/24"
+#         prefix_list_id = ""
+#       }
+#     },
+#     {
+#       route_identifier = "blackhole_dev_spoke_to_central_endpoints"
+#       route_table_id   = module.ntc_core_network_frankfurt.transit_gateway_route_table_ids["tgw-core-rtb-spoke-dev"]
+#       attachment_id    = ""
+#       blackhole        = true
+#       destination = {
+#         cidr_block     = "10.100.10.0/24"
+#       }
+#     },
+#     {
+#       route_identifier = "route_int_spoke_to_central_endpoints"
+#       route_table_id   = module.ntc_core_network_frankfurt.transit_gateway_route_table_ids["tgw-core-rtb-spoke-int"]
+#       attachment_id    = module.ntc_vpc_central_endpoints.transit_gateway_vpc_attachement_id
+#       blackhole        = false
+#       destination = {
+#         cidr_block     = "10.100.10.0/24"
+#       }
+#     },
+#     {
+#       route_identifier = "dev_spoke_to_tgw_zurich"
+#       route_table_id   = module.ntc_core_network_frankfurt.transit_gateway_route_table_ids["tgw-core-rtb-spoke-dev"]
+#       attachment_id    = module.ntc_core_network_frankfurt_peering.transit_gateway_peering_attachment_id_by_peer_name["tgw-core-zurich"]
+#       blackhole        = false
+#       destination = {
+#         cidr_block     = "10.200.0.0/16"
+#       }
+#     }
+#   ]
 
-  providers = {
-    aws = aws.euc1
-  }
-}
+#   providers = {
+#     aws = aws.euc1
+#   }
+# }
