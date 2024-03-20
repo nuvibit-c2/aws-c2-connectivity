@@ -84,42 +84,42 @@ module "ntc_core_network_frankfurt" {
     ]
     # dedicated network connections between on-premises and aws direct connect locations
     dx_dedicated_connections = [
-      # {
-      #   name = "dx-con-frankfurt"
-      #   # bandwidth can be one of 1, 2, 3, 4, 10, 20, 30, 40, 100, 200, 300, 400 Gpbs
-      #   # upgrading bandwidth without downtime in ranges 1-4, 10-40 or 100-400
-      #   # upgrading bandwidth from 1 Gpbs to 10 Gpbs will recreate connections
-      #   # WARNING: recreating connections will cause downtime if no failover is availble (e.g. secondary direct connect or vpn)
-      #   bandwidth_in_gpbs = 1
-      #   location          = "EqFA5"
-      #   provider_name     = "Equinix"
-      #   macsec_support    = false
-      #   # avoid deleting connection when destroyed and instead remove from the Terraform state
-      #   skip_destroy = false
-      #   # private virtual interfaces can be used to access a VPC using private IP addresses
-      #   # public virtual interfaces can access all aws public services using public IP addresses
-      #   # transit virtual interfaces should be used to access one or more transit gateways associated with direct connect gateways (recommended)
-      #   virtual_interfaces = [
-      #     {
-      #       name = "dx-vif-transit-frankfurt"
-      #       type = "transit"
-      #       # either reference the direct connect gateway defined in 'direct_connect.dx_gateways'
-      #       dx_gateway_name = "dx-gateway"
-      #       # or reference the id of an existing direct connect gateway
-      #       dx_gateway_id     = ""
-      #       vlan              = 100
-      #       address_family    = "ipv4"
-      #       customer_side_asn = 65352
-      #       bgp_auth_key      = null
-      #       mtu               = 1500
-      #       sitelink_enabled  = false
-      #       # the destination IPv4 CIDR address to which AWS should send traffic (default is a /29 from 169.254.0.0/16)
-      #       customer_peer_ip = "10.0.0.1/30"
-      #       # the IPv4 CIDR address to use to send traffic to AWS (default is a /29 from 169.254.0.0/16)
-      #       amazon_peer_ip = "10.0.0.2/30"
-      #     }
-      #   ]
-      # }
+      {
+        name = "dx-con-frankfurt"
+        # bandwidth can be one of 1, 2, 3, 4, 10, 20, 30, 40, 100, 200, 300, 400 Gpbs
+        # upgrading bandwidth without downtime in ranges 1-4, 10-40 or 100-400
+        # upgrading bandwidth from 1 Gpbs to 10 Gpbs will recreate connections
+        # WARNING: recreating connections will cause downtime if no failover is availble (e.g. secondary direct connect or vpn)
+        bandwidth_in_gpbs = 1
+        location_name     = "Equinix FR5, Frankfurt, DEU"
+        provider_name     = "Equinix, Inc."
+        macsec_support    = false
+        # avoid deleting connection when destroyed and instead remove from the Terraform state
+        skip_destroy = false
+        # private virtual interfaces can be used to access a VPC using private IP addresses
+        # public virtual interfaces can access all aws public services using public IP addresses
+        # transit virtual interfaces should be used to access one or more transit gateways associated with direct connect gateways (recommended)
+        virtual_interfaces = [
+          {
+            name = "dx-vif-transit-frankfurt"
+            type = "transit"
+            # either reference the direct connect gateway defined in 'direct_connect.dx_gateways'
+            dx_gateway_name = "dx-gateway"
+            # or reference the id of an existing direct connect gateway
+            dx_gateway_id     = ""
+            vlan              = 100
+            address_family    = "ipv4"
+            customer_side_asn = 65352
+            bgp_auth_key      = null
+            mtu               = 1500
+            sitelink_enabled  = false
+            # the destination IPv4 CIDR address to which AWS should send traffic (default is a /29 from 169.254.0.0/16)
+            customer_peer_ip = "10.0.0.1/30"
+            # the IPv4 CIDR address to use to send traffic to AWS (default is a /29 from 169.254.0.0/16)
+            amazon_peer_ip = "10.0.0.2/30"
+          }
+        ]
+      }
     ]
   }
 
