@@ -274,7 +274,7 @@ module "ntc_core_network_frankfurt_custom_routes" {
       attachment_id    = ""
       blackhole        = true
       destination = {
-        cidr_block     = "10.100.10.0/24"
+        cidr_block = "10.100.10.0/24"
       }
     },
     {
@@ -283,7 +283,7 @@ module "ntc_core_network_frankfurt_custom_routes" {
       attachment_id    = module.ntc_vpc_central_endpoints.transit_gateway_vpc_attachement_id
       blackhole        = false
       destination = {
-        cidr_block     = "10.100.10.0/24"
+        cidr_block = "10.100.10.0/24"
       }
     },
     {
@@ -292,7 +292,7 @@ module "ntc_core_network_frankfurt_custom_routes" {
       attachment_id    = module.ntc_core_network_frankfurt_peering.transit_gateway_peering_attachment_id_by_peer_name["tgw-core-zurich"]
       blackhole        = false
       destination = {
-        cidr_block     = "10.200.0.0/16"
+        cidr_block = "10.200.0.0/16"
       }
     }
   ]

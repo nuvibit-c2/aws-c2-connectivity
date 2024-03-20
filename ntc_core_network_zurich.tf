@@ -168,7 +168,7 @@ module "ntc_core_network_zurich_custom_routes" {
       attachment_id    = module.ntc_core_network_zurich_peering.transit_gateway_peering_attachment_id_by_peer_name["tgw-core-frankfurt"]
       blackhole        = false
       destination = {
-        cidr_block     = "10.100.0.0/16"
+        cidr_block = "10.100.0.0/16"
       }
     }
   ]
