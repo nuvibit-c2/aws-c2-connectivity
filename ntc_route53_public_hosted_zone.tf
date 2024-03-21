@@ -53,14 +53,15 @@ module "ntc_route53_nuvibit_dev" {
 module "ntc_route53_nuvibit_dev_dnssec" {
   source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53//modules/dnssec?ref=feat-dnssec"
 
-  zone_id              = module.ntc_route53_nuvibit_dev.zone_id
+  zone_id = module.ntc_route53_nuvibit_dev.zone_id
+
+  # dnssec key can be rotated by creating a new 'inactive' key-signing-key and adding new DS records in root domain
+  # WARNING: old key should stay active until new key-signing-key is provisioned and new DS records are propagated
   key_signing_keys = [
     {
       ksk_name   = "ksk-1"
       ksk_status = "inactive"
     },
-    # dnssec key can be rotated by creating a new 'inactive' key-signing-key and adding new DS records in root domain
-    # WARNING: old key should stay active until new key-signing-key is provisioned and new DS records are propagated
     {
       ksk_name   = "ksk-2"
       ksk_status = "active"
