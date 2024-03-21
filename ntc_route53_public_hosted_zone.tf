@@ -61,10 +61,10 @@ module "ntc_route53_nuvibit_dev_dnssec" {
     },
     # dnssec key can be rotated by creating a new 'inactive' key-signing-key and adding new DS records in root domain
     # WARNING: old key should stay active until new key-signing-key is provisioned and new DS records are propagated
-    # {
-    #   ksk_name   = "ksk-2"
-    #   ksk_status = "inactive"
-    # }
+    {
+      ksk_name   = "ksk-2"
+      ksk_status = "inactive"
+    }
   ]
 
   providers = {
