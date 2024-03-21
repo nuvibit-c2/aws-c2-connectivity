@@ -130,6 +130,7 @@ module "ntc_core_network_zurich_peering" {
   source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network//modules/peering?ref=beta"
 
   # all transit gateway peerings will be associated with the same transit gateway route table
+  create_transit_gateway_peering_association              = true
   transit_gateway_peering_association_with_route_table_id = module.ntc_core_network_zurich.transit_gateway_route_table_ids["tgw-core-rtb-hub"]
 
   # the transit gateway initiating peering is called 'requester'
