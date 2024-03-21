@@ -17,7 +17,7 @@ module "ntc_route53_nuvibit_dev" {
   # https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resource-record-sets-choosing-alias-non-alias.html
   dns_records = [
     {
-      name = ""
+      name = "redirect"
       type = "CNAME"
       ttl  = 300
       values = [
