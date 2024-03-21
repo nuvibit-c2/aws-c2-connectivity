@@ -17,7 +17,7 @@ module "ntc_route53_nuvibit_dev" {
   # https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resource-record-sets-choosing-alias-non-alias.html
   dns_records = [
     {
-      name = "nuvibit"
+      name = ""
       type = "CNAME"
       ttl  = 300
       values = [
@@ -57,13 +57,13 @@ module "ntc_route53_nuvibit_dev_dnssec" {
   key_signing_keys = [
     {
       ksk_name   = "ksk-1"
-      ksk_status = "active"
+      ksk_status = "inactive"
     },
     # dnssec key can be rotated by creating a new 'inactive' key-signing-key and adding new DS records in root domain
     # WARNING: old key should stay active until new key-signing-key is provisioned and new DS records are propagated
     {
       ksk_name   = "ksk-2"
-      ksk_status = "inactive"
+      ksk_status = "active"
     }
   ]
 
@@ -71,8 +71,4 @@ module "ntc_route53_nuvibit_dev_dnssec" {
     # dnssec requires the kms key to be in us-east-1
     aws.us_east_1 = aws.use1
   }
-}
-
-output "ntc_route53_nuvibit_dev_dnssec" {
-  value = module.ntc_route53_nuvibit_dev_dnssec
 }
