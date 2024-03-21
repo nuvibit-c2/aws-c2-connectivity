@@ -81,10 +81,11 @@ module "ntc_route53_nuvibit_dev_query_logging" {
   source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53//modules/query-logs?ref=feat-dnssec"
 
   zone_id = module.ntc_route53_nuvibit_dev.zone_id
-  # cloudwatch_name_prefix          = "/aws/r53-query-logging/"
-  # cloudwatch_resource_policy_name = "r53-query-logging"
+  # cloudwatch_name_prefix          = "/aws/route53/"
+  # cloudwatch_resource_policy_name = "route53-query-logs"
   # cloudwatch_retention_in_days    = null
-  # cloudwatch_kms_key_arn          = null
+  # cloudwatch_kms_key_use_existing = false
+  # cloudwatch_kms_key_arn          = ""
 
   providers = {
     # cloudwatch log group must be in us-east-1
