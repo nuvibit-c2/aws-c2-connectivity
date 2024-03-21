@@ -40,6 +40,11 @@ module "ntc_route53_nuvibit_dev" {
     # }
   ]
 
+  # (optional) Enable query logging for public hosted zone. Log group with permissive resource policy must be in us-east-1
+  # https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/query-logs.html
+  zone_query_logging_enabled       = true
+  zone_query_logging_log_group_arn = aws_cloudwatch_log_group.aws_route53_example_com.arn
+
   providers = {
     aws = aws.euc1
   }
@@ -72,4 +77,37 @@ module "ntc_route53_nuvibit_dev_dnssec" {
     # dnssec requires the kms key to be in us-east-1
     aws.us_east_1 = aws.use1
   }
+}
+
+# ---------------------------------------------------------------------------------------------------------------------
+# ¦ TESTING QUERY LOGGING
+# ---------------------------------------------------------------------------------------------------------------------
+resource "aws_cloudwatch_log_group" "aws_route53_example_com" {
+  name              = "/aws/route53/test"
+  retention_in_days = 30
+
+  provider = aws.use1
+}
+
+data "aws_iam_policy_document" "route53-query-logging-policy" {
+  statement {
+    actions = [
+      "logs:CreateLogStream",
+      "logs:PutLogEvents",
+    ]
+
+    resources = ["arn:aws:logs:*:*:log-group:/aws/route53/*"]
+
+    principals {
+      identifiers = ["route53.amazonaws.com"]
+      type        = "Service"
+    }
+  }
+}
+
+resource "aws_cloudwatch_log_resource_policy" "route53-query-logging-policy" {
+  policy_document = data.aws_iam_policy_document.route53-query-logging-policy.json
+  policy_name     = "route53-query-logging-policy"
+
+  provider = aws.use1
 }
