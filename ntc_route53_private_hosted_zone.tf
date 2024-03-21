@@ -58,9 +58,6 @@ module "ntc_route53_mydomain_internal" {
     }
   ]
 
-  # (optional) 
-  zone_delegation_list = []
-
   providers = {
     aws = aws.euc1
   }
