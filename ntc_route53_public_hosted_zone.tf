@@ -45,52 +45,52 @@ module "ntc_route53_nuvibit_dev" {
   }
 }
 
-# # ---------------------------------------------------------------------------------------------------------------------
-# # ¦ NTC ROUTE53 - DNSSEC
-# # ---------------------------------------------------------------------------------------------------------------------
-# # WARNING: disabling DNSSEC before DS records expire can lead to domain becoming unavailable on the internet
-# # https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-configuring-dnssec-disable.html
-# module "ntc_route53_nuvibit_dev_dnssec" {
-#   source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53//modules/dnssec?ref=feat-dnssec"
+# ---------------------------------------------------------------------------------------------------------------------
+# ¦ NTC ROUTE53 - DNSSEC
+# ---------------------------------------------------------------------------------------------------------------------
+# WARNING: disabling DNSSEC before DS records expire can lead to domain becoming unavailable on the internet
+# https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-configuring-dnssec-disable.html
+module "ntc_route53_nuvibit_dev_dnssec" {
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53//modules/dnssec?ref=feat-dnssec"
 
-#   zone_id = module.ntc_route53_nuvibit_dev.zone_id
+  zone_id = module.ntc_route53_nuvibit_dev.zone_id
 
-#   # dnssec key can be rotated by creating a new 'inactive' key-signing-key and adding new DS records in root domain
-#   # WARNING: old key should stay active until new key-signing-key is provisioned and new DS records are propagated
-#   key_signing_keys = [
-#     {
-#       ksk_name   = "ksk-1"
-#       ksk_status = "inactive"
-#     },
-#     {
-#       ksk_name   = "ksk-2"
-#       ksk_status = "active"
-#     }
-#   ]
+  # dnssec key can be rotated by creating a new 'inactive' key-signing-key and adding new DS records in root domain
+  # WARNING: old key should stay active until new key-signing-key is provisioned and new DS records are propagated
+  key_signing_keys = [
+    {
+      ksk_name   = "ksk-1"
+      ksk_status = "inactive"
+    },
+    {
+      ksk_name   = "ksk-2"
+      ksk_status = "active"
+    }
+  ]
 
-#   providers = {
-#     # dnssec requires the kms key to be in us-east-1
-#     aws.us_east_1 = aws.use1
-#   }
-# }
+  providers = {
+    # dnssec requires the kms key to be in us-east-1
+    aws.us_east_1 = aws.use1
+  }
+}
 
-# # ---------------------------------------------------------------------------------------------------------------------
-# # ¦ NTC ROUTE53 - QUERY LOGGING
-# # ---------------------------------------------------------------------------------------------------------------------
-# module "ntc_route53_nuvibit_dev_query_logging" {
-#   source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53//modules/query-logs?ref=feat-dnssec"
+# ---------------------------------------------------------------------------------------------------------------------
+# ¦ NTC ROUTE53 - QUERY LOGGING
+# ---------------------------------------------------------------------------------------------------------------------
+module "ntc_route53_nuvibit_dev_query_logging" {
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53//modules/query-logs?ref=feat-dnssec"
 
-#   # query logging requires a public hosted zone
-#   zone_id = module.ntc_route53_nuvibit_dev.zone_id
+  # query logging requires a public hosted zone
+  zone_id = module.ntc_route53_nuvibit_dev.zone_id
 
-#   # cloudwatch_name_prefix          = "/aws/route53/"
-#   # cloudwatch_resource_policy_name = "route53-query-logs"
-#   # cloudwatch_retention_in_days    = null
-#   # cloudwatch_kms_key_use_existing = false
-#   # cloudwatch_kms_key_arn          = ""
+  # cloudwatch_name_prefix          = "/aws/route53/"
+  # cloudwatch_resource_policy_name = "route53-query-logs"
+  # cloudwatch_retention_in_days    = null
+  # cloudwatch_kms_key_use_existing = false
+  # cloudwatch_kms_key_arn          = ""
 
-#   providers = {
-#     # cloudwatch log group must be in us-east-1
-#     aws.us_east_1 = aws.use1
-#   }
-# }
+  providers = {
+    # cloudwatch log group must be in us-east-1
+    aws.us_east_1 = aws.use1
+  }
+}
