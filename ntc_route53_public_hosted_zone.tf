@@ -40,11 +40,6 @@ module "ntc_route53_nuvibit_dev" {
     # }
   ]
 
-  # (optional) Enable query logging for public hosted zone. Log group with permissive resource policy must be in us-east-1
-  # https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/query-logs.html
-  zone_query_logging_enabled       = true
-  zone_query_logging_log_group_arn = aws_cloudwatch_log_group.aws_route53_example_com.arn
-
   providers = {
     aws = aws.euc1
   }
@@ -80,34 +75,19 @@ module "ntc_route53_nuvibit_dev_dnssec" {
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
-# ¦ TESTING QUERY LOGGING
+# ¦ NTC ROUTE53 - QUERY LOGGING
 # ---------------------------------------------------------------------------------------------------------------------
-resource "aws_cloudwatch_log_group" "aws_route53_example_com" {
-  name              = "/aws/route53/test"
-  retention_in_days = 30
+module "ntc_route53_nuvibit_dev_query_logging" {
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53//modules/query-logs?ref=feat-dnssec"
 
-  provider = aws.use1
-}
+  zone_id                         = module.ntc_route53_nuvibit_dev.zone_id
+  cloudwatch_name_prefix          = "/aws/route53-query-logging/"
+  cloudwatch_resource_policy_name = "route53-query-logging"
+  cloudwatch_retention_in_days    = null
+  cloudwatch_kms_key_arn          = null
 
-data "aws_iam_policy_document" "route53-query-logging-policy" {
-  statement {
-    actions = [
-      "logs:CreateLogStream",
-      "logs:PutLogEvents",
-    ]
-
-    resources = ["arn:aws:logs:*:*:log-group:/aws/route53/*"]
-
-    principals {
-      identifiers = ["route53.amazonaws.com"]
-      type        = "Service"
-    }
+  providers = {
+    # cloudwatch log group must be in us-east-1
+    aws.us_east_1 = aws.use1
   }
-}
-
-resource "aws_cloudwatch_log_resource_policy" "route53-query-logging-policy" {
-  policy_document = data.aws_iam_policy_document.route53-query-logging-policy.json
-  policy_name     = "route53-query-logging-policy"
-
-  provider = aws.use1
 }
