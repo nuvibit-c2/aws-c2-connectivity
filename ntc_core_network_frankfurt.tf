@@ -44,17 +44,17 @@ module "ntc_core_network_frankfurt" {
       # https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs.html#flow-logs-default
       # log_format = "$${account-id} $${action} $${bytes} $${dstaddr} $${dstport} $${end} $${instance-id} $${interface-id} $${log-status} $${packets} $${pkt-dstaddr} $${pkt-srcaddr} $${protocol} $${srcaddr} $${srcport} $${start} $${subnet-id} $${tcp-flags} $${type} $${version} $${vpc-id}"
     },
-    {
-      destination_type = "cloud-watch-logs"
-      # cloudwatch log group will be created if 'destination_arn' is omitted
-      destination_arn = ""
-      cloudwatch_options = {
-        use_existing_kms_key = false
-        kms_key_arn          = ""
-        # iam role is required when an existing log group is defined in 'destination_arn'
-        iam_role_arn = ""
-      }
-    },
+    # {
+    #   destination_type = "cloud-watch-logs"
+    #   # cloudwatch log group will be created if 'destination_arn' is omitted
+    #   destination_arn = ""
+    #   cloudwatch_options = {
+    #     use_existing_kms_key = false
+    #     kms_key_arn          = ""
+    #     # iam role is required when an existing log group is defined in 'destination_arn'
+    #     iam_role_arn = ""
+    #   }
+    # },
     # {
     #   destination_type = "kinesis-data-firehose"
     #   destination_arn = "KINESIS_DATA_FIREHOSE_ARN"
