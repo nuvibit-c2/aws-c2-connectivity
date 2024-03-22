@@ -60,11 +60,11 @@ module "ntc_route53_nuvibit_dev_dnssec" {
   key_signing_keys = [
     {
       ksk_name   = "ksk-1"
-      ksk_status = "inactive"
+      ksk_status = "active"
     },
     {
       ksk_name   = "ksk-2"
-      ksk_status = "active"
+      ksk_status = "inactive"
     }
   ]
 

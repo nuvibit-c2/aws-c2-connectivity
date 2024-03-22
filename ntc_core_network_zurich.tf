@@ -86,6 +86,8 @@ module "ntc_core_network_zurich" {
         # upgrading bandwidth from 1 Gpbs to 10 Gpbs will recreate connections
         # WARNING: recreating connections will cause downtime if no failover is availble (e.g. secondary direct connect or vpn)
         bandwidth_in_gpbs = 1
+        # associated region of direct connect location must match with provider region
+        # https://aws.amazon.com/directconnect/locations/
         location_name     = "Equinix ZH5, Zurich, CHE"
         provider_name     = "Equinix, Inc"
         macsec_support    = false
