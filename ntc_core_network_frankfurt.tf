@@ -2,7 +2,8 @@
 # ¦ NTC CORE NETWORK
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_core_network_frankfurt" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network?ref=beta"
+  # source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network?ref=beta"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network?ref=flow-logs-kms"
 
   # -------------------------------------------------------------------------------------------------------------------
   # ¦ TRANSIT GATEWAY
@@ -43,14 +44,17 @@ module "ntc_core_network_frankfurt" {
       # https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs.html#flow-logs-default
       # log_format = "$${account-id} $${action} $${bytes} $${dstaddr} $${dstport} $${end} $${instance-id} $${interface-id} $${log-status} $${packets} $${pkt-dstaddr} $${pkt-srcaddr} $${protocol} $${srcaddr} $${srcport} $${start} $${subnet-id} $${tcp-flags} $${type} $${version} $${vpc-id}"
     },
-    # {
-    #   destination_type = "cloud-watch-logs"
-    #   # cloudwatch log group will be created if destination_arn is omitted
-    #   destination_arn = ""
-    #   cloudwatch_options = {
-    #     iam_role_arn = "CLOUDWATCH_IAM_ROLE_ARN"
-    #   }
-    # },
+    {
+      destination_type = "cloud-watch-logs"
+      # cloudwatch log group will be created if 'destination_arn' is omitted
+      destination_arn = ""
+      cloudwatch_options = {
+        use_existing_kms_key = false
+        kms_key_arn          = ""
+        # iam role is required when an existing log group is defined in 'destination_arn'
+        iam_role_arn = ""
+      }
+    },
     # {
     #   destination_type = "kinesis-data-firehose"
     #   destination_arn = "KINESIS_DATA_FIREHOSE_ARN"
@@ -93,9 +97,9 @@ module "ntc_core_network_frankfurt" {
         bandwidth_in_gpbs = 1
         # associated region of direct connect location must match with provider region
         # https://aws.amazon.com/directconnect/locations/
-        location_name     = "Equinix FR5, Frankfurt, DEU"
-        provider_name     = "Equinix, Inc."
-        macsec_support    = false
+        location_name  = "Equinix FR5, Frankfurt, DEU"
+        provider_name  = "Equinix, Inc."
+        macsec_support = false
         # avoid deleting connection when destroyed and instead remove from the Terraform state
         skip_destroy = false
         # private virtual interfaces can be used to access a VPC using private IP addresses

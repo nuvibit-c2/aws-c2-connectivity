@@ -45,10 +45,13 @@ module "ntc_core_network_zurich" {
     },
     # {
     #   destination_type = "cloud-watch-logs"
-    #   # cloudwatch log group will be created if destination_arn is omitted
+    #   # cloudwatch log group will be created if 'destination_arn' is omitted
     #   destination_arn = ""
     #   cloudwatch_options = {
-    #     iam_role_arn = "CLOUDWATCH_IAM_ROLE_ARN"
+    #     use_existing_kms_key = false
+    #     kms_key_arn          = ""
+    #     # iam role is required when an existing log group is defined in 'destination_arn'
+    #     iam_role_arn = ""
     #   }
     # },
     # {
@@ -88,9 +91,9 @@ module "ntc_core_network_zurich" {
         bandwidth_in_gpbs = 1
         # associated region of direct connect location must match with provider region
         # https://aws.amazon.com/directconnect/locations/
-        location_name     = "Equinix ZH5, Zurich, CHE"
-        provider_name     = "Equinix, Inc"
-        macsec_support    = false
+        location_name  = "Equinix ZH5, Zurich, CHE"
+        provider_name  = "Equinix, Inc"
+        macsec_support = false
         # avoid deleting connection when destroyed and instead remove from the Terraform state
         skip_destroy = false
         # private virtual interfaces can be used to access a VPC using private IP addresses
