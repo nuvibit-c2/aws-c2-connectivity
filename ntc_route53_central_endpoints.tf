@@ -73,7 +73,6 @@ module "ntc_route53_central_endpoints" {
   zone_description               = each.value.zone_description
   zone_type                      = each.value.zone_type
   zone_force_destroy             = each.value.zone_force_destroy
-  zone_delegation_list           = each.value.zone_delegation_list
   dns_records                    = each.value.dns_records
   zone_vpc_associations          = each.value.zone_vpc_associations
   zone_vpc_association_exception = each.value.zone_vpc_association_exception
