@@ -55,9 +55,6 @@ locals {
           }
         }
       ]
-
-      # (optional) 
-      zone_delegation_list = []
     }
     # private dns must be disabled for centralized vpc endpoints
     if endpoint.private_dns_enabled == false
