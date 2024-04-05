@@ -2,7 +2,7 @@
 # ¦ NTC CORE NETWORK
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_core_network_frankfurt" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network?ref=1.0.0"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network?ref=1.0.1"
 
   # -------------------------------------------------------------------------------------------------------------------
   # ¦ TRANSIT GATEWAY
@@ -227,7 +227,7 @@ module "ntc_core_network_frankfurt" {
 # ¦ NTC CORE NETWORK - PEERING (ZRH-FRA)
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_core_network_frankfurt_peering" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network//modules/peering?ref=1.0.0"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network//modules/peering?ref=1.0.1"
 
   # all transit gateway peerings will be associated with the same transit gateway route table
   create_transit_gateway_peering_association              = true
@@ -254,7 +254,7 @@ module "ntc_core_network_frankfurt_peering" {
 # ¦ NTC CORE NETWORK - CUSTOM ROUTES
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_core_network_frankfurt_custom_routes" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network//modules/custom-routes?ref=1.0.0"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network//modules/custom-routes?ref=1.0.1"
 
   # add custom routes for more flexibility and full control (e.g. firewall deployment)
   transit_gateway_custom_routes = [
