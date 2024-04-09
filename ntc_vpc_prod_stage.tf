@@ -109,6 +109,7 @@ module "ntc_vpc_prod_stage" {
       }
       # network access control list (ACL) allows or denies specific inbound or outbound traffic at the subnet level
       # additional layer of security but can lead to unexpected traffic patterns if configured wrong (stateful security group vs. stateless NACL rules)
+      # https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html#custom-network-acl
       network_acl_inbound = [
         {
           # allow inbound HTTPS traffic from any IPv4 address
