@@ -2,7 +2,8 @@
 # ¦ NTC VPC - PROD STAGE
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_vpc_prod_stage" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc?ref=1.3.0"
+  # source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc?ref=1.3.0"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc?ref=fix-defaults"
 
   # a prefix which will be added to all vpc resources
   prefix_name = "prod-stage"
@@ -80,6 +81,8 @@ module "ntc_vpc_prod_stage" {
       private_subnet_config = {
         default_route_to_public_nat_gateway = false
         default_route_to_transit_gateway    = true
+        create_private_nat_gateway          = true
+        secondary_private_ip_address_count  = 0
       }
       # (optional) share subnet with Organizations, OUs or Accounts - requires RAM to be enabled for Organizations
       # ram_share_principals = ["o-m29e8d9awz", "ou-6gf5-6ltp3mjf", "945766593056"]
@@ -104,6 +107,19 @@ module "ntc_vpc_prod_stage" {
         map_public_ip_on_launch           = true
         create_public_nat_gateway         = true
       }
+      # network access control list (ACL) allows or denies specific inbound or outbound traffic at the subnet level
+      # additional layer of security but can lead to unexpected traffic patterns if configured wrong (stateful security group vs. stateless NACL rules)
+      network_acl_inbound = [
+        {
+          rule_number     = 100
+          rule_action     = "allow"
+          protocol        = "tcp"
+          from_port       = 443
+          to_port         = 443
+          ipv4_cidr_block = "0.0.0.0/0"
+        }
+      ]
+      network_acl_outbound = []
       # (optional) share subnet with Organizations, OUs or Accounts - requires RAM to be enabled for Organizations
       ram_share_principals = [
         local.ntc_parameters["mgmt-organizations"]["ou_ids"]["/root/workloads/prod"]
