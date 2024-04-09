@@ -20,5 +20,5 @@ output "ntc_vpc_prod_stage" {
 
 output "ntc_core_network_frankfurt" {
   description = "Outputs of frankfurt core network module"
-  value       = module.ntc_core_network_frankfurt
+  value       = merge(module.ntc_core_network_frankfurt, { vpn_preshared_keys_by_connection_name : null })
 }
