@@ -5,7 +5,7 @@
 # ¦ NTC ROUTE53
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_route53_resolver" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53//modules/resolver?ref=1.1.0"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53//modules/resolver?ref=1.1.1"
   count  = 0 # disabled for demo purposes
 
   # inbound resolver endpoints are required for conditional dns forwarding from on-premise dns servers to aws
@@ -98,7 +98,7 @@ module "ntc_route53_resolver" {
   resolver_rules = [
     {
       domain_name = "domain.onprem"
-      rule_name   = "forward onprem dns traffic"
+      rule_name   = "forward onprem dns domain"
       rule_type   = "FORWARD"
       vpc_ids = [
         module.ntc_vpc_central_endpoints.vpc_id
@@ -107,6 +107,17 @@ module "ntc_route53_resolver" {
         # add ips of on-premises dns servers (default port is 53)
         "192.168.8.8",
         "192.168.9.9"
+      ]
+      # (optional) share subnet with Organizations, OUs or Accounts - requires RAM to be enabled for Organizations
+      # ram_share_principals = ["o-m29e8d9awz", "ou-6gf5-6ltp3mjf", "945766593056"]
+      # ram_share_allow_external_principals = false
+    },
+    {
+      domain_name = "domain.cloud"
+      rule_name   = "do not forward cloud domain"
+      rule_type   = "SYSTEM"
+      vpc_ids = [
+        module.ntc_vpc_central_endpoints.vpc_id
       ]
       # (optional) share subnet with Organizations, OUs or Accounts - requires RAM to be enabled for Organizations
       # ram_share_principals = ["o-m29e8d9awz", "ou-6gf5-6ltp3mjf", "945766593056"]
