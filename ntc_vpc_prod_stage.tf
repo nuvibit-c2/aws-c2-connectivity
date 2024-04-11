@@ -2,8 +2,7 @@
 # ¦ NTC VPC - PROD STAGE
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_vpc_prod_stage" {
-  # source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc?ref=1.3.0"
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc?ref=fix-defaults"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc?ref=1.4.0"
 
   # a prefix which will be added to all vpc resources
   prefix_name = "prod-stage"
@@ -308,7 +307,7 @@ module "ntc_vpc_prod_stage" {
 # ¦ NTC VPC - PROD STAGE - CUSTOM ROUTES
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_vpc_prod_stage_custom_routes" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc//modules/custom-routes?ref=1.3.0"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc//modules/custom-routes?ref=1.4.0"
 
   # add custom routes for more flexibility and full control (e.g. firewall deployment)
   custom_routes = [
