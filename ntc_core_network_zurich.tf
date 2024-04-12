@@ -2,7 +2,7 @@
 # ¦ NTC CORE NETWORK
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_core_network_zurich" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network?ref=1.0.1"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network?ref=feat-propagation"
 
   # -------------------------------------------------------------------------------------------------------------------
   # ¦ TRANSIT GATEWAY
@@ -22,6 +22,7 @@ module "ntc_core_network_zurich" {
       "tgw-core-rtb-spoke-prod",
       "tgw-core-rtb-spoke-dev",
       "tgw-core-rtb-spoke-int",
+      "tgw-core-rtb-onprem",
     ]
     # (optional) share subnet with Organizations, OUs or Accounts - requires RAM to be enabled for Organizations
     auto_accept_shared_attachments      = true
@@ -75,7 +76,13 @@ module "ntc_core_network_zurich" {
         # or reference the id of an existing direct connect gateway
         dx_gateway_id = module.ntc_core_network_frankfurt.dx_gateway_ids_by_name["dx-gateway"]
         # reference transit gateway route table defined in 'transit_gateway'
-        transit_gateway_association_with_route_table_name = "tgw-core-rtb-hub"
+        transit_gateway_association_with_route_table_name = "tgw-core-rtb-onprem"
+        transit_gateway_propagation_to_route_table_names = [
+          "tgw-core-rtb-hub",
+          "tgw-core-rtb-spoke-prod",
+          "tgw-core-rtb-spoke-dev",
+          "tgw-core-rtb-spoke-int",
+        ]
         # only the allowed prefixes entered will be advertised to on-premises and cannot be overlapping across transit gateways
         allowed_prefixes = ["10.200.10.0/24", "10.200.20.0/24", "10.200.30.0/24"]
       }
@@ -132,7 +139,7 @@ module "ntc_core_network_zurich" {
 # ¦ NTC CORE NETWORK - PEERING (FRA-ZRH)
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_core_network_zurich_peering" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network//modules/peering?ref=1.0.1"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network//modules/peering?ref=feat-propagation"
 
   # all transit gateway peerings will be associated with the same transit gateway route table
   create_transit_gateway_peering_association              = true
@@ -164,18 +171,23 @@ module "ntc_core_network_zurich_peering" {
 # ¦ NTC CORE NETWORK - CUSTOM ROUTES
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_core_network_zurich_custom_routes" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network//modules/custom-routes?ref=1.0.1"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network//modules/custom-routes?ref=feat-propagation"
 
   # add custom routes for more flexibility and full control (e.g. firewall deployment)
   transit_gateway_custom_routes = [
     {
+      # unique name to identify the route
       route_identifier = "dev_spoke_to_tgw_frankfurt"
-      route_table_id   = module.ntc_core_network_zurich.transit_gateway_route_table_ids["tgw-core-rtb-spoke-dev"]
-      attachment_id    = module.ntc_core_network_zurich_peering.transit_gateway_peering_attachment_id_by_peer_name["tgw-core-frankfurt"]
-      blackhole        = false
-      destination = {
-        cidr_block = "10.100.0.0/16"
-      }
+      # route table where custom route will be be added
+      route_table_id = module.ntc_core_network_zurich.transit_gateway_route_table_ids["tgw-core-rtb-spoke-dev"]
+      # transit gateway attachment (Peering, VPC, Direct Connect, VPN) where traffic should be forwarded to
+      attachment_id = module.ntc_core_network_zurich_peering.transit_gateway_peering_attachment_id_by_peer_name["tgw-core-frankfurt"]
+      # set to true to drop specific traffic. cannot be combined with 'attachment_id'
+      blackhole = false
+      # what is the destination of the traffic that should be controlled by this route?
+      # supported destination_type: 'cidr_block' (IPv4 or IPv6), 'prefix_list_id'
+      destination_type = "cidr_block"
+      destination      = "10.100.0.0/16"
     }
   ]
 
