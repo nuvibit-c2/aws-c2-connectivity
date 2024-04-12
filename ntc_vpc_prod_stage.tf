@@ -258,7 +258,8 @@ module "ntc_vpc_prod_stage" {
         # vpc attachement can propagate to multiple transit gateway route table for dynamic routing
         transit_gateway_propagation_to_route_table_ids = [
           module.ntc_core_network_frankfurt.transit_gateway_route_table_ids["tgw-core-rtb-hub"],
-          module.ntc_core_network_frankfurt.transit_gateway_route_table_ids["tgw-core-rtb-spoke-prod"]
+          module.ntc_core_network_frankfurt.transit_gateway_route_table_ids["tgw-core-rtb-spoke-prod"],
+          module.ntc_core_network_frankfurt.transit_gateway_route_table_ids["tgw-core-rtb-onprem"]
         ]
       }
       # (optional) share subnet with Organizations, OUs or Accounts - requires RAM to be enabled for Organizations
