@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------------------------------------------------------
 # ¦ NTC IPAM
 # ---------------------------------------------------------------------------------------------------------------------
-module "ipam" {
+module "ntc_ipam" {
   source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-ipam?ref=1.0.2"
 
   description = "Organizational IPAM"
@@ -66,4 +66,9 @@ module "ipam" {
   providers = {
     aws = aws.euc1
   }
+}
+
+moved = {
+  from = module.ipam
+  to = module.ntc_ipam
 }
