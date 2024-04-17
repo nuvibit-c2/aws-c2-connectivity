@@ -67,8 +67,3 @@ module "ntc_ipam" {
     aws = aws.euc1
   }
 }
-
-moved {
-  from = module.ipam
-  to = module.ntc_ipam
-}
