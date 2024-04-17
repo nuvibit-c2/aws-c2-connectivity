@@ -68,7 +68,7 @@ module "ntc_ipam" {
   }
 }
 
-moved = {
+moved {
   from = module.ipam
   to = module.ntc_ipam
 }
