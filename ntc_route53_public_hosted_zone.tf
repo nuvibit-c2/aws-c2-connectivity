@@ -4,11 +4,12 @@
 module "ntc_route53_nuvibit_dev" {
   source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53?ref=1.1.1"
 
+  zone_force_destroy = false
+
   # name of the route53 hosted zone
   zone_name        = "nuvibit.dev"
   zone_description = "Managed by Terraform"
-  # 
-  zone_force_destroy = false
+
   # private hosted zones require at least one vpc to be associated
   # public hosted zones cannot have any vpc associated
   zone_type = "public"
@@ -30,11 +31,11 @@ module "ntc_route53_nuvibit_dev" {
   # https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-routing-traffic-for-subdomains.html
   zone_delegation_list = [
     # {
-    #   subdomain_zone_name       = "int"
+    #   subdomain_zone_name = "int"
     #   subdomain_nameserver_list = [
     #     "ns-999.awsdns-00.co.uk.",
     #     "ns-888.awsdns-00.org.",
-    #     "ns-777.awsdns-00.com."
+    #     "ns-777.awsdns-00.com.",
     #     "ns-666.awsdns-00.net.",
     #   ]
     # }

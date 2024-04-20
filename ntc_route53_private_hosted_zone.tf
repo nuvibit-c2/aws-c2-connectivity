@@ -4,11 +4,12 @@
 module "ntc_route53_mydomain_internal" {
   source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53?ref=1.1.1"
 
+  zone_force_destroy = false
+
   # name of the route53 hosted zone
   zone_name        = "mydomain.internal"
   zone_description = "Managed by Terraform"
-  # 
-  zone_force_destroy = false
+
   # private hosted zones require at least one vpc to be associated
   # public hosted zones cannot have any vpc associated
   zone_type = "private"
