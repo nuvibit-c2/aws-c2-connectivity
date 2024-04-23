@@ -79,7 +79,7 @@ module "ntc_route53_nuvibit_dev_dnssec" {
 # ¦ NTC ROUTE53 - QUERY LOGGING
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_route53_nuvibit_dev_query_logging" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53//modules/query-logs?ref=1.1.1"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53//modules/query-logs?ref=1.1.2"
 
   # query logging requires a public hosted zone
   zone_id = module.ntc_route53_nuvibit_dev.zone_id
