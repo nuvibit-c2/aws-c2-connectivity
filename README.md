@@ -30,7 +30,7 @@ Terraform pipeline repository to deploy AWS connectivity resources
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_ntc_core_network_frankfurt"></a> [ntc\_core\_network\_frankfurt](#module\_ntc\_core\_network\_frankfurt) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network | 1.1.0 |
+| <a name="module_ntc_core_network_frankfurt"></a> [ntc\_core\_network\_frankfurt](#module\_ntc\_core\_network\_frankfurt) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network | 1.1.1 |
 | <a name="module_ntc_core_network_frankfurt_custom_routes"></a> [ntc\_core\_network\_frankfurt\_custom\_routes](#module\_ntc\_core\_network\_frankfurt\_custom\_routes) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network//modules/custom-routes | 1.1.0 |
 | <a name="module_ntc_core_network_frankfurt_peering"></a> [ntc\_core\_network\_frankfurt\_peering](#module\_ntc\_core\_network\_frankfurt\_peering) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network//modules/peering | 1.1.0 |
 | <a name="module_ntc_core_network_zurich"></a> [ntc\_core\_network\_zurich](#module\_ntc\_core\_network\_zurich) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network | 1.1.0 |
