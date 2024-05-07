@@ -44,7 +44,7 @@ Terraform pipeline repository to deploy AWS connectivity resources
 | <a name="module_ntc_route53_nuvibit_dev"></a> [ntc\_route53\_nuvibit\_dev](#module\_ntc\_route53\_nuvibit\_dev) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53 | 1.1.2 |
 | <a name="module_ntc_route53_nuvibit_dev_dnssec"></a> [ntc\_route53\_nuvibit\_dev\_dnssec](#module\_ntc\_route53\_nuvibit\_dev\_dnssec) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53//modules/dnssec | 1.1.2 |
 | <a name="module_ntc_route53_nuvibit_dev_query_logging"></a> [ntc\_route53\_nuvibit\_dev\_query\_logging](#module\_ntc\_route53\_nuvibit\_dev\_query\_logging) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53//modules/query-logs | 1.1.2 |
-| <a name="module_ntc_route53_resolver"></a> [ntc\_route53\_resolver](#module\_ntc\_route53\_resolver) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53//modules/resolver | 1.1.2 |
+| <a name="module_ntc_route53_resolver"></a> [ntc\_route53\_resolver](#module\_ntc\_route53\_resolver) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53//modules/resolver | 1.2.0 |
 | <a name="module_ntc_vpc_central_endpoints"></a> [ntc\_vpc\_central\_endpoints](#module\_ntc\_vpc\_central\_endpoints) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc | 1.4.0 |
 | <a name="module_ntc_vpc_prod_stage"></a> [ntc\_vpc\_prod\_stage](#module\_ntc\_vpc\_prod\_stage) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc | 1.4.0 |
 | <a name="module_ntc_vpc_prod_stage_custom_routes"></a> [ntc\_vpc\_prod\_stage\_custom\_routes](#module\_ntc\_vpc\_prod\_stage\_custom\_routes) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc//modules/custom-routes | 1.4.0 |
