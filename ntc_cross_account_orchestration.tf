@@ -23,6 +23,25 @@ module "ntc_cross_account_orchestration" {
     ]
   }
 
+  # orchestration_step_function_settings = {
+  #   # this function will create subdomain delegation records in a central hosted zone
+  #   route53_subdomain_delegation = {
+  #     enabled        = true
+  #     s3_file_prefix = "r53_delegation"
+  #     root_zone_id   = ""
+  #     root_zone_name = ""
+  #   }
+  #   # this function will add route table asssociations and propagations to vpc attachment in a central transit gateway
+  #   transit_gateway_vpc_attachment = {
+  #     enabled                           = true
+  #     s3_file_prefix                    = "tgw_attachment"
+  #     transit_gateway_id                = ""
+  #     transit_gateway_association_rules = []
+  #     transit_gateway_propagation_rules = []
+  #   }
+  #   # TODO: should orchestration also get organizational data like security tooling? caching dynamodb would be required
+  # }
+
   providers = {
     aws = aws.euc1
   }
