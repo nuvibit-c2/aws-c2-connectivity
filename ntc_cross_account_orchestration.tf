@@ -7,6 +7,9 @@ module "ntc_cross_account_orchestration" {
   # organization id to limit bucket access to organization accounts
   org_id = local.ntc_parameters["mgmt-organizations"]["org_id"]
 
+  # to get organizational information about accounts an assumable iam role is required in the org management account
+  organization_reader_role_name = "ntc-org-account-reader"
+
   # this bucket stores information for cross account orchestration which will be provided by member accounts
   orchestration_bucket_name = "ntc-cross-account-orchestration-connectivity"
 
