@@ -62,7 +62,6 @@ module "ntc_cross_account_orchestration" {
       }
     }
   ]
-  # TODO: should orchestration also get organizational read access like security tooling? caching dynamodb would be required
 
   providers = {
     aws = aws.euc1
