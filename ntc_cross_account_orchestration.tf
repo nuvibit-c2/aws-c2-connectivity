@@ -26,9 +26,9 @@ module "ntc_cross_account_orchestration" {
   # trigger orchestration when a organization member account creates a JSON file in the orchestration_bucket and a rule matches
   orchestration_rules = [
     {
-      rule_name      = "r53_subdomain_delegation_workloads"
-      rule_type      = "route53_subdomain_delegation"
-      s3_file_prefix = "r53_delegation"
+      rule_name          = "r53_subdomain_delegation_workloads"
+      orchestration_type = "route53_subdomain_delegation"
+      s3_file_prefix     = "r53_delegation"
       # orchestrate cross-account route53 public subdomain delegation
       route53_delegation_settings = {
         root_zone_id   = module.ntc_route53_nuvibit_dev.zone_id
@@ -38,9 +38,9 @@ module "ntc_cross_account_orchestration" {
       condition = {}
     },
     {
-      rule_name      = "tgw_attachment_workloads_prod"
-      rule_type      = "transit_gateway_vpc_attachment"
-      s3_file_prefix = "tgw_attachment"
+      rule_name          = "tgw_attachment_workloads_prod"
+      orchestration_type = "transit_gateway_vpc_attachment"
+      s3_file_prefix     = "tgw_attachment"
       # orchestrate cross-account transit gateway vpc attachments associations and propagations
       transit_gateway_vpc_attachment_settings = {
         transit_gateway_id            = module.ntc_core_network_frankfurt.transit_gateway_id
