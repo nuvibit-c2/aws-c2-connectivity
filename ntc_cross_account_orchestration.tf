@@ -36,6 +36,8 @@ module "ntc_cross_account_orchestration" {
       route53_delegation_settings = {
         root_zone_id   = module.ntc_route53_nuvibit_dev.zone_id
         dnssec_enabled = true
+        # (optional) limit subdomain zone name to value specified in account tag
+        subdomain_equals_account_tag = "AccountDNSZoneName"
       }
       # by default this rule will apply to all accounts where 's3_file_prefix' matches
       condition = {}
