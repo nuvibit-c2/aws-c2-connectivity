@@ -38,6 +38,8 @@ module "ntc_cross_account_orchestration" {
         dnssec_enabled = true
         # (optional) limit subdomain zone name to value specified in account tag
         subdomain_equals_account_tag = "AccountDNSZoneName"
+        # (optional) separator when multiple zones are specified in account tag
+        subdomain_separator_account_tag = " "
       }
       # by default this rule will apply to all accounts where 's3_file_prefix' matches
       condition = {}
