@@ -34,8 +34,10 @@ module "ntc_cross_account_orchestration" {
       s3_file_prefix     = "r53_delegation/"
       # orchestrate cross-account route53 public subdomain delegation
       route53_delegation_settings = {
-        root_zone_id   = module.ntc_route53_nuvibit_dev.zone_id
-        dnssec_enabled = true
+        root_zone_id             = module.ntc_route53_nuvibit_dev.zone_id
+        ns_record_ttl_in_seconds = 3600 # 1h = 3600; 1d = 86400
+        ds_record_ttl_in_seconds = 3600 # 1h = 3600; 1d = 86400
+        dnssec_enabled           = true
         # (optional) limit subdomain zone name to value specified in account tag
         subdomain_equals_account_tag = "AccountDNSZoneName"
         # (optional) separator when multiple zones are specified in account tag
