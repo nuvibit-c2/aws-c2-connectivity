@@ -29,8 +29,7 @@ module "ntc_ipam" {
       pool_name   = "Prod Pool"
       pool_region = "eu-central-1"
       description = "staging pool"
-      # subnet cidrs can also be calculated with cidrsubnets()
-      cidrs = cidrsubnets("100.64.0.0/14", 2, 2, 2, 2)
+      cidrs       = cidrsubnets("100.64.0.0/14", 2, 2, 2, 2)
       # share IPAM with Organizations, OUs or Accounts
       # ram_share_principals              = ["o-m29e8d9awz", "ou-6gf5-6ltp3mjf", "090258021222"]
       allocation_default_netmask_length = 22
@@ -39,12 +38,15 @@ module "ntc_ipam" {
       allocation_resource_tags          = {}
     },
     {
-      pool_path                         = "/toplevel/frankfurt/dev"
-      pool_name                         = "Dev Pool"
-      pool_region                       = "eu-central-1"
-      description                       = "staging pool"
-      cidrs                             = cidrsubnets("100.68.0.0/14", 2, 2, 2, 2)
-      ram_share_principals              = []
+      pool_path   = "/toplevel/frankfurt/dev"
+      pool_name   = "Dev Pool"
+      pool_region = "eu-central-1"
+      description = "staging pool"
+      cidrs       = cidrsubnets("100.68.0.0/14", 2, 2, 2, 2)
+      # share IPAM with Organizations, OUs or Accounts
+      ram_share_principals = [
+        local.ntc_parameters["mgmt-organizations"]["ou_ids"]["/root/workloads/dev"]
+      ]
       allocation_default_netmask_length = 22
       allocation_max_netmask_length     = 22
       allocation_min_netmask_length     = 22
