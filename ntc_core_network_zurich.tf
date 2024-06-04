@@ -25,8 +25,10 @@ module "ntc_core_network_zurich" {
       "tgw-core-rtb-onprem",
     ]
     # (optional) share subnet with Organizations, OUs or Accounts - requires RAM to be enabled for Organizations
-    auto_accept_shared_attachments      = true
-    ram_share_principals                = []
+    auto_accept_shared_attachments = true
+    ram_share_principals = [
+      local.ntc_parameters["mgmt-organizations"]["ou_ids"]["/root/workloads"]
+    ]
     ram_share_allow_external_principals = false
   }
 
