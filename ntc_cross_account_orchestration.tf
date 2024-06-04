@@ -63,7 +63,7 @@ module "ntc_cross_account_orchestration" {
       # condition to limit to which accounts this rule applies where 's3_file_prefix' also matches
       condition = {
         test     = "StringEquals" # StringEquals, StringLike
-        variable = "ou_path"      # account_id, account_name, ou_path, account_tag/KEY_NAME
+        variable = "ouPath"       # accountId, accountName, ouPath, accountTag:KEY_NAME
         values   = ["/root/workloads/prod"]
       }
     }
