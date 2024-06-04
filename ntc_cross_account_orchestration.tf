@@ -38,12 +38,12 @@ module "ntc_cross_account_orchestration" {
         ns_record_ttl_in_seconds = 3600 # 1h = 3600; 1d = 86400
         ds_record_ttl_in_seconds = 3600 # 1h = 3600; 1d = 86400
         dnssec_enabled           = true
-        # (optional) limit subdomain zone name to value specified in account tag
+        # (optional) subdomain zone name must match value specified in account tag
         subdomain_equals_account_tag = "AccountDNSZoneName"
         # (optional) separator when multiple zones are specified in account tag
-        subdomain_separator_account_tag = " "
+        subdomain_separator_account_tag = " " # e.g. "app1.example.com app2.example.com"
       }
-      # by default this rule will apply to all accounts where 's3_file_prefix' matches
+      # by default orchestration_rules will apply to all accounts where 's3_file_prefix' matches
       condition = {}
     },
     {
@@ -60,11 +60,12 @@ module "ntc_cross_account_orchestration" {
           module.ntc_core_network_frankfurt.transit_gateway_route_table_ids["tgw-core-rtb-onprem"]
         ]
       }
-      # condition to limit to which accounts this rule applies where 's3_file_prefix' also matches
+      # by default orchestration_rules will apply to all accounts where 's3_file_prefix' matches
+      # a condition can additionaly restrict to which accounts orchestration_rules will apply
       condition = {
         test     = "StringEquals" # StringEquals, StringLike
         variable = "ouPath"       # accountId, accountName, ouPath, accountTag:KEY_NAME
-        values   = ["/root/workloads/prod"]
+        values   = ["/root/infrastructure"]
       }
     }
   ]
@@ -72,4 +73,41 @@ module "ntc_cross_account_orchestration" {
   providers = {
     aws = aws.euc1
   }
+}
+
+# ---------------------------------------------------------------------------------------------------------------------
+# ¦ NTC CROSS ACCOUNT ORCHESTRATION - WRITE
+# ---------------------------------------------------------------------------------------------------------------------
+# this is an example how an organization member account would trigger a cross-account orchestration
+module "ntc_cross_account_orchestration_trigger" {
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-cross-account-orchestration//modules/orchestration-trigger?ref=beta"
+
+  orchestration_triggers = [
+    # {
+    #   trigger_name = "r53_subdomain_delegation_workloads"
+    #   s3_bucket_name = "ntc-cross-account-orchestration-connectivity"
+    #   # file prefix must match with central orchestration configuration
+    #   s3_file_prefix     = "r53_delegation/"
+    #   orchestration_type = "route53_subdomain_delegation"
+    #   route53_delegation_info = {
+    #     zone_id     = ""
+    #     zone_name   = ""
+    #     nameservers = ""
+    #     # (optional) DS record is required when DNSSEC is enabled
+    #     ds_record = ""
+    #   }
+    # },
+    # {
+    #   trigger_name = "tgw_attachment_workloads_prod"
+    #   s3_bucket_name = "ntc-cross-account-orchestration-connectivity"
+    #   # file prefix must match with central orchestration configuration
+    #   s3_file_prefix     = "tgw_attachment/"
+    #   orchestration_type = "transit_gateway_vpc_attachment"
+    #   transit_gateway_vpc_attachment_info = {
+    #     vpc_id            = ""
+    #     vpc_name          = ""
+    #     tgw_attachment_id = ""
+    #   }
+    # }
+  ]
 }
