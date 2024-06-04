@@ -4,7 +4,10 @@ locals {
 
   # parameters that are managed by core connectivity account
   ntc_parameters_to_write = {
-    customer_managed_prefix_lists : module.ntc_vpc_prod_stage.customer_managed_prefix_lists
+    "customer_managed_prefix_lists" = module.ntc_vpc_prod_stage.customer_managed_prefix_lists
+    "transit_gateway_zurich"        = module.ntc_core_network_zurich.transit_gateway_id
+    "transit_gateway_frankfurt"     = module.ntc_core_network_frankfurt.transit_gateway_id
+    "ipam_pools_ids"                = module.ntc_ipam.nested_pools_ids
   }
 
   # by default existing node parameters will be merged with new parameters to avoid deleting parameters
