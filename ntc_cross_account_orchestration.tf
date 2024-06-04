@@ -65,7 +65,29 @@ module "ntc_cross_account_orchestration" {
       condition = {
         test     = "StringEquals" # StringEquals, StringLike
         variable = "ouPath"       # accountId, accountName, ouPath, accountTag:KEY_NAME
-        values   = ["/root/infrastructure"]
+        values   = ["/root/workloads/prod"]
+      }
+    },
+    {
+      rule_name          = "tgw_attachment_workloads_dev"
+      orchestration_type = "transit_gateway_vpc_attachment"
+      s3_file_prefix     = "tgw_attachment/"
+      # orchestrate cross-account transit gateway vpc attachments associations and propagations
+      transit_gateway_vpc_attachment_settings = {
+        transit_gateway_id            = module.ntc_core_network_frankfurt.transit_gateway_id
+        associate_with_route_table_id = module.ntc_core_network_frankfurt.transit_gateway_route_table_ids["tgw-core-rtb-spoke-dev"]
+        propagate_to_route_table_ids = [
+          module.ntc_core_network_frankfurt.transit_gateway_route_table_ids["tgw-core-rtb-hub"],
+          module.ntc_core_network_frankfurt.transit_gateway_route_table_ids["tgw-core-rtb-spoke-dev"],
+          module.ntc_core_network_frankfurt.transit_gateway_route_table_ids["tgw-core-rtb-onprem"]
+        ]
+      }
+      # by default orchestration_rules will apply to all accounts where 's3_file_prefix' matches
+      # a condition can additionaly restrict to which accounts orchestration_rules will apply
+      condition = {
+        test     = "StringEquals" # StringEquals, StringLike
+        variable = "ouPath"       # accountId, accountName, ouPath, accountTag:KEY_NAME
+        values   = ["/root/workloads/dev"]
       }
     }
   ]
