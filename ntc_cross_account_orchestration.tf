@@ -101,13 +101,13 @@ module "ntc_cross_account_orchestration" {
 # ¦ NTC CROSS ACCOUNT ORCHESTRATION - TRIGGER
 # ---------------------------------------------------------------------------------------------------------------------
 # this is an example how an organization member account would trigger a cross-account orchestration
-# normally this would be defined in another account which would then trigger the orchestration in this account
+# normally this would be defined in a different account which would then trigger the orchestration in this account
 module "ntc_cross_account_orchestration_trigger" {
   source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-cross-account-orchestration//modules/orchestration-trigger?ref=beta"
 
   orchestration_triggers = [
     # {
-    #   trigger_name = "app1_nuvibit_dev"
+    #   trigger_name = "r53_delegation"
     #   s3_bucket_name = "ntc-cross-account-orchestration-connectivity"
     #   # file prefix must match with central orchestration configuration
     #   s3_file_prefix     = "r53_delegation/"
@@ -121,7 +121,7 @@ module "ntc_cross_account_orchestration_trigger" {
     #   }
     # },
     # {
-    #   trigger_name = "vpc_app1_euc1"
+    #   trigger_name = "tgw_attachment_euc1"
     #   s3_bucket_name = "ntc-cross-account-orchestration-connectivity"
     #   # file prefix must match with central orchestration configuration
     #   s3_file_prefix     = "tgw_attachment/"
