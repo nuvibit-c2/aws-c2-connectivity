@@ -127,9 +127,9 @@ module "ntc_cross_account_orchestration_trigger" {
     #   s3_file_prefix     = "tgw_attachment/"
     #   orchestration_type = "transit_gateway_vpc_attachment"
     #   transit_gateway_vpc_attachment_info = {
-    #     vpc_id            = ""
-    #     vpc_name          = ""
-    #     tgw_attachment_id = ""
+    #     vpc_id                        = ""
+    #     vpc_name                      = ""
+    #     transit_gateway_attachment_id = ""
     #   }
     # }
   ]
