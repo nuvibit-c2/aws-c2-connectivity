@@ -32,6 +32,7 @@ module "ntc_cross_account_orchestration" {
       rule_name          = "r53_subdomain_delegation_workloads"
       orchestration_type = "route53_subdomain_delegation"
       s3_file_prefix     = "r53_delegation/"
+      region             = "us-east-1" # route53 is a global service
       # orchestrate cross-account route53 public subdomain delegation
       route53_delegation_settings = {
         root_zone_id             = module.ntc_route53_nuvibit_dev.zone_id
@@ -47,9 +48,10 @@ module "ntc_cross_account_orchestration" {
       condition = {}
     },
     {
-      rule_name          = "tgw_attachment_workloads_prod"
+      rule_name          = "tgw_attachment_workloads_prod_euc1"
       orchestration_type = "transit_gateway_vpc_attachment"
       s3_file_prefix     = "tgw_attachment/"
+      region             = "eu-central-1" # TODO: update module input and add regional support - PoC use codebuild_terraform instead of step function?
       # orchestrate cross-account transit gateway vpc attachments associations and propagations
       transit_gateway_vpc_attachment_settings = {
         transit_gateway_id            = module.ntc_core_network_frankfurt.transit_gateway_id
@@ -69,9 +71,10 @@ module "ntc_cross_account_orchestration" {
       }
     },
     {
-      rule_name          = "tgw_attachment_workloads_dev"
+      rule_name          = "tgw_attachment_workloads_dev_euc1"
       orchestration_type = "transit_gateway_vpc_attachment"
       s3_file_prefix     = "tgw_attachment/"
+      region             = "eu-central-1"
       # orchestrate cross-account transit gateway vpc attachments associations and propagations
       transit_gateway_vpc_attachment_settings = {
         transit_gateway_id            = module.ntc_core_network_frankfurt.transit_gateway_id
@@ -112,6 +115,7 @@ module "ntc_cross_account_orchestration_trigger" {
     #   # file prefix must match with central orchestration configuration
     #   s3_file_prefix     = "r53_delegation/"
     #   orchestration_type = "route53_subdomain_delegation"
+    #   region             = "us-east-1"
     #   route53_delegation_info = {
     #     zone_id     = ""
     #     zone_name   = ""
@@ -125,6 +129,7 @@ module "ntc_cross_account_orchestration_trigger" {
     #   s3_bucket_name = "ntc-cross-account-orchestration-connectivity"
     #   # file prefix must match with central orchestration configuration
     #   s3_file_prefix     = "tgw_attachment/"
+    #   region             = "eu-central-1"
     #   orchestration_type = "transit_gateway_vpc_attachment"
     #   transit_gateway_vpc_attachment_info = {
     #     vpc_id                        = ""
