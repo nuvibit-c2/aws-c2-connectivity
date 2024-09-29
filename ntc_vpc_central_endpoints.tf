@@ -79,13 +79,19 @@ module "ntc_vpc_central_endpoints" {
       # by default a security group will be created with https/443 ingress rule for the local VPC CIDR
       interface_endpoints = [
         {
-          common_name = "logs"
+          common_name = "ssm"
           policy_json = null
           # private dns should be disabled for centralized endpoints
           private_dns_enabled = false
         },
         {
-          common_name = "ec2"
+          common_name = "ssmmessages"
+          policy_json = null
+          # private dns should be disabled for centralized endpoints
+          private_dns_enabled = false
+        },
+        {
+          common_name = "ec2messages"
           policy_json = null
           # private dns should be disabled for centralized endpoints
           private_dns_enabled = false
