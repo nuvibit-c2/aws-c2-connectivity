@@ -271,7 +271,7 @@ module "ntc_core_network_frankfurt_peering" {
 # ¦ NTC CORE NETWORK - CUSTOM ROUTES
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_core_network_frankfurt_custom_routes" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network//modules/custom-routes?ref=1.1.1"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network//modules/custom-routes?ref=1.1.2"
 
   # add custom routes for more flexibility and full control (e.g. firewall deployment)
   transit_gateway_custom_routes = [
