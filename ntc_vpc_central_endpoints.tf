@@ -46,7 +46,7 @@ module "ntc_vpc_central_endpoints" {
 
   # for centralized vpc endpoints update security group (by default only current vpc is allowed to access endpoints)
   interface_endpoints_security_group_ingress = {
-    create_security_group      = true
+    create_security_group = true
     # allowed_cidr_blocks        = ["172.16.0.0/16"]
     # allowed_prefix_list_names  = ["onprem-dns-servers"]
     allowed_security_group_ids = ["sg-0360e544786aa199a"] # security group in another VPC
