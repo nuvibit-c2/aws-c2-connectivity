@@ -2,7 +2,7 @@
 # ¦ NTC ROUTE53 - PUBLIC HOSTED ZONE
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_route53_nuvibit_dev" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53?ref=1.2.0"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53?ref=1.2.1"
 
   zone_force_destroy = false
 
@@ -52,7 +52,7 @@ module "ntc_route53_nuvibit_dev" {
 # WARNING: disabling DNSSEC before DS records expire can lead to domain becoming unavailable on the internet
 # https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-configuring-dnssec-disable.html
 module "ntc_route53_nuvibit_dev_dnssec" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53//modules/dnssec?ref=1.2.0"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53//modules/dnssec?ref=1.2.1"
 
   zone_id = module.ntc_route53_nuvibit_dev.zone_id
 
@@ -79,7 +79,7 @@ module "ntc_route53_nuvibit_dev_dnssec" {
 # ¦ NTC ROUTE53 - QUERY LOGGING
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_route53_nuvibit_dev_query_logging" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53//modules/query-logs?ref=1.2.0"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53//modules/query-logs?ref=1.2.1"
 
   # query logging requires a public hosted zone
   zone_id = module.ntc_route53_nuvibit_dev.zone_id
