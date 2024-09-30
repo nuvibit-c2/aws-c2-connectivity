@@ -19,7 +19,7 @@ module "ntc_vpc_prod_stage" {
   # define customer managed prefix lists e.g. for all on-premises ip ranges
   customer_managed_prefix_lists = [
     {
-      name = "onprem-ipv4-ranges"
+      name = "onprem-servers-ipv4-ranges"
       entries = [
         {
           cidr        = "192.168.10.0/24"
@@ -32,6 +32,26 @@ module "ntc_vpc_prod_stage" {
         {
           cidr        = "192.168.30.0/24"
           description = "Server Zone C"
+        }
+      ]
+      # (optional) share subnet with Organizations, OUs or Accounts - requires RAM to be enabled for Organizations
+      # ram_share_principals = ["o-m29e8d9awz", "ou-6gf5-6ltp3mjf", "945766593056"]
+      # ram_share_allow_external_principals = false
+    },
+    {
+      name = "cloud-ipv4-ranges"
+      entries = [
+        {
+          cidr        = "100.64.0.0/10"
+          description = "cloudonly"
+        },
+        {
+          cidr        = "172.16.0.0/12"
+          description = "hybrid"
+        },
+        {
+          cidr        = "192.168.0.0/16"
+          description = "onprem"
         }
       ]
       # (optional) share subnet with Organizations, OUs or Accounts - requires RAM to be enabled for Organizations
@@ -64,30 +84,6 @@ module "ntc_vpc_prod_stage" {
   }
 
   vpc_subnets = [
-    {
-      # (optional) for VPCs with secondary cidr blocks the 'vpc_cidr_identifier' is required. Primary cidr block is always 'primary'
-      vpc_cidr_identifier = "primary"
-      # unique identifier for subnet - renaming will cause subnet to be recreated
-      subnet_identifier = "hybrid-private"
-      # subnets can be of type 'private', 'public', 'firewall' or 'transit'
-      subnet_type = "private"
-      # setting netmask_length will dynamically calculate or allocate (with ipam) corresponding cidr ranges
-      # when calculating cidrs the subnets will be sorted from largest to smallest to optimize cidr space
-      # WARNING: changing the netmask_length can lead to subnets beeing redeployed
-      netmask_length = 26
-      # instead of dynamically calculating subnet cidrs based on netmask length a list of static cidrs can be provided
-      static_cidrs = []
-      # specific configuration for subnet type
-      private_subnet_config = {
-        default_route_to_public_nat_gateway = false
-        default_route_to_transit_gateway    = true
-        create_private_nat_gateway          = true
-        secondary_private_ip_address_count  = 0
-      }
-      # (optional) share subnet with Organizations, OUs or Accounts - requires RAM to be enabled for Organizations
-      # ram_share_principals = ["o-m29e8d9awz", "ou-6gf5-6ltp3mjf", "945766593056"]
-      # ram_share_allow_external_principals = false
-    },
     {
       # (optional) for VPCs with secondary cidr blocks the 'vpc_cidr_identifier' is required. Primary cidr block is always 'primary'
       vpc_cidr_identifier = "cloudonly"
@@ -213,29 +209,6 @@ module "ntc_vpc_prod_stage" {
       # (optional) for VPCs with secondary cidr blocks the 'vpc_cidr_identifier' is required. Primary cidr block is always 'primary'
       vpc_cidr_identifier = "cloudonly"
       # unique identifier for subnet - renaming will cause subnet to be recreated
-      subnet_identifier = "cloudonly-firewall"
-      # subnets can be of type 'private', 'public', 'firewall' or 'transit'
-      subnet_type = "firewall"
-      # setting netmask_length will dynamically calculate or allocate (with ipam) corresponding cidr ranges
-      # when calculating cidrs the subnets will be sorted from largest to smallest to optimize cidr space
-      # WARNING: changing the netmask_length can lead to subnets beeing redeployed
-      netmask_length = 28
-      # instead of dynamically calculating subnet cidrs based on netmask length a list of static cidrs can be provided
-      static_cidrs = []
-      # specific configuration for subnet type
-      firewall_subnet_config = {
-        default_route_to_public_nat_gateway = true
-        default_route_to_internet_gateway   = false
-        default_route_to_transit_gateway    = false
-      }
-      # (optional) share subnet with Organizations, OUs or Accounts - requires RAM to be enabled for Organizations
-      # ram_share_principals = ["o-m29e8d9awz", "ou-6gf5-6ltp3mjf", "945766593056"]
-      # ram_share_allow_external_principals = false
-    },
-    {
-      # (optional) for VPCs with secondary cidr blocks the 'vpc_cidr_identifier' is required. Primary cidr block is always 'primary'
-      vpc_cidr_identifier = "cloudonly"
-      # unique identifier for subnet - renaming will cause subnet to be recreated
       subnet_identifier = "cloudonly-transit"
       # subnets can be of type 'private', 'public', 'firewall' or 'transit'
       subnet_type = "transit"
@@ -267,7 +240,32 @@ module "ntc_vpc_prod_stage" {
       # (optional) share subnet with Organizations, OUs or Accounts - requires RAM to be enabled for Organizations
       # ram_share_principals = ["o-m29e8d9awz", "ou-6gf5-6ltp3mjf", "945766593056"]
       # ram_share_allow_external_principals = false
-    }
+    },
+    /* different types of subnets (e.g. subnet with secondary cidr or firewall subnet)
+    {
+      vpc_cidr_identifier = "primary"
+      subnet_identifier = "hybrid-private"
+      subnet_type = "private"
+      netmask_length = 26
+      private_subnet_config = {
+        default_route_to_public_nat_gateway = false
+        default_route_to_transit_gateway    = true
+        create_private_nat_gateway          = true
+        secondary_private_ip_address_count  = 0
+      }
+    },
+    {
+      vpc_cidr_identifier = "cloudonly"
+      subnet_identifier = "cloudonly-firewall"
+      subnet_type = "firewall"
+      netmask_length = 28
+      firewall_subnet_config = {
+        default_route_to_public_nat_gateway = true
+        default_route_to_internet_gateway   = false
+        default_route_to_transit_gateway    = false
+      }
+    },
+    */
   ]
 
   # vpc flow logs can be delivered to s3, cloudwatch and kinesis-data-firehose.
@@ -316,6 +314,54 @@ module "ntc_vpc_prod_stage_custom_routes" {
   custom_routes = [
     {
       # unique name to identify the route
+      route_identifier = "route_cloudonly_traffic_to_tgw_az1"
+      # route table where custom route will be be added
+      route_table_id = module.ntc_vpc_prod_stage.route_table_ids["cloudonly-public"][0]
+      # what is the destination of the traffic that should be controlled by this route?
+      # a single destination type is required and cannot combine multiple destination types
+      destination = {
+        cidr_block      = ""
+        ipv6_cidr_block = ""
+        prefix_list_id  = module.ntc_vpc_prod_stage.customer_managed_prefix_lists["cloud-ipv4-ranges"].id
+      }
+      # what is the target of the traffic that should be controlled by this route?
+      # a single target type is required and cannot combine multiple target types
+      target = {
+        carrier_gateway_id          = ""
+        core_network_arn            = ""
+        ipv6_egress_only_gateway_id = ""
+        internet_gateway_id         = ""
+        transit_gateway_id          = module.ntc_core_network_frankfurt.transit_gateway_id
+        virtual_private_gateway_id  = ""
+        vpc_peering_connection_id   = ""
+        nat_gateway_id              = ""
+        network_interface_id        = ""
+        vpc_endpoint_id             = ""
+      }
+    },
+    {
+      route_identifier = "route_cloudonly_traffic_to_tgw_az2"
+      route_table_id   = module.ntc_vpc_prod_stage.route_table_ids["cloudonly-public"][1]
+      destination = {
+        prefix_list_id = module.ntc_vpc_prod_stage.customer_managed_prefix_lists["cloud-ipv4-ranges"].id
+      }
+      target = {
+        transit_gateway_id = module.ntc_core_network_frankfurt.transit_gateway_id
+      }
+    },
+    {
+      route_identifier = "route_cloudonly_traffic_to_tgw_az3"
+      route_table_id   = module.ntc_vpc_prod_stage.route_table_ids["cloudonly-public"][2]
+      destination = {
+        prefix_list_id = module.ntc_vpc_prod_stage.customer_managed_prefix_lists["cloud-ipv4-ranges"].id
+      }
+      target = {
+        transit_gateway_id = module.ntc_core_network_frankfurt.transit_gateway_id
+      }
+    }
+    /* custom routes when adding a firewall subnet
+    {
+      # unique name to identify the route
       route_identifier = "route_private_traffic_to_firewall_az1"
       # route table where custom route will be be added
       route_table_id = module.ntc_vpc_prod_stage.route_table_ids["cloudonly-private"][0]
@@ -361,6 +407,7 @@ module "ntc_vpc_prod_stage_custom_routes" {
         network_interface_id = "eni-0e55b3e0b04ee1824"
       }
     }
+    */
   ]
 
   providers = {
