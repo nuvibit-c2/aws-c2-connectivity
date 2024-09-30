@@ -143,7 +143,7 @@ module "ntc_core_network_zurich" {
 # ¦ NTC CORE NETWORK - PEERING (FRA-ZRH)
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_core_network_zurich_peering" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network//modules/peering?ref=1.1.1"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network//modules/peering?ref=1.1.2"
 
   # all transit gateway peerings will be associated with the same transit gateway route table
   create_transit_gateway_peering_association              = true
