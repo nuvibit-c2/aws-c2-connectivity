@@ -2,7 +2,8 @@
 # ¦ NTC VPC
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_vpc_central_endpoints" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc?ref=1.5.0"
+  # source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc?ref=1.5.0"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc?ref=feat-tgw-security-group-ref"
 
   # a prefix which will be added to all vpc resources
   prefix_name = "central-endpoints"
@@ -45,10 +46,11 @@ module "ntc_vpc_central_endpoints" {
 
   # for centralized vpc endpoints update security group (by default only current vpc is allowed to access endpoints)
   interface_endpoints_security_group_ingress = {
-    create_security_group     = true
-    allowed_cidr_blocks       = ["172.16.0.0/16"]
-    allowed_prefix_list_names = ["onprem-dns-servers"]
-    inbound_ports             = ["443"]
+    create_security_group      = true
+    # allowed_cidr_blocks        = ["172.16.0.0/16"]
+    # allowed_prefix_list_names  = ["onprem-dns-servers"]
+    allowed_security_group_ids = ["sg-0360e544786aa199a"] # security group in another VPC
+    inbound_ports              = ["443"]
   }
 
   vpc_subnets = [
@@ -77,13 +79,19 @@ module "ntc_vpc_central_endpoints" {
       # by default a security group will be created with https/443 ingress rule for the local VPC CIDR
       interface_endpoints = [
         {
-          common_name = "logs"
+          common_name = "ssm"
           policy_json = null
           # private dns should be disabled for centralized endpoints
           private_dns_enabled = false
         },
         {
-          common_name = "ec2"
+          common_name = "ssmmessages"
+          policy_json = null
+          # private dns should be disabled for centralized endpoints
+          private_dns_enabled = false
+        },
+        {
+          common_name = "ec2messages"
           policy_json = null
           # private dns should be disabled for centralized endpoints
           private_dns_enabled = false
@@ -108,13 +116,14 @@ module "ntc_vpc_central_endpoints" {
       static_cidrs = []
       # specific configuration for subnet type
       transit_subnet_config = {
-        transit_gateway_create_attachment               = true
-        transit_gateway_appliance_mode_support          = false
-        transit_gateway_ipv6_support                    = false
-        transit_gateway_dns_support                     = true
-        transit_gateway_default_route_table_association = false
-        transit_gateway_default_route_table_propagation = false
-        transit_gateway_id                              = module.ntc_core_network_frankfurt.transit_gateway_id
+        transit_gateway_create_attachment                  = true
+        transit_gateway_appliance_mode_support             = false
+        transit_gateway_ipv6_support                       = false
+        transit_gateway_dns_support                        = true
+        transit_gateway_security_group_referencing_support = true
+        transit_gateway_default_route_table_association    = false
+        transit_gateway_default_route_table_propagation    = false
+        transit_gateway_id                                 = module.ntc_core_network_frankfurt.transit_gateway_id
         # vpc attachement can only be associated with a single transit gateway route table
         transit_gateway_association_with_route_table_id = module.ntc_core_network_frankfurt.transit_gateway_route_table_ids["tgw-core-rtb-hub"]
         # vpc attachement can propagate to multiple transit gateway route table for dynamic routing

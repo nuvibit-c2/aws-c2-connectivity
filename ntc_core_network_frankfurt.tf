@@ -2,21 +2,23 @@
 # ¦ NTC CORE NETWORK
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_core_network_frankfurt" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network?ref=1.1.2"
+  # source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network?ref=1.1.2"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network?ref=feat-tgw-security-group-ref"
 
   # -------------------------------------------------------------------------------------------------------------------
   # ¦ TRANSIT GATEWAY
   # -------------------------------------------------------------------------------------------------------------------
   transit_gateway = {
-    name                            = "tgw-core-frankfurt"
-    description                     = "core network in frankfurt"
-    amazon_side_asn                 = 64512
-    default_route_table_association = false
-    default_route_table_propagation = false
-    dns_support                     = true
-    multicast_support               = false
-    vpn_ecmp_support                = true
-    cidr_blocks                     = []
+    name                               = "tgw-core-frankfurt"
+    description                        = "core network in frankfurt"
+    amazon_side_asn                    = 64512
+    default_route_table_association    = false
+    default_route_table_propagation    = false
+    dns_support                        = true
+    multicast_support                  = false
+    vpn_ecmp_support                   = true
+    security_group_referencing_support = true
+    cidr_blocks                        = []
     route_table_names = [
       "tgw-core-rtb-hub",
       "tgw-core-rtb-spoke-prod",

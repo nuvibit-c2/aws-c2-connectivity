@@ -2,7 +2,7 @@
 # ¦ NTC ROUTE53 - PRIVATE HOSTED ZONE
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_route53_mydomain_internal" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53?ref=1.2.0"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53?ref=1.2.1"
 
   zone_force_destroy = false
 
@@ -47,13 +47,13 @@ module "ntc_route53_mydomain_internal" {
       ]
     },
     {
-      name = "cloudwatch-endpoint"
+      name = "ssm-endpoint"
       type = "A"
       ttl  = 300
       alias = {
         enable_alias           = true
-        target_dns_name        = module.ntc_vpc_central_endpoints.interface_endpoints.logs.dns_names[0]
-        target_hosted_zone_id  = module.ntc_vpc_central_endpoints.interface_endpoints.logs.hosted_zone_id
+        target_dns_name        = module.ntc_vpc_central_endpoints.interface_endpoints.ssm.dns_names[0]
+        target_hosted_zone_id  = module.ntc_vpc_central_endpoints.interface_endpoints.ssm.hosted_zone_id
         evaluate_target_health = true
       }
     }

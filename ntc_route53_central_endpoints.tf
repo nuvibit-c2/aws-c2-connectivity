@@ -18,10 +18,15 @@ locals {
       zone_type = "private"
       zone_vpc_associations = [
         {
-          vpc_id = module.ntc_vpc_prod_stage.vpc_id
+          vpc_id = module.ntc_vpc_central_endpoints.vpc_id
           # (optional) by default the provider region will be used
           vpc_region = null
-        }
+        },
+        # {
+        #   vpc_id = module.ntc_vpc_prod_stage.vpc_id
+        #   # (optional) by default the provider region will be used
+        #   vpc_region = null
+        # }
       ]
 
       # (optional) set to true if you need to create the vpc associations in another account
@@ -65,7 +70,7 @@ locals {
 # ¦ NTC ROUTE53
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_route53_central_endpoints" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53?ref=1.2.0"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53?ref=1.2.1"
 
   for_each = local.route53_central_endpoints
 
