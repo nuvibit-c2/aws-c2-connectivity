@@ -30,24 +30,26 @@ Terraform pipeline repository to deploy AWS connectivity resources
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_ntc_core_network_frankfurt"></a> [ntc\_core\_network\_frankfurt](#module\_ntc\_core\_network\_frankfurt) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network | 1.1.0 |
-| <a name="module_ntc_core_network_frankfurt_custom_routes"></a> [ntc\_core\_network\_frankfurt\_custom\_routes](#module\_ntc\_core\_network\_frankfurt\_custom\_routes) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network//modules/custom-routes | 1.1.0 |
-| <a name="module_ntc_core_network_frankfurt_peering"></a> [ntc\_core\_network\_frankfurt\_peering](#module\_ntc\_core\_network\_frankfurt\_peering) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network//modules/peering | 1.1.0 |
-| <a name="module_ntc_core_network_zurich"></a> [ntc\_core\_network\_zurich](#module\_ntc\_core\_network\_zurich) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network | 1.1.0 |
-| <a name="module_ntc_core_network_zurich_custom_routes"></a> [ntc\_core\_network\_zurich\_custom\_routes](#module\_ntc\_core\_network\_zurich\_custom\_routes) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network//modules/custom-routes | 1.1.0 |
-| <a name="module_ntc_core_network_zurich_peering"></a> [ntc\_core\_network\_zurich\_peering](#module\_ntc\_core\_network\_zurich\_peering) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network//modules/peering | 1.1.0 |
+| <a name="module_ntc_core_network_frankfurt"></a> [ntc\_core\_network\_frankfurt](#module\_ntc\_core\_network\_frankfurt) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network | feat-tgw-security-group-ref |
+| <a name="module_ntc_core_network_frankfurt_custom_routes"></a> [ntc\_core\_network\_frankfurt\_custom\_routes](#module\_ntc\_core\_network\_frankfurt\_custom\_routes) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network//modules/custom-routes | 1.1.1 |
+| <a name="module_ntc_core_network_frankfurt_peering"></a> [ntc\_core\_network\_frankfurt\_peering](#module\_ntc\_core\_network\_frankfurt\_peering) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network//modules/peering | 1.1.2 |
+| <a name="module_ntc_core_network_zurich"></a> [ntc\_core\_network\_zurich](#module\_ntc\_core\_network\_zurich) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network | feat-tgw-security-group-ref |
+| <a name="module_ntc_core_network_zurich_custom_routes"></a> [ntc\_core\_network\_zurich\_custom\_routes](#module\_ntc\_core\_network\_zurich\_custom\_routes) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network//modules/custom-routes | 1.1.1 |
+| <a name="module_ntc_core_network_zurich_peering"></a> [ntc\_core\_network\_zurich\_peering](#module\_ntc\_core\_network\_zurich\_peering) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network//modules/peering | 1.1.1 |
+| <a name="module_ntc_cross_account_orchestration"></a> [ntc\_cross\_account\_orchestration](#module\_ntc\_cross\_account\_orchestration) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-cross-account-orchestration | beta |
+| <a name="module_ntc_cross_account_orchestration_trigger"></a> [ntc\_cross\_account\_orchestration\_trigger](#module\_ntc\_cross\_account\_orchestration\_trigger) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-cross-account-orchestration//modules/orchestration-trigger | beta |
 | <a name="module_ntc_ipam"></a> [ntc\_ipam](#module\_ntc\_ipam) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-ipam | 1.0.2 |
 | <a name="module_ntc_parameters_reader"></a> [ntc\_parameters\_reader](#module\_ntc\_parameters\_reader) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-parameters//modules/reader | 1.1.2 |
 | <a name="module_ntc_parameters_writer"></a> [ntc\_parameters\_writer](#module\_ntc\_parameters\_writer) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-parameters//modules/writer | 1.1.2 |
-| <a name="module_ntc_route53_central_endpoints"></a> [ntc\_route53\_central\_endpoints](#module\_ntc\_route53\_central\_endpoints) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53 | 1.1.2 |
-| <a name="module_ntc_route53_mydomain_internal"></a> [ntc\_route53\_mydomain\_internal](#module\_ntc\_route53\_mydomain\_internal) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53 | 1.1.2 |
-| <a name="module_ntc_route53_nuvibit_dev"></a> [ntc\_route53\_nuvibit\_dev](#module\_ntc\_route53\_nuvibit\_dev) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53 | 1.1.2 |
-| <a name="module_ntc_route53_nuvibit_dev_dnssec"></a> [ntc\_route53\_nuvibit\_dev\_dnssec](#module\_ntc\_route53\_nuvibit\_dev\_dnssec) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53//modules/dnssec | 1.1.2 |
-| <a name="module_ntc_route53_nuvibit_dev_query_logging"></a> [ntc\_route53\_nuvibit\_dev\_query\_logging](#module\_ntc\_route53\_nuvibit\_dev\_query\_logging) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53//modules/query-logs | 1.1.2 |
-| <a name="module_ntc_route53_resolver"></a> [ntc\_route53\_resolver](#module\_ntc\_route53\_resolver) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53//modules/resolver | 1.1.2 |
-| <a name="module_ntc_vpc_central_endpoints"></a> [ntc\_vpc\_central\_endpoints](#module\_ntc\_vpc\_central\_endpoints) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc | 1.4.0 |
-| <a name="module_ntc_vpc_prod_stage"></a> [ntc\_vpc\_prod\_stage](#module\_ntc\_vpc\_prod\_stage) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc | 1.4.0 |
-| <a name="module_ntc_vpc_prod_stage_custom_routes"></a> [ntc\_vpc\_prod\_stage\_custom\_routes](#module\_ntc\_vpc\_prod\_stage\_custom\_routes) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc//modules/custom-routes | 1.4.0 |
+| <a name="module_ntc_route53_central_endpoints"></a> [ntc\_route53\_central\_endpoints](#module\_ntc\_route53\_central\_endpoints) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53 | 1.2.1 |
+| <a name="module_ntc_route53_mydomain_internal"></a> [ntc\_route53\_mydomain\_internal](#module\_ntc\_route53\_mydomain\_internal) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53 | 1.2.1 |
+| <a name="module_ntc_route53_nuvibit_dev"></a> [ntc\_route53\_nuvibit\_dev](#module\_ntc\_route53\_nuvibit\_dev) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53 | 1.2.1 |
+| <a name="module_ntc_route53_nuvibit_dev_dnssec"></a> [ntc\_route53\_nuvibit\_dev\_dnssec](#module\_ntc\_route53\_nuvibit\_dev\_dnssec) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53//modules/dnssec | 1.2.1 |
+| <a name="module_ntc_route53_nuvibit_dev_query_logging"></a> [ntc\_route53\_nuvibit\_dev\_query\_logging](#module\_ntc\_route53\_nuvibit\_dev\_query\_logging) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53//modules/query-logs | 1.2.1 |
+| <a name="module_ntc_route53_resolver"></a> [ntc\_route53\_resolver](#module\_ntc\_route53\_resolver) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53//modules/resolver | 1.2.1 |
+| <a name="module_ntc_vpc_central_endpoints"></a> [ntc\_vpc\_central\_endpoints](#module\_ntc\_vpc\_central\_endpoints) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc | feat-tgw-security-group-ref |
+| <a name="module_ntc_vpc_prod_stage"></a> [ntc\_vpc\_prod\_stage](#module\_ntc\_vpc\_prod\_stage) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc | feat-tgw-security-group-ref |
+| <a name="module_ntc_vpc_prod_stage_custom_routes"></a> [ntc\_vpc\_prod\_stage\_custom\_routes](#module\_ntc\_vpc\_prod\_stage\_custom\_routes) | github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc//modules/custom-routes | 1.5.0 |
 
 ## Resources
 
