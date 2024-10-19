@@ -2,7 +2,7 @@
 # ¦ NTC CROSS ACCOUNT ORCHESTRATION
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_cross_account_orchestration" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-cross-account-orchestration?ref=beta"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-cross-account-orchestration?ref=alpha"
 
   # organization id to limit bucket access to organization accounts
   org_id = local.ntc_parameters["mgmt-organizations"]["org_id"]
@@ -24,6 +24,17 @@ module "ntc_cross_account_orchestration" {
         endpoints = ["stefano.franco@nuvibit.com"]
       }
     ]
+  }
+
+  # (optional) configure settings for the orchestration pipeline
+  orchestration_pipeline_settings = {
+    terraform_parallelism = 10
+    terraform_binary      = "opentofu"
+    terraform_version     = "1.8.3"
+    aws_provider_version  = "5.72.0"
+    provider_default_tags = { ManagedBy = "ntc-cross-account-orchestration" }
+    pipeline_compute_type = "BUILD_GENERAL1_SMALL"
+    pipeline_logs_enabled = true
   }
 
   # trigger orchestration when a organization member account creates a JSON file in the orchestration_bucket and a rule matches
@@ -106,7 +117,7 @@ module "ntc_cross_account_orchestration" {
 # this is an example how an organization member account would trigger a cross-account orchestration
 # normally this would be defined in a different account which would then trigger the orchestration in this account
 module "ntc_cross_account_orchestration_trigger" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-cross-account-orchestration//modules/orchestration-trigger?ref=beta"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-cross-account-orchestration//modules/orchestration-trigger?ref=alpha"
 
   orchestration_triggers = [
     # {
