@@ -42,7 +42,7 @@ module "ntc_cross_account_orchestration" {
     {
       rule_name          = "r53_subdomain_delegation_workloads"
       orchestration_type = "route53_subdomain_delegation"
-      s3_file_prefix     = "r53_delegation/"
+      s3_file_prefix     = "r53_delegation/" # TODO: probably obsolete
       region             = "us-east-1" # route53 is a global service
       # orchestrate cross-account route53 public subdomain delegation
       route53_delegation_settings = {
