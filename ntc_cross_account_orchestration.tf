@@ -128,7 +128,6 @@ module "ntc_cross_account_orchestration_trigger" {
       trigger_name       = "r53_delegation"
       s3_bucket_name     = "ntc-cross-account-orchestration-connectivity"
       orchestration_type = "route53_subdomain_delegation"
-      region             = null
       route53_delegation_info = {
         zone_id     = "Z028999726P9BKFOXIYXX"
         zone_name   = "orchestration.nuvibit.dev"
@@ -145,9 +144,9 @@ module "ntc_cross_account_orchestration_trigger" {
     {
       trigger_name       = "tgw_attachment_euc1"
       s3_bucket_name     = "ntc-cross-account-orchestration-connectivity"
-      region             = "eu-central-1"
       orchestration_type = "transit_gateway_vpc_attachment"
       transit_gateway_vpc_attachment_info = {
+        region                        = "eu-central-1"
         vpc_id                        = "vpc-03162c1dfd6d7c6xx"
         vpc_name                      = "orchestration-vpc"
         transit_gateway_attachment_id = "tgw-attach-055962245c0a83800"
