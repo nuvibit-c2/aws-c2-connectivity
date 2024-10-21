@@ -46,8 +46,6 @@ module "ntc_cross_account_orchestration" {
     {
       rule_name          = "r53_subdomain_delegation_workloads"
       orchestration_type = "route53_subdomain_delegation"
-      s3_file_prefix     = "r53_delegation/" # TODO: probably obsolete
-      region             = "us-east-1"       # route53 is a global service
       # orchestrate cross-account route53 public subdomain delegation
       route53_delegation_settings = {
         root_zone_id             = module.ntc_route53_nuvibit_dev.zone_id
@@ -59,16 +57,15 @@ module "ntc_cross_account_orchestration" {
         # (optional) separator when multiple zones are specified in account tag
         subdomain_separator_account_tag = " " # e.g. "app1.example.com app2.example.com"
       }
-      # by default orchestration_rules will apply to all accounts where 's3_file_prefix' matches
+      # by default orchestration_rules will apply to all accounts
       condition = {}
     },
     {
       rule_name          = "tgw_attachment_workloads_prod_euc1"
       orchestration_type = "transit_gateway_vpc_attachment"
-      s3_file_prefix     = "tgw_attachment/"
-      region             = "eu-central-1" # TODO: update module input and add regional support - PoC use codebuild_terraform instead of step function?
       # orchestrate cross-account transit gateway vpc attachments associations and propagations
       transit_gateway_vpc_attachment_settings = {
+        region                        = "eu-central-1"
         transit_gateway_id            = module.ntc_core_network_frankfurt.transit_gateway_id
         associate_with_route_table_id = module.ntc_core_network_frankfurt.transit_gateway_route_table_ids["tgw-core-rtb-spoke-prod"]
         propagate_to_route_table_ids = [
@@ -77,7 +74,7 @@ module "ntc_cross_account_orchestration" {
           module.ntc_core_network_frankfurt.transit_gateway_route_table_ids["tgw-core-rtb-onprem"]
         ]
       }
-      # by default orchestration_rules will apply to all accounts where 's3_file_prefix' matches
+      # by default orchestration_rules will apply to all accounts
       # a condition can additionaly restrict to which accounts orchestration_rules will apply
       condition = {
         test     = "StringEquals" # StringEquals, StringLike
@@ -89,9 +86,9 @@ module "ntc_cross_account_orchestration" {
       rule_name          = "tgw_attachment_workloads_dev_euc1"
       orchestration_type = "transit_gateway_vpc_attachment"
       s3_file_prefix     = "tgw_attachment/"
-      region             = "eu-central-1"
       # orchestrate cross-account transit gateway vpc attachments associations and propagations
       transit_gateway_vpc_attachment_settings = {
+        region                        = "eu-central-1"
         transit_gateway_id            = module.ntc_core_network_frankfurt.transit_gateway_id
         associate_with_route_table_id = module.ntc_core_network_frankfurt.transit_gateway_route_table_ids["tgw-core-rtb-spoke-dev"]
         propagate_to_route_table_ids = [
@@ -100,7 +97,7 @@ module "ntc_cross_account_orchestration" {
           module.ntc_core_network_frankfurt.transit_gateway_route_table_ids["tgw-core-rtb-onprem"]
         ]
       }
-      # by default orchestration_rules will apply to all accounts where 's3_file_prefix' matches
+      # by default orchestration_rules will apply to all accounts
       # a condition can additionaly restrict to which accounts orchestration_rules will apply
       condition = {
         test     = "StringEquals" # StringEquals, StringLike
