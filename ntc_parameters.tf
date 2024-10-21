@@ -8,6 +8,7 @@ locals {
     "transit_gateway_zurich"        = module.ntc_core_network_zurich.transit_gateway_id
     "transit_gateway_frankfurt"     = module.ntc_core_network_frankfurt.transit_gateway_id
     "ipam_pools_ids"                = module.ntc_ipam.nested_pools_ids
+    "baseline_assume_role_arn"      = aws_iam_role.ntc_baseline.arn
   }
 
   # by default existing node parameters will be merged with new parameters to avoid deleting parameters
