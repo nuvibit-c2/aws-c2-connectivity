@@ -36,6 +36,9 @@ module "ntc_cross_account_orchestration" {
     provider_default_tags = { ManagedBy = "ntc-cross-account-orchestration" }
     pipeline_compute_type = "BUILD_GENERAL1_SMALL"
     pipeline_logs_enabled = true
+    # before you can delete the orchestration pipeline you need to decommission it
+    # WARNING: this will destroy all resources managed by the orchestration pipeline 
+    decommission = false
   }
 
   # trigger orchestration when a organization member account creates a JSON file in the orchestration_bucket and a rule matches
@@ -44,7 +47,7 @@ module "ntc_cross_account_orchestration" {
       rule_name          = "r53_subdomain_delegation_workloads"
       orchestration_type = "route53_subdomain_delegation"
       s3_file_prefix     = "r53_delegation/" # TODO: probably obsolete
-      region             = "us-east-1" # route53 is a global service
+      region             = "us-east-1"       # route53 is a global service
       # orchestrate cross-account route53 public subdomain delegation
       route53_delegation_settings = {
         root_zone_id             = module.ntc_route53_nuvibit_dev.zone_id
@@ -121,33 +124,34 @@ module "ntc_cross_account_orchestration_trigger" {
   source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-cross-account-orchestration//modules/orchestration-trigger?ref=alpha"
 
   orchestration_triggers = [
-    # {
-    #   trigger_name = "r53_delegation"
-    #   s3_bucket_name = "ntc-cross-account-orchestration-connectivity"
-    #   # file prefix must match with central orchestration configuration
-    #   s3_file_prefix     = "r53_delegation/"
-    #   orchestration_type = "route53_subdomain_delegation"
-    #   region             = "us-east-1"
-    #   route53_delegation_info = {
-    #     zone_id     = ""
-    #     zone_name   = ""
-    #     nameservers = ""
-    #     # (optional) DS record is required when DNSSEC is enabled
-    #     ds_record = ""
-    #   }
-    # },
-    # {
-    #   trigger_name = "tgw_attachment_euc1"
-    #   s3_bucket_name = "ntc-cross-account-orchestration-connectivity"
-    #   # file prefix must match with central orchestration configuration
-    #   s3_file_prefix     = "tgw_attachment/"
-    #   region             = "eu-central-1"
-    #   orchestration_type = "transit_gateway_vpc_attachment"
-    #   transit_gateway_vpc_attachment_info = {
-    #     vpc_id                        = ""
-    #     vpc_name                      = ""
-    #     transit_gateway_attachment_id = ""
-    #   }
-    # }
+    {
+      trigger_name       = "r53_delegation"
+      s3_bucket_name     = "ntc-cross-account-orchestration-connectivity"
+      orchestration_type = "route53_subdomain_delegation"
+      region             = null
+      route53_delegation_info = {
+        zone_id     = "Z028999726P9BKFOXIYXX"
+        zone_name   = "orchestration.nuvibit.dev"
+        nameservers = [
+          "ns-1111.awsdns-12.org",
+          "ns-8888.awsdns-39.co.uk",
+          "ns-444.awsdns-59.com",
+          "ns-888.awsdns-36.net",
+        ]
+        # (optional) DS record is required when DNSSEC is enabled
+        ds_record = "22282 13 2 9E1XXEBE0FABCEB20ED2A401CXXX0DA4C3A474322DF2C414XX7FCCFF83F1BBXX"
+      }
+    },
+    {
+      trigger_name       = "tgw_attachment_euc1"
+      s3_bucket_name     = "ntc-cross-account-orchestration-connectivity"
+      region             = "eu-central-1"
+      orchestration_type = "transit_gateway_vpc_attachment"
+      transit_gateway_vpc_attachment_info = {
+        vpc_id                        = "vpc-03162c1dfd6d7c6xx"
+        vpc_name                      = "orchestration-vpc"
+        transit_gateway_attachment_id = "tgw-attach-055962245c0a83800"
+      }
+    }
   ]
 }
