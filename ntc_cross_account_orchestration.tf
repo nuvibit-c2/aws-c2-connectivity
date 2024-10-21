@@ -85,7 +85,6 @@ module "ntc_cross_account_orchestration" {
     {
       rule_name          = "tgw_attachment_workloads_dev_euc1"
       orchestration_type = "transit_gateway_vpc_attachment"
-      s3_file_prefix     = "tgw_attachment/"
       # orchestrate cross-account transit gateway vpc attachments associations and propagations
       transit_gateway_vpc_attachment_settings = {
         region                        = "eu-central-1"
@@ -126,8 +125,8 @@ module "ntc_cross_account_orchestration_trigger" {
       s3_bucket_name     = "ntc-cross-account-orchestration-connectivity"
       orchestration_type = "route53_subdomain_delegation"
       route53_delegation_info = {
-        zone_id     = "Z028999726P9BKFOXIYXX"
-        zone_name   = "orchestration.nuvibit.dev"
+        zone_id   = "Z028999726P9BKFOXIYXX"
+        zone_name = "orchestration.nuvibit.dev"
         nameservers = [
           "ns-1111.awsdns-12.org",
           "ns-8888.awsdns-39.co.uk",
