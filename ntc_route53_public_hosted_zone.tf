@@ -38,6 +38,8 @@ module "ntc_route53_nuvibit_dev" {
     #     "ns-777.awsdns-00.com.",
     #     "ns-666.awsdns-00.net.",
     #   ]
+    #   dnssec_enabled   = true
+    #   dnssec_ds_record = "26175 13 2 44444A317DAEC3A213AB156BE09A22E333DDD10903B666B3A2301ECFB3C59933"
     # }
   ]
 
