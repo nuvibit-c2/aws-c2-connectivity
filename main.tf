@@ -110,6 +110,7 @@ data "aws_iam_policy_document" "ntc_baseline_permissions" {
       "route53:ChangeResourceRecordSets",
       "route53:ListResourceRecordSets",
       "route53:GetHostedZone",
+      "route53:ListHostedZones",
     ]
     resources = [module.ntc_route53_nuvibit_dev.zone_arn]
   }
