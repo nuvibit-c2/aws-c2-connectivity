@@ -79,8 +79,9 @@ data "aws_iam_policy_document" "ntc_baseline_trust" {
   statement {
     effect = "Allow"
     principals {
+      # grant access to ntc-account-factory baseline pipelines
       type        = "AWS"
-      identifiers = try(local.ntc_parameters["mgmt-account-factory"]["baseline_role_arns"], ["944538260333"])
+      identifiers = local.ntc_parameters["mgmt-account-factory"]["baseline_role_arns"]
     }
     actions = ["sts:AssumeRole"]
   }
