@@ -2,7 +2,8 @@
 # ¦ NTC CORE NETWORK
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_core_network_zurich" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network?ref=1.2.0"
+  # source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network?ref=1.2.0"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network?ref=fix-outputs"
 
   # -------------------------------------------------------------------------------------------------------------------
   # ¦ TRANSIT GATEWAY

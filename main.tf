@@ -98,8 +98,8 @@ data "aws_iam_policy_document" "ntc_baseline_permissions" {
       "ec2:GetTransitGatewayAttachmentPropagations",
     ]
     resources = [
-      module.ntc_core_network_frankfurt.transit_gateway_id,
-      module.ntc_core_network_zurich.transit_gateway_id
+      module.ntc_core_network_frankfurt.transit_gateway_arn,
+      module.ntc_core_network_zurich.transit_gateway_arn
     ]
   }
   # permissions required to manage subdomain delegations
