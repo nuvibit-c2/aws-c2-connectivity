@@ -41,6 +41,18 @@ module "ntc_route53_nuvibit_dev" {
     #   dnssec_enabled   = true
     #   dnssec_ds_record = "26175 13 2 44444A317DAEC3A213AB156BE09A22E333DDD10903B666B3A2301ECFB3C59933"
     # }
+    {
+      # spacelift self-hosted PoC in 'aws-c2-shared-services'
+      subdomain_zone_name = "spacelift"
+      subdomain_nameserver_list = [
+        "ns-1785.awsdns-31.co.uk.",
+        "ns-962.awsdns-56.net.",
+        "ns-462.awsdns-57.com.",
+        "ns-1424.awsdns-50.org.",
+      ]
+      dnssec_enabled   = true
+      dnssec_ds_record = "21182 13 2 2ED1D1F4654A4CF097EE83B718BCD76D2385F6348466A131F12F563C2EBAE494"
+    }
   ]
 
   providers = {
