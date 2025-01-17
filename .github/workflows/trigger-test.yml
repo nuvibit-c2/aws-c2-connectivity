@@ -12,6 +12,10 @@ jobs:
     steps:
       - uses: octokit/request-action@v2.x
         with:
-          route: POST /repos/nuvibit-terraform-collection/docs/dispatches
+          route: POST /repos/{owner}/{repo}/actions/workflows/{workflow_id}/dispatches
+          owner: nuvibit-terraform-collection
+          repo: docs
+          workflow_id: dynamic-docs.yml
+          ref: main
         env:
           GITHUB_TOKEN: ${{ secrets.GHE_API_TOKEN }}
