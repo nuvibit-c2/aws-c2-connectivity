@@ -52,6 +52,27 @@ module "ntc_route53_nuvibit_dev" {
       ]
       dnssec_enabled   = true
       dnssec_ds_record = "21182 13 2 2ED1D1F4654A4CF097EE83B718BCD76D2385F6348466A131F12F563C2EBAE494"
+    },
+    # DEMO ACCOUNTS
+    {
+      subdomain_zone_name = "apollo-dev"
+      subdomain_nameserver_list = [
+        "ns-1213.awsdns-23.org.",
+        "ns-2023.awsdns-60.co.uk.",
+        "ns-280.awsdns-35.com.",
+        "ns-575.awsdns-07.net.",
+      ]
+      dnssec_enabled   = false
+    },
+    {
+      subdomain_zone_name = "apollo-prod"
+      subdomain_nameserver_list = [
+        "ns-388.awsdns-48.com.",
+        "ns-1307.awsdns-35.org.",
+        "ns-601.awsdns-11.net.",
+        "ns-1741.awsdns-25.co.uk.",
+      ]
+      dnssec_enabled   = false
     }
   ]
 
