@@ -31,7 +31,7 @@ module "ntc_ipam" {
       description = "staging pool"
       cidrs       = cidrsubnets("100.64.0.0/14", 2, 2, 2, 2)
       # share IPAM with Organizations, OUs or Accounts
-      # ram_share_principals              = ["o-m29e8d9awz", "ou-6gf5-6ltp3mjf", "090258021222"]
+        local.ntc_parameters["mgmt-organizations"]["ou_ids"]["/root/workloads/prod"]
       allocation_default_netmask_length = 22
       allocation_max_netmask_length     = 22
       allocation_min_netmask_length     = 22
