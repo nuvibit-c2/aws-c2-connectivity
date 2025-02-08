@@ -53,6 +53,19 @@ module "ntc_route53_nuvibit_dev" {
       dnssec_enabled   = true
       dnssec_ds_record = "21182 13 2 2ED1D1F4654A4CF097EE83B718BCD76D2385F6348466A131F12F563C2EBAE494"
     },
+    # POC ACCOUNT
+    {
+      # SaaS PoC in 'aws-c2-ares-dev'
+      subdomain_zone_name = "app"
+      subdomain_nameserver_list = [
+        "ns-754.awsdns-30.net.",
+        "ns-1529.awsdns-63.org.",
+        "ns-1696.awsdns-20.co.uk.",
+        "ns-476.awsdns-59.com.",
+      ]
+      dnssec_enabled   = true
+      dnssec_ds_record = "46737 13 2 E8E8FC7365FCC657E3F7C5B2CB1003879B818C535DE599D03CC7AEFEC617D651"
+    },
     # DEMO ACCOUNTS
     {
       subdomain_zone_name = "apollo-dev"
