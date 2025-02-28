@@ -56,15 +56,15 @@ module "ntc_route53_nuvibit_dev" {
     # POC ACCOUNT
     {
       # SaaS PoC in 'aws-c2-ares-dev'
-      subdomain_zone_name = "app"
+      subdomain_zone_name = "portal"
       subdomain_nameserver_list = [
-        "ns-754.awsdns-30.net.",
-        "ns-1529.awsdns-63.org.",
-        "ns-1696.awsdns-20.co.uk.",
-        "ns-476.awsdns-59.com.",
+        "ns-679.awsdns-20.net.",
+        "ns-1565.awsdns-03.co.uk.",
+        "ns-155.awsdns-19.com.",
+        "ns-1286.awsdns-32.org.",
       ]
       dnssec_enabled   = true
-      dnssec_ds_record = "46737 13 2 E8E8FC7365FCC657E3F7C5B2CB1003879B818C535DE599D03CC7AEFEC617D651"
+      dnssec_ds_record = "46737 13 2 D053F385C76334C66706D9B4A169375E73EB5E9D1C7450AF3B4ECF3573CC6C4F"
     },
     # DEMO ACCOUNTS
     {
