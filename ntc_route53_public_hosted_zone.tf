@@ -86,6 +86,17 @@ module "ntc_route53_nuvibit_dev" {
         "ns-1741.awsdns-25.co.uk.",
       ]
       dnssec_enabled   = false
+    },
+    {
+      subdomain_zone_name = "c1"
+      subdomain_nameserver_list = [
+        "ns-944.awsdns-54.net.",
+        "ns-1952.awsdns-52.co.uk.",
+        "ns-159.awsdns-19.com.",
+        "ns-1402.awsdns-47.org.",
+      ]
+      dnssec_enabled   = true
+      dnssec_ds_record = "38236 13 2 A859D6E3785BA06BFFC86D44257315FEDDD9547E6031264E2724A33568EE8674"
     }
   ]
 
