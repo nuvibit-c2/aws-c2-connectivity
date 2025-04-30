@@ -66,27 +66,19 @@ module "ntc_route53_nuvibit_dev" {
       dnssec_enabled   = true
       dnssec_ds_record = "46737 13 2 D053F385C76334C66706D9B4A169375E73EB5E9D1C7450AF3B4ECF3573CC6C4F"
     },
-    # DEMO ACCOUNTS
+    # NTC Demo Portal in 'aws-c2-apollo-dev'
     {
-      subdomain_zone_name = "apollo-dev"
+      subdomain_zone_name = "demo"
       subdomain_nameserver_list = [
-        "ns-1213.awsdns-23.org.",
-        "ns-2023.awsdns-60.co.uk.",
-        "ns-280.awsdns-35.com.",
-        "ns-575.awsdns-07.net.",
+        "ns-856.awsdns-43.net.",
+        "ns-1738.awsdns-25.co.uk.",
+        "ns-233.awsdns-29.com.",
+        "ns-1204.awsdns-22.org.",
       ]
-      dnssec_enabled   = false
+      dnssec_enabled   = true
+      dnssec_ds_record = "55533 13 2 0C65A29F685A8F85DDB1BF2F9E4B54EA6150959E133EFE2CC986812E4DD0DE4C"
     },
-    {
-      subdomain_zone_name = "apollo-prod"
-      subdomain_nameserver_list = [
-        "ns-388.awsdns-48.com.",
-        "ns-1307.awsdns-35.org.",
-        "ns-601.awsdns-11.net.",
-        "ns-1741.awsdns-25.co.uk.",
-      ]
-      dnssec_enabled   = false
-    },
+    # Subdomain for aws-c1 organization
     # {
     #   subdomain_zone_name = "c1"
     #   subdomain_nameserver_list = [
