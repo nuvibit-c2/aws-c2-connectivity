@@ -108,7 +108,7 @@ module "ntc_route53_resolver" {
         "192.168.8.8",
         "192.168.9.9"
       ]
-      # (optional) share subnet with Organizations, OUs or Accounts - requires RAM to be enabled for Organizations
+      # (optional) share resolver rule with Organizations, OUs or Accounts - requires RAM to be enabled for Organizations
       # ram_share_principals = ["o-m29e8d9awz", "ou-6gf5-6ltp3mjf", "945766593056"]
       # ram_share_allow_external_principals = false
     },
@@ -119,7 +119,7 @@ module "ntc_route53_resolver" {
       vpc_ids = [
         module.ntc_vpc_central_endpoints.vpc_id
       ]
-      # (optional) share subnet with Organizations, OUs or Accounts - requires RAM to be enabled for Organizations
+      # (optional) share resolver rule with Organizations, OUs or Accounts - requires RAM to be enabled for Organizations
       # ram_share_principals = ["o-m29e8d9awz", "ou-6gf5-6ltp3mjf", "945766593056"]
       # ram_share_allow_external_principals = false
     }
