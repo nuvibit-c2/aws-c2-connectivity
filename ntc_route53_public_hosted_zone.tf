@@ -78,6 +78,14 @@ module "ntc_route53_nuvibit_dev" {
       dnssec_enabled   = true
       dnssec_ds_record = "55533 13 2 0C65A29F685A8F85DDB1BF2F9E4B54EA6150959E133EFE2CC986812E4DD0DE4C"
     },
+    # NTC Summit Demo in 'aws-c3'
+    {
+      subdomain_zone_name = "adesso"
+      subdomain_nameserver_list = [
+        
+      ]
+      dnssec_enabled   = false
+    },
     # Subdomain for aws-c1 organization
     # {
     #   subdomain_zone_name = "c1"
