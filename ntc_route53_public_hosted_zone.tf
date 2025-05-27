@@ -82,9 +82,12 @@ module "ntc_route53_nuvibit_dev" {
     {
       subdomain_zone_name = "adesso"
       subdomain_nameserver_list = [
-        
+        "ns-1673.awsdns-17.co.uk.",
+        "ns-1277.awsdns-31.org.",
+        "ns-951.awsdns-54.net.",
+        "ns-508.awsdns-63.com.",
       ]
-      dnssec_enabled   = false
+      dnssec_enabled = false
     },
     # Subdomain for aws-c1 organization
     # {
