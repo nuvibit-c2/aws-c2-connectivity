@@ -80,12 +80,12 @@ module "ntc_route53_nuvibit_dev" {
     },
     # NTC Summit Demo in 'aws-c3'
     {
-      subdomain_zone_name = "adesso"
+      subdomain_zone_name = "summit"
       subdomain_nameserver_list = [
-        "ns-1673.awsdns-17.co.uk.",
-        "ns-1277.awsdns-31.org.",
-        "ns-951.awsdns-54.net.",
-        "ns-508.awsdns-63.com.",
+        "ns-1126.awsdns-12.org.",
+        "ns-694.awsdns-22.net.",
+        "ns-1679.awsdns-17.co.uk.",
+        "ns-414.awsdns-51.com.",
       ]
       dnssec_enabled = false
     },
