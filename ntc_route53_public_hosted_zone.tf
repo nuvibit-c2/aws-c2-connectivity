@@ -30,32 +30,8 @@ module "ntc_route53_nuvibit_dev" {
   # (optional) List of subdomains with corresponding nameservers which should be delegated
   # https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-routing-traffic-for-subdomains.html
   zone_delegation_list = [
-    # {
-    #   subdomain_zone_name = "int"
-    #   subdomain_nameserver_list = [
-    #     "ns-999.awsdns-00.co.uk.",
-    #     "ns-888.awsdns-00.org.",
-    #     "ns-777.awsdns-00.com.",
-    #     "ns-666.awsdns-00.net.",
-    #   ]
-    #   dnssec_enabled   = true
-    #   dnssec_ds_record = "26175 13 2 44444A317DAEC3A213AB156BE09A22E333DDD10903B666B3A2301ECFB3C59933"
-    # }
     {
-      # spacelift self-hosted PoC in 'aws-c2-shared-services'
-      subdomain_zone_name = "spacelift"
-      subdomain_nameserver_list = [
-        "ns-1785.awsdns-31.co.uk.",
-        "ns-962.awsdns-56.net.",
-        "ns-462.awsdns-57.com.",
-        "ns-1424.awsdns-50.org.",
-      ]
-      dnssec_enabled   = true
-      dnssec_ds_record = "21182 13 2 2ED1D1F4654A4CF097EE83B718BCD76D2385F6348466A131F12F563C2EBAE494"
-    },
-    # POC ACCOUNT
-    {
-      # SaaS PoC in 'aws-c2-ares-dev'
+      # SaaS PoC 'aws-c2-ares-dev'
       subdomain_zone_name = "portal"
       subdomain_nameserver_list = [
         "ns-679.awsdns-20.net.",
@@ -66,8 +42,8 @@ module "ntc_route53_nuvibit_dev" {
       dnssec_enabled   = true
       dnssec_ds_record = "46737 13 2 D053F385C76334C66706D9B4A169375E73EB5E9D1C7450AF3B4ECF3573CC6C4F"
     },
-    # NTC Summit Demo in 'aws-c3'
     # {
+    #   # NTC Summit Demo 'aws-c3'
     #   subdomain_zone_name = "summit"
     #   subdomain_nameserver_list = [
     #     "ns-460.awsdns-57.com.",
