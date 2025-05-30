@@ -67,17 +67,17 @@ module "ntc_route53_nuvibit_dev" {
       dnssec_ds_record = "46737 13 2 D053F385C76334C66706D9B4A169375E73EB5E9D1C7450AF3B4ECF3573CC6C4F"
     },
     # NTC Summit Demo in 'aws-c3'
-    {
-      subdomain_zone_name = "summit"
-      subdomain_nameserver_list = [
-        "ns-460.awsdns-57.com.",
-        "ns-676.awsdns-20.net.",
-        "ns-1608.awsdns-09.co.uk.",
-        "ns-1027.awsdns-00.org.",
-      ]
-      dnssec_enabled = true
-      dnssec_ds_record = "2485 13 2 58E2279279FDAF975887AEC8A46CF5FD8EC7A7C945E6401D8362C689550E545B"
-    },
+    # {
+    #   subdomain_zone_name = "summit"
+    #   subdomain_nameserver_list = [
+    #     "ns-460.awsdns-57.com.",
+    #     "ns-676.awsdns-20.net.",
+    #     "ns-1608.awsdns-09.co.uk.",
+    #     "ns-1027.awsdns-00.org.",
+    #   ]
+    #   dnssec_enabled = true
+    #   dnssec_ds_record = "2485 13 2 58E2279279FDAF975887AEC8A46CF5FD8EC7A7C945E6401D8362C689550E545B"
+    # },
   ]
 
   providers = {
