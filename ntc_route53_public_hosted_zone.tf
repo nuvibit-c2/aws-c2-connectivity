@@ -66,41 +66,18 @@ module "ntc_route53_nuvibit_dev" {
       dnssec_enabled   = true
       dnssec_ds_record = "46737 13 2 D053F385C76334C66706D9B4A169375E73EB5E9D1C7450AF3B4ECF3573CC6C4F"
     },
-    # NTC Demo Portal in 'aws-c2-apollo-dev'
-    {
-      subdomain_zone_name = "demo"
-      subdomain_nameserver_list = [
-        "ns-856.awsdns-43.net.",
-        "ns-1738.awsdns-25.co.uk.",
-        "ns-233.awsdns-29.com.",
-        "ns-1204.awsdns-22.org.",
-      ]
-      dnssec_enabled   = true
-      dnssec_ds_record = "55533 13 2 0C65A29F685A8F85DDB1BF2F9E4B54EA6150959E133EFE2CC986812E4DD0DE4C"
-    },
     # NTC Summit Demo in 'aws-c3'
     {
       subdomain_zone_name = "summit"
       subdomain_nameserver_list = [
-        "ns-1126.awsdns-12.org.",
-        "ns-694.awsdns-22.net.",
-        "ns-1679.awsdns-17.co.uk.",
-        "ns-414.awsdns-51.com.",
+        "ns-460.awsdns-57.com.",
+        "ns-676.awsdns-20.net.",
+        "ns-1608.awsdns-09.co.uk.",
+        "ns-1027.awsdns-00.org.",
       ]
-      dnssec_enabled = false
+      dnssec_enabled = true
+      dnssec_ds_record = "2485 13 2 58E2279279FDAF975887AEC8A46CF5FD8EC7A7C945E6401D8362C689550E545B"
     },
-    # Subdomain for aws-c1 organization
-    # {
-    #   subdomain_zone_name = "c1"
-    #   subdomain_nameserver_list = [
-    #     "ns-944.awsdns-54.net.",
-    #     "ns-1952.awsdns-52.co.uk.",
-    #     "ns-159.awsdns-19.com.",
-    #     "ns-1402.awsdns-47.org.",
-    #   ]
-    #   dnssec_enabled   = true
-    #   dnssec_ds_record = "38236 13 2 A859D6E3785BA06BFFC86D44257315FEDDD9547E6031264E2724A33568EE8674"
-    # }
   ]
 
   providers = {
