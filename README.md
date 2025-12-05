@@ -1,170 +1,150 @@
-<!-- BEGIN_TF_DOCS -->
-## Requirements
+# NTC Implementation Blueprint - Connectivity
 
-The following requirements are needed by this module:
+This repository is part of the **Nuvibit Terraform Collection (NTC) Implementation Blueprints** - a comprehensive reference implementation showcasing best practices for building enterprise-grade AWS platforms using NTC building blocks.
 
-- terraform (>= 1.3.0)
 
-- aws (~> 5.33)
+## 🎯 Overview
 
-## Providers
+The NTC Implementation Blueprints provide a complete, production-ready example of how to structure and deploy AWS infrastructure using the [Nuvibit Terraform Collection](https://docs.nuvibit.com/ntc-library/). These blueprints are deployed in a dedicated customer-simulated AWS organization (`aws-c2-*`), demonstrating real-world multi-account architecture patterns and configurations.
 
-The following providers are used by this module:
+### Key Characteristics
 
-- aws (~> 5.33)
+- **Best Practice Architecture**: Implements the [Nuvibit AWS Reference Architecture (NARA)](https://docs.nuvibit.com/whitepapers/nuvibit-aws-reference-architecture/) with battle-tested patterns
+- **GitOps Workflow**: All infrastructure is managed through Git with automated CI/CD pipelines
+- **Secure Authentication**: Uses OpenID Connect (OIDC) for secure, short-lived credentials
+- **Modular Design**: Each repository manages a specific domain or AWS account
+- **Production-Ready**: Demonstrates configurations suitable for enterprise deployments
 
-## Modules
+## 📋 Purpose of This Repository
 
-The following Modules are called:
+This repository (`aws-c2-connectivity`) manages the **Connectivity Account** and is responsible for:
 
-### ntc\_core\_network\_frankfurt
+- **Transit Gateway**: Centralized network hub for inter-VPC and hybrid connectivity
+- **Centralized VPC Management**: Centralized VPCs with subnets and routing configurations
+- **IP Address Management (IPAM)**: Centralized CIDR allocation and IP space management
+- **DNS Infrastructure**: Route 53 hosted zones, resolver endpoints, and hybrid DNS
+- **Direct Connect**: Dedicated network connections to on-premises infrastructure
+- **VPN Connections**: Site-to-site VPN for secure hybrid connectivity
+- **Multi-Region Networking**: Transit Gateway peering across AWS regions
 
-Source: github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network
+### NTC Building Blocks Used
 
-Version: 1.2.1
+This repository leverages the following NTC building blocks:
 
-### ntc\_core\_network\_frankfurt\_custom\_routes
+- [**NTC Core Network**](https://docs.nuvibit.com/ntc-building-blocks/connectivity/ntc-core-network/) - Transit Gateway, VPN, Direct Connect
+- [**NTC VPC**](https://docs.nuvibit.com/ntc-building-blocks/connectivity/ntc-vpc/) - Virtual Private Clouds and subnets
+- [**NTC IPAM**](https://docs.nuvibit.com/ntc-building-blocks/connectivity/ntc-ipam/) - IP Address Management
+- [**NTC Route53**](https://docs.nuvibit.com/ntc-building-blocks/connectivity/ntc-route53/) - DNS management
+- [**NTC Parameters**](https://docs.nuvibit.com/ntc-building-blocks/management/ntc-parameters/) - Cross-account parameter sharing and orchestration
 
-Source: github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network//modules/custom-routes
 
-Version: 1.2.1
+## 🏗️ Complete Blueprint Architecture
 
-### ntc\_core\_network\_frankfurt\_peering
+The NTC Implementation Blueprints consist of multiple repositories, each managing a specific domain or AWS account:
 
-Source: github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network//modules/peering
+### Core Management Repositories
 
-Version: 1.2.1
+#### 1. [aws-c2-mgmt-organizations](https://github.com/nuvibit-c2/aws-c2-mgmt-organizations)
+**Purpose**: Foundation of the AWS organization  
+**Manages**: AWS Organizations, OU structure, SCPs, service integrations, cross-account parameters  
+**Building Blocks**: [NTC Organizations](https://docs.nuvibit.com/ntc-building-blocks/management/ntc-organizations/), [NTC Guardrail Templates](https://docs.nuvibit.com/ntc-building-blocks/templates/ntc-guardrail-templates/), [NTC Parameters](https://docs.nuvibit.com/ntc-building-blocks/management/ntc-parameters/)
 
-### ntc\_core\_network\_zurich
+#### 2. [aws-c2-mgmt-account-factory](https://github.com/nuvibit-c2/aws-c2-mgmt-account-factory)
+**Purpose**: Automated AWS account provisioning and lifecycle management  
+**Manages**: Account creation, baseline configuration, budget alerts, lifecycle automation  
+**Building Blocks**: [NTC Account Factory](https://docs.nuvibit.com/ntc-building-blocks/management/ntc-account-factory/), [NTC Account Baseline Templates](https://docs.nuvibit.com/ntc-building-blocks/templates/ntc-account-baseline-templates/), [NTC Account Lifecycle Templates](https://docs.nuvibit.com/ntc-building-blocks/templates/ntc-account-lifecycle-templates/), [NTC Parameters](https://docs.nuvibit.com/ntc-building-blocks/management/ntc-parameters/)
 
-Source: github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network
+#### 3. [aws-c2-mgmt-identity-center](https://github.com/nuvibit-c2/aws-c2-mgmt-identity-center)
+**Purpose**: Centralized identity and access management  
+**Manages**: AWS IAM Identity Center (SSO), permission sets, user/group assignments  
+**Building Blocks**: [NTC Identity Center](https://docs.nuvibit.com/ntc-building-blocks/management/ntc-identity-center/), [NTC Parameters](https://docs.nuvibit.com/ntc-building-blocks/management/ntc-parameters/)
 
-Version: 1.2.1
+### Core Account Repositories
 
-### ntc\_core\_network\_zurich\_custom\_routes
+#### 4. [aws-c2-log-archive](https://github.com/nuvibit-c2/aws-c2-log-archive)
+**Purpose**: Centralized logging and audit trail storage  
+**Manages**: S3 buckets for CloudTrail, VPC Flow Logs, DNS Query Logs, GuardDuty, AWS Config  
+**Building Blocks**: [NTC Log Archive](https://docs.nuvibit.com/ntc-building-blocks/security/ntc-log-archive/), [NTC Parameters](https://docs.nuvibit.com/ntc-building-blocks/management/ntc-parameters/)
 
-Source: github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network//modules/custom-routes
+#### 5. [aws-c2-security](https://github.com/nuvibit-c2/aws-c2-security)
+**Purpose**: Centralized security monitoring and compliance  
+**Manages**: Security Hub, GuardDuty, Inspector, Config, IAM Access Analyzer, automation rules  
+**Building Blocks**: [NTC Security Tooling](https://docs.nuvibit.com/ntc-building-blocks/security/ntc-security-tooling/), [NTC Parameters](https://docs.nuvibit.com/ntc-building-blocks/management/ntc-parameters/)
 
-Version: 1.2.1
+#### 6. [aws-c2-connectivity](https://github.com/nuvibit-c2/aws-c2-connectivity) ← *You are here*
+**Purpose**: Network infrastructure and connectivity  
+**Manages**: Transit Gateway, VPCs, Route 53, IPAM, Direct Connect, VPN, multi-region peering  
+**Building Blocks**: [NTC Core Network](https://docs.nuvibit.com/ntc-building-blocks/connectivity/ntc-core-network/), [NTC VPC](https://docs.nuvibit.com/ntc-building-blocks/connectivity/ntc-vpc/), [NTC IPAM](https://docs.nuvibit.com/ntc-building-blocks/connectivity/ntc-ipam/), [NTC Route53](https://docs.nuvibit.com/ntc-building-blocks/connectivity/ntc-route53/), [NTC Parameters](https://docs.nuvibit.com/ntc-building-blocks/management/ntc-parameters/)
 
-### ntc\_core\_network\_zurich\_peering
+## 🚀 Deployment Workflow
 
-Source: github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network//modules/peering
+All blueprint repositories follow a consistent GitOps workflow:
 
-Version: 1.2.1
+1. **Infrastructure as Code**: All configurations are version-controlled in Git
+2. **Pull Request Workflow**: Changes are proposed via pull requests
+3. **Automated Planning**: CI/CD pipeline runs `terraform plan` on pull requests
+4. **Peer Review**: Changes are reviewed before merging
+5. **Automated Deployment**: Merging to main triggers `terraform apply` via CI/CD
+6. **OIDC Authentication**: Pipelines authenticate to AWS using OpenID Connect (no static credentials)
 
-### ntc\_ipam
+## 📚 Getting Started
 
-Source: github.com/nuvibit-terraform-collection/terraform-aws-ntc-ipam
+### Prerequisites
 
-Version: 1.0.2
+1. **NTC Access**: Valid NTC subscription and access credentials
+2. **AWS Account**: Dedicated Connectivity account created via NTC Account Factory
+3. **CI/CD Pipeline**: Configured CI/CD tool (e.g., Spacelift, GitHub Actions, GitLab CI/CD)
+4. **RAM Sharing**: AWS Resource Access Manager (RAM) sharing must be enabled in AWS Organizations for sharing Transit Gateways, IPAM pools, and VPC subnets
 
-### ntc\_parameters\_reader
+:::info
+RAM sharing can be easily enabled via [NTC Organizations](https://docs.nuvibit.com/ntc-building-blocks/management/ntc-organizations/) by setting `enable_ram_sharing_in_organization` to true.
+:::
 
-Source: github.com/nuvibit-terraform-collection/terraform-aws-ntc-parameters//modules/reader
+### Deployment Order
 
-Version: 1.1.4
+The blueprint repositories should be deployed in the following order:
 
-### ntc\_parameters\_writer
+1. **aws-c2-mgmt-organizations**   (foundation setup)
+2. **aws-c2-mgmt-account-factory** (creates connectivity account)
+3. **aws-c2-mgmt-identity-center** (creates sso permissions)
+4. **aws-c2-log-archive**          (creates audit log archive)
+5. **aws-c2-security**             (creates security tooling)
+6. **aws-c2-connectivity**         ← *You are here*
 
-Source: github.com/nuvibit-terraform-collection/terraform-aws-ntc-parameters//modules/writer
+### Implementation Guide
 
-Version: 1.1.4
+For detailed deployment instructions, refer to the [NTC Quickstart Guide](https://docs.nuvibit.com/getting-started/quickstart/).
 
-### ntc\_route53\_central\_endpoints
+## 🔗 Additional Resources
 
-Source: github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53
+- **[NTC Documentation](https://docs.nuvibit.com/)** - Complete documentation for all NTC building blocks
+- **[NTC Library](https://docs.nuvibit.com/ntc-library/)** - Browse all available NTC modules
+- **[Nuvibit AWS Reference Architecture](https://docs.nuvibit.com/whitepapers/nuvibit-aws-reference-architecture/)** - Architecture whitepaper
+- **[CI/CD Pipelines for IaC](https://docs.nuvibit.com/whitepapers/cicd-pipelines-iac-delivery/)** - CI/CD best practices
+- **[Nuvibit Website](https://nuvibit.com/)** - Company information and contact
 
-Version: 1.3.0
+## 💡 Use Cases
 
-### ntc\_route53\_mydomain\_internal
+These implementation blueprints serve multiple purposes:
 
-Source: github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53
+- **Reference Architecture**: Learn how to structure enterprise AWS environments
+- **Starter Template**: Copy and customize for your own AWS organization
+- **Best Practices**: Study production-ready configurations and patterns
+- **Training Material**: Understand NTC building blocks in real-world context
+- **Proof of Concept**: Evaluate NTC capabilities before full adoption
 
-Version: 1.3.0
+## 🤝 Support
 
-### ntc\_route53\_nuvibit\_dev
+For questions, issues, or consultation regarding NTC implementation:
 
-Source: github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53
+- **Documentation**: [docs.nuvibit.com](https://docs.nuvibit.com/)
+- **Contact**: [nuvibit.com/contact](https://nuvibit.com/contact/)
+- **Email**: info@nuvibit.com
 
-Version: 1.3.0
+## 📄 License
 
-### ntc\_route53\_nuvibit\_dev\_dnssec
+This repository demonstrates the usage of the Nuvibit Terraform Collection. Please refer to your NTC subscription agreement for licensing terms.
 
-Source: github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53//modules/dnssec
+---
 
-Version: 1.3.0
-
-### ntc\_route53\_nuvibit\_dev\_query\_logging
-
-Source: github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53//modules/query-logs
-
-Version: 1.3.0
-
-### ntc\_route53\_resolver
-
-Source: github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53//modules/resolver
-
-Version: 1.3.0
-
-### ntc\_vpc\_central\_endpoints
-
-Source: github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc
-
-Version: 1.6.0
-
-### ntc\_vpc\_prod\_stage
-
-Source: github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc
-
-Version: 1.6.0
-
-### ntc\_vpc\_prod\_stage\_custom\_routes
-
-Source: github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc//modules/custom-routes
-
-Version: 1.6.0
-
-## Resources
-
-The following resources are used by this module:
-
-- [aws_iam_role.ntc_baseline](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) (resource)
-- [aws_iam_role_policy.ntc_baseline](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) (resource)
-- [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) (data source)
-- [aws_iam_policy_document.ntc_baseline_permissions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) (data source)
-- [aws_iam_policy_document.ntc_baseline_trust](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) (data source)
-- [aws_region.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) (data source)
-
-## Required Inputs
-
-No required inputs.
-
-## Optional Inputs
-
-No optional inputs.
-
-## Outputs
-
-The following outputs are exported:
-
-### account\_id
-
-Description: The current account id
-
-### default\_region
-
-Description: The default region name
-
-### ntc\_core\_network\_frankfurt
-
-Description: Outputs of frankfurt core network module
-
-### ntc\_parameters
-
-Description: Map of all ntc parameters
-
-### ntc\_vpc\_prod\_stage
-
-Description: Outputs of prod stage VPC module
-<!-- END_TF_DOCS -->
+**Built with ❤️ by [Nuvibit](https://nuvibit.com/)**
