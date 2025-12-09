@@ -31,16 +31,16 @@ module "ntc_route53_nuvibit_dev" {
   # https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-routing-traffic-for-subdomains.html
   zone_delegation_list = [
     {
-      # SaaS PoC 'aws-c2-ares-dev'
-      subdomain_zone_name = "portal"
+      # c1 zone delegation at 'aws-c1' ( https://github.com/nuvibit-c1/aws-c1-connectivity/blob/main/ntc_route53.tf )
+      subdomain_zone_name = "c1"
       subdomain_nameserver_list = [
-        "ns-679.awsdns-20.net.",
-        "ns-1565.awsdns-03.co.uk.",
-        "ns-155.awsdns-19.com.",
-        "ns-1286.awsdns-32.org.",
+        "ns-1134.awsdns-13.org",
+        "ns-1873.awsdns-42.co.uk",
+        "ns-712.awsdns-25.net",
+        "ns-72.awsdns-09.com",
       ]
       dnssec_enabled   = true
-      dnssec_ds_record = "46737 13 2 D053F385C76334C66706D9B4A169375E73EB5E9D1C7450AF3B4ECF3573CC6C4F"
+      dnssec_ds_record = "48427 13 2 01A4F6DF790335CDBFCBB6C6E8160E45BF50A707B5D061D2F66928EC1CCB5FEC"
     },
     {
       # NTC Summit Demo 'aws-c3'
@@ -53,18 +53,6 @@ module "ntc_route53_nuvibit_dev" {
       ]
       dnssec_enabled   = true
       dnssec_ds_record = "13790 13 2 4ADEA6D37A6064708DCAE2BF1298A30A54EEAE4B43A22354446236353C916343"
-    },
-    {
-      # c1 zone delegation at 'aws-c1' ( https://github.com/nuvibit-c1/aws-c1-connectivity/blob/main/ntc_route53.tf )
-      subdomain_zone_name = "c1"
-      subdomain_nameserver_list = [
-        "ns-1134.awsdns-13.org",
-        "ns-1873.awsdns-42.co.uk",
-        "ns-712.awsdns-25.net",
-        "ns-72.awsdns-09.com",
-      ]
-      dnssec_enabled   = true
-      dnssec_ds_record = "48427 13 2 01A4F6DF790335CDBFCBB6C6E8160E45BF50A707B5D061D2F66928EC1CCB5FEC"
     },
   ]
 
