@@ -2,8 +2,9 @@
 # ¦ NTC IPAM
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_ipam" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-ipam?ref=1.0.2"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-ipam?ref=feat-provider-v6"
 
+  region      = "eu-central-1"
   description = "Organizational IPAM"
 
   nested_pools = [
@@ -66,8 +67,4 @@ module "ntc_ipam" {
       ]
     }
   ]
-
-  providers = {
-    aws = aws.euc1
-  }
 }
