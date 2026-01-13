@@ -2,7 +2,7 @@
 # ¦ NTC ROUTE53 - PUBLIC HOSTED ZONE
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_route53_nuvibit_dev" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53?ref=1.3.0"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53?ref=2.0.0"
 
   zone_force_destroy = false
 
@@ -56,57 +56,22 @@ module "ntc_route53_nuvibit_dev" {
     },
   ]
 
-  providers = {
-    aws = aws.euc1
+  dnssec_config = {
+    enabled = true
+    key_signing_keys = [
+      {
+        ksk_name   = "ksk-1"
+        ksk_status = "active"
+      },
+      # {
+      #   ksk_name   = "ksk-2"
+      #   ksk_status = "inactive"
+      # }
+    ]
   }
-}
 
-# ---------------------------------------------------------------------------------------------------------------------
-# ¦ NTC ROUTE53 - DNSSEC
-# ---------------------------------------------------------------------------------------------------------------------
-# WARNING: disabling DNSSEC before DS records expire can lead to domain becoming unavailable on the internet
-# https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-configuring-dnssec-disable.html
-module "ntc_route53_nuvibit_dev_dnssec" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53//modules/dnssec?ref=1.3.0"
-
-  zone_id = module.ntc_route53_nuvibit_dev.zone_id
-
-  # dnssec key can be rotated by creating a new 'inactive' key-signing-key and adding new DS records in root domain
-  # WARNING: old key should stay active until new key-signing-key is provisioned and new DS records are propagated
-  key_signing_keys = [
-    {
-      ksk_name   = "ksk-1"
-      ksk_status = "active"
-    },
-    {
-      ksk_name   = "ksk-2"
-      ksk_status = "inactive"
-    }
-  ]
-
-  providers = {
-    # dnssec requires the kms key to be in us-east-1
-    aws.us_east_1 = aws.use1
-  }
-}
-
-# ---------------------------------------------------------------------------------------------------------------------
-# ¦ NTC ROUTE53 - QUERY LOGGING
-# ---------------------------------------------------------------------------------------------------------------------
-module "ntc_route53_nuvibit_dev_query_logging" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53//modules/query-logs?ref=1.3.0"
-
-  # query logging requires a public hosted zone
-  zone_id = module.ntc_route53_nuvibit_dev.zone_id
-
-  # cloudwatch_name_prefix          = "/aws/route53/"
-  # cloudwatch_resource_policy_name = "route53-query-logs"
-  # cloudwatch_retention_in_days    = null
-  # cloudwatch_kms_key_use_existing = false
-  # cloudwatch_kms_key_arn          = ""
-
-  providers = {
-    # cloudwatch log group must be in us-east-1
-    aws.us_east_1 = aws.use1
+  query_logs_config = {
+    enabled                = true
+    cloudwatch_name_prefix = "/aws/route53/nuvibit-dev"
   }
 }

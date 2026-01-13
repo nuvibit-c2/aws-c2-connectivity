@@ -70,7 +70,7 @@ locals {
 # ¦ NTC ROUTE53
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_route53_central_endpoints" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53?ref=1.3.0"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53?ref=2.0.0"
 
   for_each = local.route53_central_endpoints
 
@@ -82,7 +82,12 @@ module "ntc_route53_central_endpoints" {
   zone_vpc_associations          = each.value.zone_vpc_associations
   zone_vpc_association_exception = each.value.zone_vpc_association_exception
 
-  providers = {
-    aws = aws.euc1
+  # NOTE: DNSSEC and Query Logs are not supported for Private Hosted Zones
+  dnssec_config = {
+    enabled = false
+  }
+
+  query_logs_config = {
+    enabled = false
   }
 }

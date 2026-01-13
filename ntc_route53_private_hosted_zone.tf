@@ -2,9 +2,7 @@
 # ¦ NTC ROUTE53 - PRIVATE HOSTED ZONE
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_route53_mydomain_internal" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53?ref=1.3.0"
-
-  zone_force_destroy = false
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53?ref=2.0.0"
 
   # name of the route53 hosted zone
   zone_name        = "mydomain.internal"
@@ -59,7 +57,12 @@ module "ntc_route53_mydomain_internal" {
     }
   ]
 
-  providers = {
-    aws = aws.euc1
+  # NOTE: DNSSEC and Query Logs are not supported for Private Hosted Zones
+  dnssec_config = {
+    enabled = false
+  }
+
+  query_logs_config = {
+    enabled = false
   }
 }
