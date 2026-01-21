@@ -31,7 +31,7 @@ module "ntc_route53_nuvibit_dev" {
   # https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-routing-traffic-for-subdomains.html
   zone_delegation_list = [
     {
-      # c1 zone delegation at 'aws-c1' ( https://github.com/nuvibit-c1/aws-c1-connectivity/blob/main/ntc_route53.tf )
+      # c1 zone delegation 'aws-c1-connectivity'
       subdomain_zone_name = "c1"
       subdomain_nameserver_list = [
         "ns-1134.awsdns-13.org",
@@ -41,6 +41,18 @@ module "ntc_route53_nuvibit_dev" {
       ]
       dnssec_enabled   = true
       dnssec_ds_record = "48427 13 2 01A4F6DF790335CDBFCBB6C6E8160E45BF50A707B5D061D2F66928EC1CCB5FEC"
+    },
+    {
+      # Stategraph PoC 'aws-c1-platform-tooling'
+      subdomain_zone_name = "stategraph"
+      subdomain_nameserver_list = [
+        "ns-198.awsdns-24.com.",
+        "ns-1177.awsdns-19.org.",
+        "ns-524.awsdns-01.net.",
+        "ns-1854.awsdns-39.co.uk.",
+      ]
+      dnssec_enabled   = true
+      dnssec_ds_record = "24965 13 2 05B8F914A93AEC3B95B684FF52E4240BCDCE17200B542824E54C4681CE9001D9"
     },
     {
       # NTC Summit Demo 'aws-c3'
