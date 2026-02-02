@@ -4,6 +4,10 @@
 module "ntc_core_network_frankfurt" {
   source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network?ref=1.2.1"
 
+  # define customer managed prefix lists e.g. for all on-premises ip ranges
+  # 'customer_managed_prefix_lists' is defined in 'ntc_ipam.tf'
+  customer_managed_prefix_lists = local.customer_managed_prefix_lists
+
   # -------------------------------------------------------------------------------------------------------------------
   # ¦ TRANSIT GATEWAY
   # -------------------------------------------------------------------------------------------------------------------

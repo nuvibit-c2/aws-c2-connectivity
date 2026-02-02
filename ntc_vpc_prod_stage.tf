@@ -2,7 +2,7 @@
 # ¦ NTC VPC - PROD STAGE
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_vpc_prod_stage" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc?ref=1.6.0"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc?ref=1.7.0"
 
   # a prefix which will be added to all vpc resources
   prefix_name = "prod-stage"
@@ -16,63 +16,23 @@ module "ntc_vpc_prod_stage" {
   }
 
   # define customer managed prefix lists e.g. for all on-premises ip ranges
-  customer_managed_prefix_lists = [
-    {
-      name = "onprem-servers-ipv4-ranges"
-      entries = [
-        {
-          cidr        = "192.168.10.0/24"
-          description = "Server Zone A"
-        },
-        {
-          cidr        = "192.168.20.0/24"
-          description = "Server Zone B"
-        },
-        {
-          cidr        = "192.168.30.0/24"
-          description = "Server Zone C"
-        }
-      ]
-      # (optional) share subnet with Organizations, OUs or Accounts - requires RAM to be enabled for Organizations
-      # ram_share_principals = ["o-m29e8d9awz", "ou-6gf5-6ltp3mjf", "945766593056"]
-      # ram_share_allow_external_principals = false
-    },
-    {
-      name = "cloud-ipv4-ranges"
-      entries = [
-        {
-          cidr        = "100.64.0.0/10"
-          description = "cloudonly"
-        },
-        {
-          cidr        = "172.16.0.0/12"
-          description = "hybrid"
-        },
-        {
-          cidr        = "192.168.0.0/16"
-          description = "onprem"
-        }
-      ]
-      # (optional) share subnet with Organizations, OUs or Accounts - requires RAM to be enabled for Organizations
-      # ram_share_principals = ["o-m29e8d9awz", "ou-6gf5-6ltp3mjf", "945766593056"]
-      # ram_share_allow_external_principals = false
-    }
-  ]
+  customer_managed_prefix_lists = []
 
   # define primary cidr block for the VPC
   vpc_ipv4_primary_cidr = "172.16.50.0/24"
 
   # define additional cidr blocks for the VPC
   vpc_ipv4_secondary_cidr_blocks = [
-    {
-      cidr_identifier = "cloudonly"
-      cidr_block      = "100.64.108.0/22"
-    }
+    # {
+    #   cidr_identifier = "cgnat"
+    #   cidr_block      = "100.64.108.0/22"
+    # }
   ]
 
   # (optional) use IPAM to get cidr blocks dynamically
   vpc_ipam_settings = {
-    # cidrs will be dynamically requested from IPAM - this overwrites 'vpc_ipv4_primary_cidr'
+    # cidrs will be dynamically requested from IPAM
+    # NOTE: enabling 'cidrs_requested_from_ipam' will overwrite any statically defined primary or secondary cidr blocks
     cidrs_requested_from_ipam = false
     # Terraform can allocate (reserve) cidrs (static or dynamic) in IPAM and assign to VPC
     cidrs_allocated_by_terraform     = false
@@ -85,9 +45,9 @@ module "ntc_vpc_prod_stage" {
   vpc_subnets = [
     {
       # (optional) for VPCs with secondary cidr blocks the 'vpc_cidr_identifier' is required. Primary cidr block is always 'primary'
-      vpc_cidr_identifier = "cloudonly"
+      vpc_cidr_identifier = "primary"
       # unique identifier for subnet - renaming will cause subnet to be recreated
-      subnet_identifier = "cloudonly-public"
+      subnet_identifier = "public"
       # subnets can be of type 'private', 'public', 'firewall' or 'transit'
       subnet_type = "public"
       # setting netmask_length will dynamically calculate or allocate (with ipam) corresponding cidr ranges
@@ -100,7 +60,7 @@ module "ntc_vpc_prod_stage" {
       public_subnet_config = {
         default_route_to_internet_gateway = true
         map_public_ip_on_launch           = true
-        create_public_nat_gateway         = true
+        create_public_nat_gateway         = false
       }
       # network access control list (ACL) allows or denies specific inbound or outbound traffic at the subnet level
       # additional layer of security but can lead to unexpected traffic patterns if configured wrong (stateful security group vs. stateless NACL rules)
@@ -153,15 +113,15 @@ module "ntc_vpc_prod_stage" {
     },
     {
       # (optional) for VPCs with secondary cidr blocks the 'vpc_cidr_identifier' is required. Primary cidr block is always 'primary'
-      vpc_cidr_identifier = "cloudonly"
+      vpc_cidr_identifier = "primary"
       # unique identifier for subnet - renaming will cause subnet to be recreated
-      subnet_identifier = "cloudonly-private"
+      subnet_identifier = "private"
       # subnets can be of type 'private', 'public', 'firewall' or 'transit'
       subnet_type = "private"
       # setting netmask_length will dynamically calculate or allocate (with ipam) corresponding cidr ranges
       # when calculating cidrs the subnets will be sorted from largest to smallest to optimize cidr space
       # WARNING: changing the netmask_length can lead to subnets beeing redeployed
-      netmask_length = 24
+      netmask_length = 27
       # instead of dynamically calculating subnet cidrs based on netmask length a list of static cidrs can be provided
       static_cidrs = []
       # specific configuration for subnet type
@@ -206,9 +166,9 @@ module "ntc_vpc_prod_stage" {
     },
     {
       # (optional) for VPCs with secondary cidr blocks the 'vpc_cidr_identifier' is required. Primary cidr block is always 'primary'
-      vpc_cidr_identifier = "cloudonly"
+      vpc_cidr_identifier = "primary"
       # unique identifier for subnet - renaming will cause subnet to be recreated
-      subnet_identifier = "cloudonly-transit"
+      subnet_identifier = "transit"
       # subnets can be of type 'private', 'public', 'firewall' or 'transit'
       subnet_type = "transit"
       # setting netmask_length will dynamically calculate or allocate (with ipam) corresponding cidr ranges
@@ -272,7 +232,7 @@ module "ntc_vpc_prod_stage" {
   vpc_flow_log_destinations = [
     {
       destination_type = "s3"
-      destination_arn  = try(local.ntc_parameters["log-archive"]["log_bucket_arns"]["vpc_flow_logs"], "")
+      destination_arn  = local.ntc_parameters["log-archive"]["log_bucket_arns"]["vpc_flow_logs"]
       # decide wether to capture ALL, only ACCEPT or only REJECT traffic
       traffic_type = "ALL"
       # interval can be 60 seconds (1min) or 600 seconds (10min)
@@ -307,106 +267,57 @@ module "ntc_vpc_prod_stage" {
 # ¦ NTC VPC - PROD STAGE - CUSTOM ROUTES
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_vpc_prod_stage_custom_routes" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc//modules/custom-routes?ref=1.6.0"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc//modules/custom-routes?ref=1.7.0"
 
   # add custom routes for more flexibility and full control (e.g. firewall deployment)
   custom_routes = [
-    {
-      # unique name to identify the route
-      route_identifier = "route_cloudonly_traffic_to_tgw_az1"
-      # route table where custom route will be be added
-      route_table_id = module.ntc_vpc_prod_stage.route_table_ids["cloudonly-public"][0]
-      # what is the destination of the traffic that should be controlled by this route?
-      # a single destination type is required and cannot combine multiple destination types
-      destination = {
-        cidr_block      = ""
-        ipv6_cidr_block = ""
-        prefix_list_id  = module.ntc_vpc_prod_stage.customer_managed_prefix_lists["cloud-ipv4-ranges"].id
-      }
-      # what is the target of the traffic that should be controlled by this route?
-      # a single target type is required and cannot combine multiple target types
-      target = {
-        carrier_gateway_id          = ""
-        core_network_arn            = ""
-        ipv6_egress_only_gateway_id = ""
-        internet_gateway_id         = ""
-        transit_gateway_id          = module.ntc_core_network_frankfurt.transit_gateway_id
-        virtual_private_gateway_id  = ""
-        vpc_peering_connection_id   = ""
-        nat_gateway_id              = ""
-        network_interface_id        = ""
-        vpc_endpoint_id             = ""
-      }
-    },
-    {
-      route_identifier = "route_cloudonly_traffic_to_tgw_az2"
-      route_table_id   = module.ntc_vpc_prod_stage.route_table_ids["cloudonly-public"][1]
-      destination = {
-        prefix_list_id = module.ntc_vpc_prod_stage.customer_managed_prefix_lists["cloud-ipv4-ranges"].id
-      }
-      target = {
-        transit_gateway_id = module.ntc_core_network_frankfurt.transit_gateway_id
-      }
-    },
-    {
-      route_identifier = "route_cloudonly_traffic_to_tgw_az3"
-      route_table_id   = module.ntc_vpc_prod_stage.route_table_ids["cloudonly-public"][2]
-      destination = {
-        prefix_list_id = module.ntc_vpc_prod_stage.customer_managed_prefix_lists["cloud-ipv4-ranges"].id
-      }
-      target = {
-        transit_gateway_id = module.ntc_core_network_frankfurt.transit_gateway_id
-      }
-    }
-    /* custom routes when adding a firewall subnet
-    {
-      # unique name to identify the route
-      route_identifier = "route_private_traffic_to_firewall_az1"
-      # route table where custom route will be be added
-      route_table_id = module.ntc_vpc_prod_stage.route_table_ids["cloudonly-private"][0]
-      # what is the destination of the traffic that should be controlled by this route?
-      # a single destination type is required and cannot combine multiple destination types
-      destination = {
-        cidr_block      = "10.100.10.0/24"
-        ipv6_cidr_block = ""
-        prefix_list_id  = ""
-      }
-      # what is the target of the traffic that should be controlled by this route?
-      # a single target type is required and cannot combine multiple target types
-      target = {
-        carrier_gateway_id          = ""
-        core_network_arn            = ""
-        ipv6_egress_only_gateway_id = ""
-        internet_gateway_id         = ""
-        transit_gateway_id          = ""
-        virtual_private_gateway_id  = ""
-        vpc_peering_connection_id   = ""
-        nat_gateway_id              = ""
-        network_interface_id        = "eni-068b5ccd7f7b7cfd3"
-        vpc_endpoint_id             = ""
-      }
-    },
-    {
-      route_identifier = "route_private_traffic_to_firewall_az2"
-      route_table_id   = module.ntc_vpc_prod_stage.route_table_ids["cloudonly-private"][1]
-      destination = {
-        cidr_block = "10.100.10.0/24"
-      }
-      target = {
-        network_interface_id = "eni-0ca9af96faf51d443"
-      }
-    },
-    {
-      route_identifier = "route_private_traffic_to_firewall_az3"
-      route_table_id   = module.ntc_vpc_prod_stage.route_table_ids["cloudonly-private"][2]
-      destination = {
-        cidr_block = "10.100.10.0/24"
-      }
-      target = {
-        network_interface_id = "eni-0e55b3e0b04ee1824"
-      }
-    }
-    */
+    # {
+    #   # unique name to identify the route
+    #   route_identifier = "route_traffic_to_tgw_az1"
+    #   # route table where custom route will be be added
+    #   route_table_id = module.ntc_vpc_prod_stage.route_table_ids["public"][0]
+    #   # what is the destination of the traffic that should be controlled by this route?
+    #   # a single destination type is required and cannot combine multiple destination types
+    #   destination = {
+    #     cidr_block      = ""
+    #     ipv6_cidr_block = ""
+    #     prefix_list_id  = module.ntc_vpc_prod_stage.customer_managed_prefix_lists["cloud-ipv4-ranges"].id
+    #   }
+    #   # what is the target of the traffic that should be controlled by this route?
+    #   # a single target type is required and cannot combine multiple target types
+    #   target = {
+    #     carrier_gateway_id          = ""
+    #     core_network_arn            = ""
+    #     ipv6_egress_only_gateway_id = ""
+    #     internet_gateway_id         = ""
+    #     transit_gateway_id          = module.ntc_core_network_frankfurt.transit_gateway_id
+    #     virtual_private_gateway_id  = ""
+    #     vpc_peering_connection_id   = ""
+    #     nat_gateway_id              = ""
+    #     network_interface_id        = ""
+    #     vpc_endpoint_id             = ""
+    #   }
+    # },
+    # {
+    #   route_identifier = "route_cloudonly_traffic_to_tgw_az2"
+    #   route_table_id   = module.ntc_vpc_prod_stage.route_table_ids["public"][1]
+    #   destination = {
+    #     prefix_list_id = module.ntc_vpc_prod_stage.customer_managed_prefix_lists["cloud-ipv4-ranges"].id
+    #   }
+    #   target = {
+    #     transit_gateway_id = module.ntc_core_network_frankfurt.transit_gateway_id
+    #   }
+    # },
+    # {
+    #   route_identifier = "route_cloudonly_traffic_to_tgw_az3"
+    #   route_table_id   = module.ntc_vpc_prod_stage.route_table_ids["public"][2]
+    #   destination = {
+    #     prefix_list_id = module.ntc_vpc_prod_stage.customer_managed_prefix_lists["cloud-ipv4-ranges"].id
+    #   }
+    #   target = {
+    #     transit_gateway_id = module.ntc_core_network_frankfurt.transit_gateway_id
+    #   }
+    # }
   ]
 
   providers = {
