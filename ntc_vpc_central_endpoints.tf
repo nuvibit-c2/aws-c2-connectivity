@@ -16,40 +16,25 @@ module "ntc_vpc_central_endpoints" {
   }
 
   # define customer managed prefix lists e.g. for all on-premises ip ranges
-  customer_managed_prefix_lists = [
-    {
-      name = "onprem-dns-servers"
-      entries = [
-        {
-          cidr        = "192.168.8.8/32"
-          description = "Primary DNS Server On-Premises"
-        },
-        {
-          cidr        = "192.168.9.9/32"
-          description = "Secondary DNS Server On-Premises"
-        }
-      ]
-      # (optional) share subnet with Organizations, OUs or Accounts - requires RAM to be enabled for Organizations
-      # ram_share_principals = ["o-m29e8d9awz", "ou-6gf5-6ltp3mjf", "945766593056"]
-      # ram_share_allow_external_principals = false
-    }
-  ]
-
+  customer_managed_prefix_lists = []
+  
   # define primary cidr block for the VPC
   vpc_ipv4_primary_cidr = "172.16.60.0/24"
+
   # define additional cidr blocks for the VPC
   vpc_ipv4_secondary_cidr_blocks = []
 
   # (optional) use IPAM to get cidr blocks dynamically
-  vpc_ipam_settings = {}
-
-  # for centralized vpc endpoints update security group (by default only current vpc is allowed to access endpoints)
-  interface_endpoints_security_group_ingress = {
-    create_security_group = true
-    allowed_cidr_blocks   = ["172.16.0.0/16"]
-    # allowed_prefix_list_names  = ["onprem-dns-servers"]
-    # allowed_security_group_ids = []
-    inbound_ports = ["443"]
+  vpc_ipam_settings = {
+    # cidrs will be dynamically requested from IPAM
+    # NOTE: enabling 'cidrs_requested_from_ipam' will overwrite any statically defined primary or secondary cidr blocks
+    cidrs_requested_from_ipam = false
+    # Terraform can allocate (reserve) cidrs (static or dynamic) in IPAM and assign to VPC
+    cidrs_allocated_by_terraform     = false
+    reservation_description          = "this cidr was allocated by terraform"
+    ipv4_primary_pool_id             = module.ntc_ipam.nested_pools_ids["/toplevel/frankfurt/core-network"]
+    ipv4_primary_pool_netmask_length = 22
+    ipv4_secondary_pools             = []
   }
 
   vpc_subnets = [

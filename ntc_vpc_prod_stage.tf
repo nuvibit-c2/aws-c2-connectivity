@@ -37,8 +37,8 @@ module "ntc_vpc_prod_stage" {
     # Terraform can allocate (reserve) cidrs (static or dynamic) in IPAM and assign to VPC
     cidrs_allocated_by_terraform     = false
     reservation_description          = "this cidr was allocated by terraform"
-    ipv4_primary_pool_id             = module.ntc_ipam.nested_pools_ids["/toplevel/frankfurt"]
-    ipv4_primary_pool_netmask_length = module.ntc_ipam.nested_pools_allocation_configs["/toplevel/frankfurt"].allocation_default_netmask_length
+    ipv4_primary_pool_id             = module.ntc_ipam.nested_pools_ids["/toplevel/frankfurt/prod"]
+    ipv4_primary_pool_netmask_length = 22
     ipv4_secondary_pools             = []
   }
 
