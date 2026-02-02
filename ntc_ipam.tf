@@ -132,10 +132,10 @@ module "ntc_ipam" {
       pool_region = "eu-central-2"
       description = "regional pool"
       cidrs = [
+        "100.112.0.0/14",
         "100.116.0.0/14",
         "100.120.0.0/14",
         "100.124.0.0/14",
-        "100.128.0.0/14",
       ]
     },
     {
@@ -143,7 +143,7 @@ module "ntc_ipam" {
       pool_name   = "Zurich Workloads Prod"
       pool_region = "eu-central-2"
       description = "prod workloads"
-      cidrs       = ["100.116.0.0/14"]
+      cidrs       = ["100.112.0.0/14"]
       # share IPAM with Organizations, OUs or Accounts
       ram_share_principals = [
         local.ntc_parameters["mgmt-organizations"]["ou_ids"]["/root/workloads/prod"]
@@ -158,7 +158,7 @@ module "ntc_ipam" {
       pool_name   = "Zurich Workloads Dev"
       pool_region = "eu-central-2"
       description = "dev workloads"
-      cidrs       = ["100.120.0.0/14"]
+      cidrs       = ["100.116.0.0/14"]
       # share IPAM with Organizations, OUs or Accounts
       ram_share_principals = [
         local.ntc_parameters["mgmt-organizations"]["ou_ids"]["/root/workloads/dev"]
@@ -173,7 +173,7 @@ module "ntc_ipam" {
       pool_name   = "Zurich Workloads Test"
       pool_region = "eu-central-2"
       description = "test workloads"
-      cidrs       = ["100.124.0.0/14"]
+      cidrs       = ["100.120.0.0/14"]
       # share IPAM with Organizations, OUs or Accounts
       ram_share_principals = [
         local.ntc_parameters["mgmt-organizations"]["ou_ids"]["/root/workloads/test"]
