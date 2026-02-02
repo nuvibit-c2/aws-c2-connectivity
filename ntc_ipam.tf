@@ -188,7 +188,7 @@ module "ntc_ipam" {
       pool_name                         = "Zurich Core Network"
       pool_region                       = "eu-central-2"
       description                       = "core network"
-      cidrs                             = ["100.128.0.0/14"]
+      cidrs                             = ["100.124.0.0/14"]
       allocation_default_netmask_length = 22
       allocation_max_netmask_length     = 22
       allocation_min_netmask_length     = 22
