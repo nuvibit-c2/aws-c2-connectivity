@@ -17,7 +17,7 @@ module "ntc_vpc_central_endpoints" {
 
   # define customer managed prefix lists e.g. for all on-premises ip ranges
   customer_managed_prefix_lists = []
-  
+
   # define primary cidr block for the VPC
   vpc_ipv4_primary_cidr = "172.16.60.0/24"
 
