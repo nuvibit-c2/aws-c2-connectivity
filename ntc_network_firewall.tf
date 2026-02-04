@@ -10,18 +10,12 @@
 #
 # WHY USE NETWORK FIREWALL?
 # --------------------------
-# Traditional Security Approach:
-#   ✗ Security Groups: Stateful but limited to allow/deny by IP/port (no deep packet inspection)
-#   ✗ NACLs: Stateless, subnet-level, limited rules (no application awareness)
-#   ✗ NAT Gateway: Internet access only, no filtering or inspection capabilities
-#
-# Network Firewall Advantages:
-#   ✓ Deep Packet Inspection: Analyze packet contents, not just headers
-#   ✓ Domain Filtering: Block/allow by domain name (*.malicious-site.com)
-#   ✓ Protocol Detection: Identify application protocols regardless of port
-#   ✓ IDS/IPS Capabilities: Suricata-compatible rules for threat detection
-#   ✓ Centralized Control: Single firewall for multiple VPCs via Transit Gateway
-#   ✓ AWS Managed: Automatic scaling, high availability, no infrastructure management
+# Beyond Security Groups & NACLs:
+#   ✓ Deep packet inspection (analyze content, not just headers)
+#   ✓ Domain-based filtering (*.amazonaws.com, *.malware-site.com)
+#   ✓ Application protocol detection (regardless of port)
+#   ✓ Suricata IDS/IPS rules for threat detection
+#   ✓ Centralized control for multiple VPCs via Transit Gateway
 #
 # DEPLOYMENT ARCHITECTURE: CENTRALIZED INSPECTION VPC
 # ----------------------------------------------------
@@ -71,35 +65,15 @@
 #   ✓ Cost optimization (shared firewall infrastructure)
 #   ✓ Scalability (automatically scales with traffic)
 #
-# RULE PROCESSING ORDER: UNDERSTAND THE FLOW
-# -------------------------------------------
-# 1. STATELESS RULES (Fast Path - Wire Speed):
-#    • Evaluated FIRST (before stateful inspection)
-#    • No connection tracking or state awareness
-#    • Based on packet headers only (IP, port, protocol)
-#    • Use case: Block obvious threats at wire speed (port scanning, known bad IPs)
-#    • Actions: DROP, PASS, or FORWARD to stateful engine
-#    • Performance: Minimal latency, highest throughput
+# RULE PROCESSING ORDER
+# ---------------------
+# 1. STATELESS (Wire Speed): Header-based filtering → DROP, PASS, or FORWARD to stateful
+# 2. STATEFUL (Deep Inspection): Domain lists, 5-tuple rules, Suricata IPS signatures
+# 3. DEFAULT ACTIONS: Applied when no rules match
 #
-# 2. STATEFUL RULES (Deep Inspection):
-#    • Evaluated AFTER stateless rules (if forwarded)
-#    • Connection tracking and application awareness
-#    • Types:
-#      a) Domain Filtering: Allow/deny by domain name (*.amazonaws.com)
-#      b) 5-Tuple Rules: Protocol, source/dest IP/port, direction
-#      c) Suricata IPS: Intrusion detection with signature matching
-#    • Rule Order:
-#      - STRICT_ORDER: Rules evaluated in priority order (like a traditional firewall)
-#      - DEFAULT_ACTION_ORDER: Pass/Drop rules separate, all Pass rules evaluated first
-#
-# 3. AWS MANAGED RULE GROUPS:
-#    • Pre-configured rule sets maintained by AWS
-#    • Automatically updated with latest threat intelligence
-#    • Categories:
-#      - Malware Domains: Block known malicious domains
-#      - Botnet Command & Control: Block C2 communication
-#      - Threat Signatures: Detect exploitation attempts
-#    • Evaluated as part of stateful engine
+# Rule Order Modes:
+#   • STRICT_ORDER: Evaluated by priority (1 = highest)
+#   • DEFAULT_ACTION_ORDER: All PASS rules first, then DROP rules
 #
 # RULE GROUP TYPES EXPLAINED
 # ---------------------------
@@ -211,72 +185,25 @@
 #   • S3: Long-term retention, compliance archives, cost-effective
 #   • Kinesis Data Firehose: Stream to SIEM or analytics platforms
 #
-# Best Practices:
-#   ✓ Always enable ALERT logs (critical for security monitoring)
-#   ✓ Consider FLOW logs cost vs. benefit (high volume)
-#   ✓ TLS logs useful for detecting malicious certificates
-#   ✓ Separate log groups per type for easier analysis
-#   ✓ Enable log encryption with KMS (automatic in this module)
-#   ✓ Set appropriate retention periods (7-90 days typical)
+# COST CONSIDERATIONS
+# -------------------
+# Frankfurt Example: $0.395/hr per AZ + $0.065/GB processed
+# 3 AZs + 10TB/month ≈ $1,515/month
 #
-# COST OPTIMIZATION STRATEGIES
-# -----------------------------
-# Network Firewall Costs (Region Frankfurt as example):
-#   • Firewall Endpoint Charges: $0.395/hour per AZ (~$288/month per AZ)
-#   • Data Processing Charges: $0.065/GB processed
-#   • Total Example: 3 AZs + 10TB/month = ~$1,515/month
+# Not Cost-Effective For:
+#   • Simple IP-based allow/deny (use Security Groups)
+#   • Basic internet access (NAT Gateway sufficient)
+#   • Very low traffic volumes
 #
-# When NOT to Use Network Firewall:
-#   ✗ Simple allow/deny by IP (use Security Groups instead)
-#   ✗ Basic internet access (NAT Gateway sufficient)
-#   ✗ Very low traffic volumes (cost may not justify benefit)
-#   ✗ Budget-constrained environments (start with Security Groups + GuardDuty)
-#
-# PROTECTION FEATURES - WHAT GETS ENABLED
-# ----------------------------------------
-# Deletion Protection:
-#   • Prevents accidental firewall deletion
-#   • Recommended: TRUE for production environments
-#   • Can be disabled for testing/development
-#
-# Subnet Change Protection:
-#   • Prevents modification of firewall subnet associations
-#   • Protects against traffic bypass via subnet changes
-#   • Recommended: TRUE for production
-#
-# Policy Change Protection:
-#   • Prevents modification of firewall policy
-#   • Useful when policy is managed by security team
-#   • Recommended: FALSE (allows policy updates)
-#   • Enable only if you want to lock down policy changes
-#
-# SECURITY BEST PRACTICES
-# ------------------------
-# Rule Design:
-#   ✓ Principle of Least Privilege: Deny by default, allow explicitly
-#   ✓ Egress Filtering: Control outbound traffic (prevent data exfiltration)
-#   ✓ East-West Segmentation: Restrict inter-VPC traffic
-#   ✓ Layer Defense: Combine with Security Groups and NACLs
-#
-# Rule Management:
-#   ✓ Use descriptive rule names and comments
-#   ✓ Document purpose of each rule group
-#   ✓ Review rules regularly (quarterly minimum)
-#   ✓ Test rule changes in non-production first
-#   ✓ Monitor ALERT logs for false positives
-#
-# Monitoring & Response:
-#   ✓ Set up CloudWatch Alarms for critical alerts
-#   ✓ Integrate with SIEM for correlation
-#   ✓ Define incident response playbooks
-#   ✓ Regular review of blocked traffic patterns
-#
-# Compliance Considerations:
-#   ✓ Log retention per regulatory requirements
-#   ✓ Encrypt logs at rest (KMS) and in transit (TLS)
-#   ✓ Restrict access to logs (only security/audit teams)
-#   ✓ Document firewall policies and changes
-#   ✓ Regular security audits and penetration testing
+# BEST PRACTICES
+# --------------
+# ✓ Start with deny-by-default, explicit allows
+# ✓ Enable ALERT logs (critical for security)
+# ✓ Test AWS Managed Rule Groups for false positives
+# ✓ Plan capacity generously (cannot change later)
+# ✓ Use domain lists for egress filtering
+# ✓ Document all custom rules
+# ✓ Review and tune quarterly
 # =====================================================================================================================
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -332,6 +259,46 @@ module "ntc_network_firewall" {
     #   - DEFAULT_ACTION_ORDER: All PASS rules first, then DROP rules
     stateful_engine_options_rule_order = "STRICT_ORDER"
   }
+
+  # -------------------------------------------------------------------------------------------------------------------
+  # RULE GROUP CAPACITY UNITS - CRITICAL PLANNING CONSIDERATION
+  # -------------------------------------------------------------------------------------------------------------------
+  # Every rule group has a 'capacity' setting that determines processing resources.
+  #
+  # WHAT ARE CAPACITY UNITS?
+  #   • Represent processing complexity required for rules
+  #   • Different rule types consume different amounts:
+  #     - Stateless rules: ~3-5 units per rule
+  #     - 5-tuple stateful: ~1-3 units per rule
+  #     - Domain list: ~1 unit per domain
+  #     - Suricata IPS: ~10-100+ units (varies by complexity)
+  #
+  # ⚠️  CRITICAL: Capacity is IMMUTABLE after creation!
+  #   • Cannot be changed once rule group is created
+  #   • Must delete and recreate to change capacity
+  #   • Always provision 20-30% extra headroom for growth
+  #
+  # FIREWALL CAPACITY LIMITS:
+  #   • Total capacity limit: 30,000 units per firewall
+  #   • Includes ALL rule groups (stateless + stateful + AWS managed)
+  #   • AWS managed groups have fixed capacity (e.g., AttackInfrastructure = 15,000)
+  #   • Plan carefully to stay within limit!
+  #
+  # CAPACITY PLANNING EXAMPLE:
+  #   Stateless groups:      500 units
+  #   Custom stateful:     5,000 units
+  #   AWS managed groups: 20,000 units
+  #   Reserved buffer:     3,000 units
+  #   ─────────────────────────────────
+  #   Total:              28,500 / 30,000 (95% utilized)
+  #
+  # RECOMMENDATIONS:
+  #   ✓ Stateless groups: Start with 100-500 units
+  #   ✓ 5-tuple groups: Start with 100-500 units
+  #   ✓ Domain lists: Start with 100-200 units (1 unit per domain)
+  #   ✓ Suricata groups: Start with 500-2,000 units (complexity varies)
+  #   ✓ Leave 3,000-5,000 units buffer for future additions
+  # -------------------------------------------------------------------------------------------------------------------
 
   # -------------------------------------------------------------------------------------------------------------------
   # Stateless Rule Groups - Fast Packet Filtering at Wire Speed

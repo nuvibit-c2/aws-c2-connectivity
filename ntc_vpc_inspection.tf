@@ -2,8 +2,9 @@
 # ¦ NTC VPC - INSPECTION
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_vpc_inspection" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc?ref=1.7.0"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc?ref=2.0.0"
 
+  region = "eu-central-1"
   # a prefix which will be added to all vpc resources
   prefix_name = "inspection"
 
@@ -218,18 +219,15 @@ module "ntc_vpc_inspection" {
     #   destination_arn = "KINESIS_DATA_FIREHOSE_ARN"
     # }
   ]
-
-  providers = {
-    aws = aws.euc1
-  }
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
 # ¦ NTC VPC - INSPECTION - CUSTOM ROUTES
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_vpc_inspection_custom_routes" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc//modules/custom-routes?ref=1.7.0"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc//modules/custom-routes?ref=2.0.0"
 
+  region = "eu-central-1"
   # add custom routes for more flexibility and full control (e.g. firewall deployment)
   custom_routes = flatten([for index, az in module.ntc_vpc_inspection.vpc_availability_zones.active :
     [
@@ -283,8 +281,4 @@ module "ntc_vpc_inspection_custom_routes" {
       }
     ]
   ])
-
-  providers = {
-    aws = aws.euc1
-  }
 }
