@@ -210,8 +210,9 @@
 # ¦ NTC NETWORK FIREWALL
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_network_firewall" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-network-firewall?ref=1.0.0"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-network-firewall?ref=feat-provider-v6"
 
+  region = "eu-central-1"
   # -------------------------------------------------------------------------------------------------------------------
   # Firewall Identity and Deployment
   # -------------------------------------------------------------------------------------------------------------------
@@ -822,6 +823,10 @@ module "ntc_network_firewall" {
   # Adjust based on your needs (see detailed documentation above)
   # -------------------------------------------------------------------------------------------------------------------
   logging_configuration = {
+    # Enables the detailed firewall monitoring dashboard in the AWS Console (additional charges apply).
+    # Provides visual insights into firewall activity, traffic patterns, and rule matches.
+    # Default: false
+    enable_monitoring_dashboard = true
 
     # ALERT logs - Security events (blocks and allows from rule matches)
     # Enable: ALWAYS (critical for security monitoring)
