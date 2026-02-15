@@ -59,9 +59,9 @@ locals {
   # Other accounts can reference: local.ntc_parameters["connectivity"]["transit_gateway_zurich"]
   # -------------------------------------------------------------------------------------------------------------------
   ntc_parameters_to_write = {
-    "customer_managed_prefix_lists" = module.ntc_vpc_prod_stage.customer_managed_prefix_lists
-    "transit_gateway_zurich"        = module.ntc_core_network_zurich.transit_gateway_id
-    "transit_gateway_frankfurt"     = module.ntc_core_network_frankfurt.transit_gateway_id
+    "customer_managed_prefix_lists" = module.ntc_core_network.customer_managed_prefix_lists_by_name
+    "transit_gateway_zurich"        = module.ntc_core_network.transit_gateway_ids_by_name["tgw-core-zurich"]
+    "transit_gateway_frankfurt"     = module.ntc_core_network.transit_gateway_ids_by_name["tgw-core-frankfurt"]
     "ipam_pools_ids"                = module.ntc_ipam.nested_pools_ids
     "baseline_assume_role_arn"      = aws_iam_role.ntc_baseline.arn
   }

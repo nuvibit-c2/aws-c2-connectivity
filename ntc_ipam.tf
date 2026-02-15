@@ -1,48 +1,4 @@
 # ---------------------------------------------------------------------------------------------------------------------
-# § LOCALS
-# ---------------------------------------------------------------------------------------------------------------------
-locals {
-  customer_managed_prefix_lists = [
-    {
-      name    = "cidrs-aws-global"
-      entries = [for cidr in module.ntc_ipam.nested_pools_cidrs["/toplevel"] : { cidr = cidr }]
-      # share customer_managed_prefix_lists with Organizations, OUs or Accounts
-      ram_share_principals = [
-        local.ntc_parameters["mgmt-organizations"]["ou_ids"]["/root/workloads"],
-      ]
-    },
-    {
-      name    = "cidrs-aws-frankfurt"
-      entries = [for cidr in module.ntc_ipam.nested_pools_cidrs["/toplevel/frankfurt"] : { cidr = cidr }]
-      # share customer_managed_prefix_lists with Organizations, OUs or Accounts
-      ram_share_principals = [
-        local.ntc_parameters["mgmt-organizations"]["ou_ids"]["/root/workloads"],
-      ]
-    },
-    {
-      name    = "cidrs-aws-zurich"
-      entries = [for cidr in module.ntc_ipam.nested_pools_cidrs["/toplevel/zurich"] : { cidr = cidr }]
-      # share customer_managed_prefix_lists with Organizations, OUs or Accounts
-      ram_share_principals = [
-        local.ntc_parameters["mgmt-organizations"]["ou_ids"]["/root/workloads"],
-      ]
-    },
-    {
-      name    = "cidrs-onprem"
-      entries = [for cidr in ["10.0.0.0/8", "192.168.0.0/16"] : { cidr = cidr }]
-      # share customer_managed_prefix_lists with Organizations, OUs or Accounts
-      ram_share_principals = [
-        local.ntc_parameters["mgmt-organizations"]["ou_ids"]["/root/workloads"],
-      ]
-    },
-    {
-      name    = "cidrs-onprem-dns"
-      entries = [for cidr in ["10.8.8.8/32", "10.8.4.4/32"] : { cidr = cidr }]
-    }
-  ]
-}
-
-# ---------------------------------------------------------------------------------------------------------------------
 # ¦ NTC IPAM
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_ipam" {

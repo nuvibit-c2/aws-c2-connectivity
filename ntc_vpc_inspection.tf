@@ -171,16 +171,16 @@ module "ntc_vpc_inspection" {
         transit_gateway_security_group_referencing_support = true
         transit_gateway_default_route_table_association    = false
         transit_gateway_default_route_table_propagation    = false
-        transit_gateway_id                                 = module.ntc_core_network_frankfurt.transit_gateway_id
+        transit_gateway_id                                 = module.ntc_core_network.transit_gateway_ids_by_name["tgw-core-frankfurt"]
         # vpc attachement can only be associated with a single transit gateway route table
-        transit_gateway_association_with_route_table_id = module.ntc_core_network_frankfurt.transit_gateway_route_table_ids["tgw-core-rtb-hub"]
+        transit_gateway_association_with_route_table_id = module.ntc_core_network.transit_gateway_route_table_ids["tgw-core-frankfurt"]["tgw-core-rtb-hub"]
         # vpc attachement can propagate to multiple transit gateway route table for dynamic routing
         transit_gateway_propagation_to_route_table_ids = [
-          module.ntc_core_network_frankfurt.transit_gateway_route_table_ids["tgw-core-rtb-hub"],
-          module.ntc_core_network_frankfurt.transit_gateway_route_table_ids["tgw-core-rtb-spoke-prod"],
-          module.ntc_core_network_frankfurt.transit_gateway_route_table_ids["tgw-core-rtb-spoke-dev"],
-          module.ntc_core_network_frankfurt.transit_gateway_route_table_ids["tgw-core-rtb-spoke-int"],
-          module.ntc_core_network_frankfurt.transit_gateway_route_table_ids["tgw-core-rtb-onprem"]
+          module.ntc_core_network.transit_gateway_route_table_ids["tgw-core-frankfurt"]["tgw-core-rtb-hub"],
+          module.ntc_core_network.transit_gateway_route_table_ids["tgw-core-frankfurt"]["tgw-core-rtb-spoke-prod"],
+          module.ntc_core_network.transit_gateway_route_table_ids["tgw-core-frankfurt"]["tgw-core-rtb-spoke-dev"],
+          module.ntc_core_network.transit_gateway_route_table_ids["tgw-core-frankfurt"]["tgw-core-rtb-spoke-int"],
+          module.ntc_core_network.transit_gateway_route_table_ids["tgw-core-frankfurt"]["tgw-core-rtb-onprem"],
         ]
       }
       # (optional) share subnet with Organizations, OUs or Accounts - requires RAM to be enabled for Organizations
@@ -260,7 +260,7 @@ module "ntc_vpc_inspection_custom_routes" {
         # what is the target of the traffic that should be controlled by this route?
         # a single target type is required and cannot combine multiple target types
         target = {
-          transit_gateway_id = module.ntc_core_network_frankfurt.transit_gateway_id
+          transit_gateway_id = module.ntc_core_network.transit_gateway_ids_by_name["tgw-core-frankfurt"]
         }
       },
       {
