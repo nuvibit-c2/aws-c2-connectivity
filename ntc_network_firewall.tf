@@ -212,6 +212,9 @@
 module "ntc_network_firewall" {
   source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-network-firewall?ref=2.0.0"
 
+  # NOTE: firewall should only be enabled when testing. Otherwise disable to avoid costs.
+  count = 0
+
   region = "eu-central-1"
   # -------------------------------------------------------------------------------------------------------------------
   # Firewall Identity and Deployment

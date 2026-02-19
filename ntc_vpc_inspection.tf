@@ -244,7 +244,10 @@ module "ntc_vpc_inspection_custom_routes" {
         # what is the target of the traffic that should be controlled by this route?
         # a single target type is required and cannot combine multiple target types
         target = {
-          vpc_endpoint_id = module.ntc_network_firewall.firewall_endpoint_ids[az]
+          # NOTE: update routes when firewall is enabled
+          # vpc_endpoint_id = module.ntc_network_firewall.firewall_endpoint_ids[az]
+          # NOTE: this is just a placeholder to avoid errors when firewall is disabled
+          transit_gateway_id = module.ntc_core_network.transit_gateway_ids_by_name["tgw-core-frankfurt"]
         }
       },
       {
@@ -276,7 +279,10 @@ module "ntc_vpc_inspection_custom_routes" {
         # what is the target of the traffic that should be controlled by this route?
         # a single target type is required and cannot combine multiple target types
         target = {
-          vpc_endpoint_id = module.ntc_network_firewall.firewall_endpoint_ids[az]
+          # NOTE: update routes when firewall is enabled
+          # vpc_endpoint_id = module.ntc_network_firewall.firewall_endpoint_ids[az]
+          # NOTE: this is just a placeholder to avoid errors when firewall is disabled
+          transit_gateway_id = module.ntc_core_network.transit_gateway_ids_by_name["tgw-core-frankfurt"]
         }
       }
     ]
