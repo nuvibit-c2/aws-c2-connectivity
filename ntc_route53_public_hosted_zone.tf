@@ -54,14 +54,18 @@ module "ntc_route53_nuvibit_dev" {
       dnssec_enabled   = true
       dnssec_ds_record = "48427 13 2 01A4F6DF790335CDBFCBB6C6E8160E45BF50A707B5D061D2F66928EC1CCB5FEC"
     },
-    # {
-    #   # 'c3.nuvibit.dev' zone delegation 'aws-c3-connectivity'
-    #   subdomain_zone_name = "c3"
-    #   subdomain_nameserver_list = [
-    #   ]
-    #   dnssec_enabled   = true
-    #   dnssec_ds_record = ""
-    # },
+    {
+      # 'c3.nuvibit.dev' zone delegation 'aws-c3-connectivity'
+      subdomain_zone_name = "c3"
+      subdomain_nameserver_list = [
+        "ns-2018.awsdns-60.co.uk.",
+        "ns-602.awsdns-11.net.",
+        "ns-73.awsdns-09.com.",
+        "ns-1388.awsdns-45.org.",
+      ]
+      dnssec_enabled   = true
+      dnssec_ds_record = "51710 13 2 B8234EE2E30AD6A3D9AF98344E6E56733CB92E6082D392BA1C79D30F44E2418A"
+    },
   ]
 
   dnssec_config = {
