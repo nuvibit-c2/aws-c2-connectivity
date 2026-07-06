@@ -225,7 +225,7 @@ module "ntc_vpc_inspection" {
 # ¦ NTC VPC - INSPECTION - CUSTOM ROUTES
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_vpc_inspection_custom_routes" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc//modules/custom-routes?ref=2.0.0"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc//modules/custom-routes?ref=2.0.1"
 
   region = "eu-central-1"
   # add custom routes for more flexibility and full control (e.g. firewall deployment)
