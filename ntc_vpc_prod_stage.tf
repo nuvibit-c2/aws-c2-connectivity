@@ -202,31 +202,31 @@ module "ntc_vpc_prod_stage" {
       # ram_share_principals = ["o-m29e8d9awz", "ou-6gf5-6ltp3mjf", "945766593056"]
       # ram_share_allow_external_principals = false
     },
-    /* different types of subnets (e.g. subnet with secondary cidr or firewall subnet)
-    {
-      vpc_cidr_identifier = "primary"
-      subnet_identifier = "hybrid-private"
-      subnet_type = "private"
-      netmask_length = 26
-      private_subnet_config = {
-        default_route_to_public_nat_gateway = false
-        default_route_to_transit_gateway    = true
-        create_private_nat_gateway          = true
-        secondary_private_ip_address_count  = 0
-      }
-    },
-    {
-      vpc_cidr_identifier = "cloudonly"
-      subnet_identifier = "cloudonly-firewall"
-      subnet_type = "firewall"
-      netmask_length = 28
-      firewall_subnet_config = {
-        default_route_to_public_nat_gateway = true
-        default_route_to_internet_gateway   = false
-        default_route_to_transit_gateway    = false
-      }
-    },
-    */
+    # different types of subnets (e.g. subnet with secondary cidr or firewall subnet)
+    # {
+    #   vpc_cidr_identifier = "primary"
+    #   subnet_identifier = "hybrid-private"
+    #   subnet_type = "private"
+    #   netmask_length = 26
+    #   private_subnet_config = {
+    #     default_route_to_public_nat_gateway = false
+    #     default_route_to_transit_gateway    = true
+    #     create_private_nat_gateway          = true
+    #     secondary_private_ip_address_count  = 0
+    #   }
+    # },
+    # {
+    #   vpc_cidr_identifier = "cloudonly"
+    #   subnet_identifier = "cloudonly-firewall"
+    #   subnet_type = "firewall"
+    #   netmask_length = 28
+    #   firewall_subnet_config = {
+    #     default_route_to_public_nat_gateway = true
+    #     default_route_to_internet_gateway   = false
+    #     default_route_to_transit_gateway    = false
+    #   }
+    # },
+
   ]
 
   # vpc flow logs can be delivered to s3, cloudwatch and kinesis-data-firehose.
@@ -265,7 +265,7 @@ module "ntc_vpc_prod_stage" {
 # ¦ NTC VPC - PROD STAGE - CUSTOM ROUTES
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_vpc_prod_stage_custom_routes" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc//modules/custom-routes?ref=2.0.0"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc//modules/custom-routes?ref=2.0.1"
 
   region = "eu-central-1"
   # add custom routes for more flexibility and full control (e.g. firewall deployment)

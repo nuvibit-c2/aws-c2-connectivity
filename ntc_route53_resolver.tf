@@ -5,7 +5,7 @@
 # ¦ NTC ROUTE53
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_route53_resolver" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53//modules/resolver?ref=2.0.0"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53//modules/resolver?ref=2.0.1"
   count  = 0 # NOTE: resolver endpoints are not in use currently and disabled to reduce cost
 
   region = "eu-central-1"

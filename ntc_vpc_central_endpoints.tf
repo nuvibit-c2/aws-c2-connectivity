@@ -2,7 +2,7 @@
 # ¦ NTC VPC
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_vpc_central_endpoints" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc?ref=2.0.0"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc?ref=2.0.1"
 
   region = "eu-central-1"
   # a prefix which will be added to all vpc resources

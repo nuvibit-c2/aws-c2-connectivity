@@ -2,7 +2,7 @@
 # ¦ NTC ROUTE53 - PUBLIC HOSTED ZONE
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_route53_nuvibit_dev" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53?ref=2.0.0"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53?ref=2.0.1"
 
   zone_force_destroy = false
 
