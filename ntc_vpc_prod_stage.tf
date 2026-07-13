@@ -226,7 +226,7 @@ module "ntc_vpc_prod_stage" {
     #     default_route_to_transit_gateway    = false
     #   }
     # },
-    
+
   ]
 
   # vpc flow logs can be delivered to s3, cloudwatch and kinesis-data-firehose.
