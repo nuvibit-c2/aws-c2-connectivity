@@ -210,7 +210,7 @@
 # ¦ NTC NETWORK FIREWALL
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_network_firewall" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-network-firewall?ref=2.0.0"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-network-firewall?ref=2.0.1"
 
   # NOTE: firewall should only be enabled when testing. Otherwise disable to avoid costs.
   count = 0
