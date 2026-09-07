@@ -43,7 +43,7 @@ data "aws_iam_policy_document" "ntc_baseline_permissions" {
       "route53:ListTagsForResource",
       "route53:GetHostedZone",
     ]
-    resources = [module.ntc_route53_nuvibit_dev.zone_arn]
+    resources = [module.ntc_route53_c2_nuvibit_dev.zone_arn]
   }
   statement {
     effect = "Allow"
