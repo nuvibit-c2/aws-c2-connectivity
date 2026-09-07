@@ -1,13 +1,13 @@
 # ---------------------------------------------------------------------------------------------------------------------
 # ¦ NTC ROUTE53 - PUBLIC HOSTED ZONE
 # ---------------------------------------------------------------------------------------------------------------------
-module "ntc_route53_nuvibit_dev" {
+module "ntc_route53_c2_nuvibit_dev" {
   source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53?ref=2.0.1"
 
   zone_force_destroy = false
 
   # name of the route53 hosted zone
-  zone_name        = "nuvibit.dev"
+  zone_name        = "c2.nuvibit.dev"
   zone_description = "Managed by Terraform"
 
   # private hosted zones require at least one vpc to be associated
@@ -30,42 +30,17 @@ module "ntc_route53_nuvibit_dev" {
   # (optional) List of subdomains with corresponding nameservers which should be delegated
   # https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-routing-traffic-for-subdomains.html
   zone_delegation_list = [
-    {
-      # 'stategraph.nuvibit.dev' zone delegation 'aws-c1-platform-tooling'
-      subdomain_zone_name = "stategraph"
-      subdomain_nameserver_list = [
-        "ns-198.awsdns-24.com.",
-        "ns-1177.awsdns-19.org.",
-        "ns-524.awsdns-01.net.",
-        "ns-1854.awsdns-39.co.uk.",
-      ]
-      dnssec_enabled   = true
-      dnssec_ds_record = "24965 13 2 05B8F914A93AEC3B95B684FF52E4240BCDCE17200B542824E54C4681CE9001D9"
-    },
-    {
-      # 'c1.nuvibit.dev' zone delegation 'aws-c1-connectivity'
-      subdomain_zone_name = "c1"
-      subdomain_nameserver_list = [
-        "ns-1134.awsdns-13.org",
-        "ns-1873.awsdns-42.co.uk",
-        "ns-712.awsdns-25.net",
-        "ns-72.awsdns-09.com",
-      ]
-      dnssec_enabled   = true
-      dnssec_ds_record = "48427 13 2 01A4F6DF790335CDBFCBB6C6E8160E45BF50A707B5D061D2F66928EC1CCB5FEC"
-    },
-    {
-      # 'c3.nuvibit.dev' zone delegation 'aws-c3-connectivity'
-      subdomain_zone_name = "c3"
-      subdomain_nameserver_list = [
-        "ns-2018.awsdns-60.co.uk.",
-        "ns-602.awsdns-11.net.",
-        "ns-73.awsdns-09.com.",
-        "ns-1388.awsdns-45.org.",
-      ]
-      dnssec_enabled   = true
-      dnssec_ds_record = "51710 13 2 B8234EE2E30AD6A3D9AF98344E6E56733CB92E6082D392BA1C79D30F44E2418A"
-    },
+    # {
+    #   subdomain_zone_name = "example"
+    #   subdomain_nameserver_list = [
+    #     "ns-111.awsdns-11.com.",
+    #     "ns-2222.awsdns-22.org.",
+    #     "ns-333.awsdns-33.net.",
+    #     "ns-4444.awsdns-44.co.uk.",
+    #   ]
+    #   dnssec_enabled   = false
+    #   dnssec_ds_record = ""
+    # },
   ]
 
   dnssec_config = {
@@ -84,6 +59,6 @@ module "ntc_route53_nuvibit_dev" {
 
   query_logs_config = {
     enabled                = true
-    cloudwatch_name_prefix = "/aws/route53/nuvibit-dev"
+    cloudwatch_name_prefix = "/aws/route53/nuvibit-c2"
   }
 }
