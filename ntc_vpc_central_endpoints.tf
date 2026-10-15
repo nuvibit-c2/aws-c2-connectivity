@@ -38,6 +38,16 @@ module "ntc_vpc_central_endpoints" {
     ipv4_secondary_pools             = []
   }
 
+  # for centralized vpc endpoints update security group (by default only current vpc is allowed to access endpoints)
+  interface_endpoints_security_group_ingress = {
+    create_security_group = true
+    # ipam toplevel pool for workload vpcs and the static 172.16.0.0/16 range of the hub and spoke vpcs in this stack
+    allowed_cidr_blocks = concat(module.ntc_ipam.nested_pools_cidrs["/toplevel"], ["172.16.0.0/16"])
+    # allowed_prefix_list_names  = ["onprem-dns-servers"]
+    # allowed_security_group_ids = []
+    inbound_ports = ["443"]
+  }
+
   vpc_subnets = [
     {
       # (optional) for VPCs with secondary cidr blocks the 'vpc_cidr_identifier' is required. Primary cidr block is always 'primary'
