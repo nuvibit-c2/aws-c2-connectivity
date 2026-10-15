@@ -4,6 +4,8 @@
 module "ntc_route53_mydomain_internal" {
   source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-route53?ref=2.0.1"
 
+  zone_force_destroy = false
+
   # name of the route53 hosted zone
   zone_name        = "mydomain.internal"
   zone_description = "Managed by Terraform"

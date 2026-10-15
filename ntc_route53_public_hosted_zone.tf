@@ -8,7 +8,7 @@ module "ntc_route53_c2_nuvibit_dev" {
 
   # name of the route53 hosted zone
   zone_name        = "c2.nuvibit.dev"
-  zone_description = "Managed by Terraform"
+  zone_description = "Managed by Terraform in github.com/nuvibit-c2/aws-c2-connectivity/"
 
   # private hosted zones require at least one vpc to be associated
   # public hosted zones cannot have any vpc associated

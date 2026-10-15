@@ -2,7 +2,7 @@
 # ¦ NTC CORE NETWORK
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_core_network" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network?ref=2.0.0"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network?ref=2.1.0"
 
   # define customer managed prefix lists e.g. for all on-premises ip ranges
   customer_managed_prefix_lists = [
@@ -351,6 +351,8 @@ module "ntc_core_network" {
     #       "tgw-core-rtb-spoke-dev",
     #       "tgw-core-rtb-spoke-int",
     #     ]
+    #     # store tunnel pre-shared keys in aws secrets manager instead of the site-to-site vpn service
+    #     preshared_key_storage = "SecretsManager"
     #     # by default dynamic routing with bgp is enabled
     #     # static routes need to be added to transit gateway route table
     #     static_routes_only      = false
@@ -428,6 +430,8 @@ module "ntc_core_network" {
     #       "tgw-core-rtb-spoke-dev",
     #       "tgw-core-rtb-spoke-int",
     #     ]
+    #     # store tunnel pre-shared keys in aws secrets manager instead of the site-to-site vpn service
+    #     preshared_key_storage = "SecretsManager"
     #     # by default dynamic routing with bgp is enabled
     #     # static routes need to be added to transit gateway route table
     #     static_routes_only      = false
@@ -447,7 +451,7 @@ module "ntc_core_network" {
 # ¦ NTC CORE NETWORK - CUSTOM ROUTES
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_core_network_zurich_custom_routes" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network//modules/custom-routes?ref=2.0.1"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-core-network//modules/custom-routes?ref=2.1.0"
 
   # add custom routes for more flexibility and full control (e.g. firewall deployment)
   transit_gateway_custom_routes = [
