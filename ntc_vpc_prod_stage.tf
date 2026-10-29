@@ -264,7 +264,7 @@ module "ntc_vpc_prod_stage" {
 # ¦ NTC VPC - PROD STAGE - CUSTOM ROUTES
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_vpc_prod_stage_custom_routes" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc//modules/custom-routes?ref=2.0.2"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc//modules/custom-routes?ref=2.0.4"
 
   region = "eu-central-1"
   # add custom routes for more flexibility and full control (e.g. firewall deployment)
