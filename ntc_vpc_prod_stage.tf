@@ -2,7 +2,7 @@
 # ¦ NTC VPC - PROD STAGE
 # ---------------------------------------------------------------------------------------------------------------------
 module "ntc_vpc_prod_stage" {
-  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc?ref=2.0.2"
+  source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-vpc?ref=2.0.4"
 
   region = "eu-central-1"
   # a prefix which will be added to all vpc resources
