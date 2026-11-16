@@ -212,7 +212,9 @@
 module "ntc_network_firewall" {
   source = "github.com/nuvibit-terraform-collection/terraform-aws-ntc-network-firewall?ref=2.0.1"
 
-  # NOTE: firewall should only be enabled when testing. Otherwise disable to avoid costs.
+  # DISABLED TO SAVE COSTS: the network firewall is intentionally not deployed in this org
+  # AWS Network Firewall is billed per firewall endpoint (one per availability zone) per hour plus per GB processed
+  # traffic is not inspected while disabled, set 'count = 1' only to test the firewall and set it back to 0 afterwards
   count = 0
 
   region = "eu-central-1"
